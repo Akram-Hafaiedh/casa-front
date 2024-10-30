@@ -17,6 +17,7 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
     const [startDate, setStartDate] = useState(selectedDate ||'');
     const [endDate, setEndDate] = useState('');
     const [title, setTitle] = useState('');
+    const [comment, setComment] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -35,13 +36,14 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
         setLoading(true);
         try {
             const data = {
-                startDate,
-                endDate,
-                title
+                start:startDate,
+                end:endDate,
+                title,
+                comment,
             }
             const response = await axiosInstance.post('/vacations', data);
-            if (response.data.status === 201) {
-                toast.success(response.data.data.message);
+            if (response.data.status.code === 201) {
+                toast.success(response.data.status.message);
                 setStartDate('');
                 setTitle('');
                 setEndDate('');
@@ -58,7 +60,28 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
     if(!isOpen) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close"
+                    className="absolute top-7 right-7 text-gray-500 hover:text-gray-700"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
                 <h2 className="text-xl font-bold mb-4">Create New Vacation</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -70,6 +93,17 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
                             onChange={(e) => setTitle(e.target.value)}
                             className="w-full px-3 py-2 border rounded"
                             placeholder="Vacation Title"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block mb-2" htmlFor="comment">Comment</label>
+                        <textarea
+                            id="comment"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            className="w-full px-3 py-2 border rounded"
+                            placeholder="Vacation Comment"
                             required
                         />
                     </div>

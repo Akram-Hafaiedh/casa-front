@@ -6,12 +6,7 @@ import AddUserModal from "../components/modals/AddUserModal";
 import useAxiosInstance from "../utils/axiosInstance";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-interface User {
-    _id: string;
-    name: string;
-    email: string;
-    role: { name: string }
-}
+import { User } from "../types/User";
 const Users: React.FC = () => {
     const axiosInstance = useAxiosInstance();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,13 +47,13 @@ const Users: React.FC = () => {
             if (result.isConfirmed) {
                 try {
                     const response = await axiosInstance.delete(`/users/${userId}`);
-                    if (response.data.status === 200) {
-                        const updatedUsers = users.filter((user) => user._id !== userId);
+                    if (response.data.status.code === 200) {
+                        const updatedUsers = users.filter((user) => user.id !== userId);
                         setUsers(updatedUsers);
-                        toast.success(response.data.data.message);
+                        toast.success(response.data.status.message);
                     }
                     else {
-                        toast.error(response.data.data.message);
+                        toast.error(response.data.status.message);
                     }
                 } catch (error) {
                     console.log('Error deleting user:', error);
@@ -70,9 +65,10 @@ const Users: React.FC = () => {
         setIsModalOpen(false);
         setUserToEdit(null); 
     };
-    const handleSaveUser = () => {
+    const handleSaveUser = (newUser: User) => {
         setIsModalOpen(false);
         setUserToEdit(null);
+        setUsers([...users, newUser]);
         // Save user logic here
     };
 
@@ -99,7 +95,7 @@ const Users: React.FC = () => {
                     </thead>
                     <tbody>
                         {users.length > 0 ? (users.map((user) => (
-                            <tr key={user._id} className="hover:bg-gray-100">
+                            <tr key={user.id} className="hover:bg-gray-100">
                                 <td className="px-6 py-3 text-left border-b border-gray-300 font-medium">{user.name}</td>
                                 <td className="px-6 py-3 text-left border-b border-gray-300">{user.email}</td>
                                 <td className="px-6 py-3 text-left border-b border-gray-300 capitalize">{user.role.name}</td>
@@ -116,7 +112,7 @@ const Users: React.FC = () => {
                                         <button 
                                             type="button" 
                                             className="px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded-md transition-colors"
-                                            onClick={() => handleDeleteUser(user._id)}
+                                            onClick={() => handleDeleteUser(user.id)}
                                         >
                                             Delete
                                         </button>

@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
                 <li>
                     <Link to="/home" className={`block px-4 py-2 text-gray-700 rounded hover:bg-gray-200 ${location.pathname === '/home' ? 'bg-gray-300' : ''}`}>Home</Link>
                 </li>
-                {user?.role === 'admin' && (
+                {user?.role === 'Administrator' && (
                     <li>
                         <Link to="/users" className={`block px-4 py-2 text-gray-700 rounded hover:bg-gray-200 ${location.pathname === '/users' ? 'bg-gray-300' : ''}`}>Users</Link>
                     </li>

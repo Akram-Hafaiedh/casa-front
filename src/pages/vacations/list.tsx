@@ -22,7 +22,7 @@ const VacationListing = () => {
     const fetchVacations = async () =>{
         try {
             const response = await axiosInstance.get('/vacations/my-vacations');
-            if (response.data.status === 200) {
+            if (response.data.status.code === 200) {
                 console.log(response.data);
                 setVacations(response.data.data.vacations)
             } else {
@@ -34,7 +34,7 @@ const VacationListing = () => {
     }
 
     const refreshVacationList = () => {
-        if(user?.role === 'admin'){
+        if(user?.role === 'Administrator') {
             fetchVacationsForAdmin();
         } else {
             fetchVacations();
@@ -46,7 +46,7 @@ const VacationListing = () => {
             const response = await axiosInstance.get('/vacations');
             console.log(response);
             console.log(response.data.data.vacations);
-            if (response.data.status === 200) {
+            if (response.data.status.code === 200) {
                 console.log(response.data);
                 setVacations(response.data.data.vacations)
             } else {
@@ -70,7 +70,7 @@ const VacationListing = () => {
             if (result.isConfirmed) {
                 try {
                     const response = await axiosInstance.delete(`/vacations/${vacation.id}`);
-                    if (response.data.status === 200) {
+                    if (response.data.status.code === 200) {
                         console.log(response.data);
                         refreshVacationList();
                         toast.success('Vacation deleted successfully');
@@ -91,7 +91,7 @@ const VacationListing = () => {
     const handleStatusChange = async (vacation: Vacation, newStatus: string) => {
         try {
             const response = await axiosInstance.put(`/vacations/${vacation.id}/status`, { status: newStatus });
-            if (response.data.status === 200) {
+            if (response.data.status.code === 200) {
                 console.log(response.data);
                 refreshVacationList();
                 toast.success('Vacation status updated successfully');
@@ -106,7 +106,7 @@ const VacationListing = () => {
     
 
     useEffect(() => {
-        if(user && user.role !== 'admin'){
+        if(user && user.role !== 'Administrator') {
             fetchVacations();
         } else {
             fetchVacationsForAdmin();
@@ -127,7 +127,7 @@ const VacationListing = () => {
                 </div>
             </div>
 
-            {user?.role === 'admin' ? (
+            {user?.role === 'Administrator' ? (
                 <div className="mt-6">
                     {/* Separate Pending Vacations */}
                     <h2 className="text-lg font-bold">Pending Vacations</h2>
@@ -137,11 +137,11 @@ const VacationListing = () => {
                                 <li key={vacation.id} className="mb-2">
                                     <div className="flex justify-between items-center">
                                         <span>
-                                            {formatDateRange(vacation.startDate, vacation.endDate)}{" "}
+                                            {formatDateRange(vacation.start, vacation.end)}{" "}
                                             <span className="text-yellow-500">({vacation.status})</span>
                                             {" "}by{" "}
                                             {/* This should Be Email instead */}
-                                            <span className="text-blue-600">{vacation.userId || "Unknown"}</span>
+                                            <span className="text-blue-600">{vacation.user.name || "Unknown"}</span>
                                         </span>
                                         <div className="space-x-2">
                                             <button
@@ -175,13 +175,13 @@ const VacationListing = () => {
                                 <li key={vacation.id} className="mb-2">
                                     <div className="flex justify-between items-center">
                                         <span>
-                                            {formatDateRange(vacation.startDate, vacation.endDate)}{" "}
+                                            {formatDateRange(vacation.start, vacation.end)}{" "}
                                             <span className={vacation.status === "Approved" ? "text-green-500" : "text-red-500"}>
                                                 ({vacation.status})
                                             </span>
                                             {" "}by{" "}
                                             {/* This should be Email instead */}
-                                            <span className="text-blue-600">{vacation.userId}</span>
+                                            <span className="text-blue-600">{vacation.user.name}</span>
                                         </span>
                                         { vacation.status === "Approved" ? (
                                             <button
@@ -216,7 +216,7 @@ const VacationListing = () => {
                                 <li key={vacation.id} className="mb-2">
                                     <div className="flex justify-between items-center">
                                         <span>
-                                            {formatDateRange(vacation.startDate, vacation.endDate)}{" "}
+                                            {formatDateRange(vacation.start, vacation.end)}{" "}
                                             <span className="text-gray-500">({vacation.status})</span>
                                         </span>
                                         <button

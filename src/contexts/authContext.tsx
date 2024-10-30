@@ -37,7 +37,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     const login = async ({ token }: { token: string }) => {
-        console.log('login', token);
         setIsAuthenticated(true);
         localStorage.setItem('token', token);
         const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
@@ -46,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const response = await axios.get(`${apiUrl}/users/me`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
-            if (response && response.data.status === 200) {
+            if (response && response.data.status.code === 200) {
                 const { email, role } = response.data.data.user;
                 localStorage.setItem('user', JSON.stringify({ email, role: role.name }));
                 setUser({ email, role: role.name });

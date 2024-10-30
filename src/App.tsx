@@ -52,7 +52,7 @@ const App: React.FC = () => {
             }
           />
           {/* <Route path="/settings" element={<Settings />} /> */}
-          <Route path="/users" element={<ProtectedRoute element={<Users />} requiredRole="admin" />} />
+          <Route path="/users" element={<ProtectedRoute element={<Users />} requiredRole="Administrator" />} />
           {/* <Route path="/customers" element={<ProtectedRoute element={<CustomerListing />} />} /> */}
           <Route path="/projects" element={<ProtectedRoute element={<ProjectListing />} />} />
           <Route path="/customers"

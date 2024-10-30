@@ -1,19 +1,12 @@
 import { toast } from "react-toastify";
 import useAxiosInstance from "../../utils/axiosInstance";
 import { useEffect, useState } from "react";
-
-
-interface User {
-    _id: string;
-    name: string;
-    email: string;
-    role: { name: string }
-}
+import { User } from "../../types/User";
 
 interface AddUserModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: () => void;
+    onSave: (newUser:User) => void;
     userToEdit: User | null;
 }
 
@@ -21,7 +14,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({isOpen, onClose, onSave, use
     const axiosInstance = useAxiosInstance();
     const [name, setName] = useState(userToEdit?.name || '');
     const [email, setEmail] = useState(userToEdit?.email || '');
-    const [role, setRole] = useState(userToEdit?.role.name || 'employee');
+    const [role, setRole] = useState(userToEdit?.role.name || 'Employee');
 
     useEffect(() => {
         if (userToEdit) {
@@ -31,9 +24,10 @@ const AddUserModal: React.FC<AddUserModalProps> = ({isOpen, onClose, onSave, use
         } else {
             setName('');
             setEmail('');
-            setRole('employee');
+            setRole('Employee');
         }
     }, [userToEdit]);
+    
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,12 +43,12 @@ const AddUserModal: React.FC<AddUserModalProps> = ({isOpen, onClose, onSave, use
                 return;
             }
             const response = await axiosInstance.post('/users', data);
-            if (response.data.status === 201) {
-                toast.success(response.data.data.message);
-                onSave();
+            if (response.data.status.code === 201) {
+                toast.success(response.data.status.message);
+                onSave(response.data.data.user);
                 onClose();
             } else {
-                toast.error(response.data.data.message);
+                toast.error(response.data.status.message);
             }
         } catch (error) {
             console.error('Error creating user:', error);
@@ -80,9 +74,9 @@ const AddUserModal: React.FC<AddUserModalProps> = ({isOpen, onClose, onSave, use
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">Role:</label>
                         <div className="flex items-center">
-                            <input className="mr-2" id="admin" type="radio" value="admin" checked={role === 'admin'} onChange={(e) => setRole(e.target.value)} />
+                            <input className="mr-2" id="admin" type="radio" value="Administrator" checked={role === 'Administrator'} onChange={(e) => setRole(e.target.value)} />
                             <label className="text-gray-700 text-sm font-bold" htmlFor="admin">Admin</label>
-                            <input className="ml-4 mr-2" id="employee" type="radio" value="employee" checked={role === 'employee'} onChange={(e) => setRole(e.target.value)} />
+                            <input className="ml-4 mr-2" id="employee" type="radio" value="Employee" checked={role === 'Employee'} onChange={(e) => setRole(e.target.value)} />
                             <label className="text-gray-700 text-sm font-bold" htmlFor="employee">Employee</label>
                         </div>
                     </div>

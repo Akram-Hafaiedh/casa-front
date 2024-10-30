@@ -55,7 +55,7 @@ const Vacations: React.FC = () => {
                 if (result.isConfirmed) {
                     try {
                         const response = await axiosInstance.delete(`/vacations/${vacationId}`);
-                        if (response.data.status === 200) {
+                        if (response.data.status.code === 200) {
                             console.log(response.data);
                             refreshVacations();
                             toast.success('Vacation deleted successfully');
@@ -76,8 +76,8 @@ const Vacations: React.FC = () => {
                 id: vacationId,
                 description: event.extendedProps.description,
                 title: event.title,
-                startDate: event.start ? event.start.toISOString() : "",
-                endDate: event.end ? event.end.toISOString() : "",
+                start: event.start ? event.start.toISOString() : "",
+                end: event.end ? event.end.toISOString() : "",
                 status: event.extendedProps.status,
                 userId: event.extendedProps.userId,
             };
@@ -88,21 +88,21 @@ const Vacations: React.FC = () => {
     const fetchVacations = async () =>{
         try {
             const response = await axiosInstance.get('/vacations/my-vacations');
-            if (response.data.status === 200) {
+            if (response.data.status.code === 200) {
                 console.log(response.data);
                 const fetchedVacations = response.data.data.vacations;
 
                 const mappedEvents = fetchedVacations.map((vacation: Vacation) => ({
                     title: vacation.title || 'Vacation',
                     vacationId: vacation.id,
-                    start: vacation.startDate,         
-                    end: vacation.endDate,
+                    start: vacation.start,         
+                    end: vacation.end,
                     status: vacation.status
                 }));
     
                 setEvents(mappedEvents);
             } else {
-                console.error("Failed to fetch vacations:", response.data);
+                console.error("Failed to fetch vacations:", response.data.vacations);
             }
         }catch (e) {    
             console.error("Failed to fetch vacations:", e);
@@ -121,7 +121,8 @@ const Vacations: React.FC = () => {
                     <button type='button' onClick={toggleModal} className="px-4 py-2 text-white bg-green-500 rounded">
                         Create New Vacation
                     </button>
-                    <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded">My Vacations</Link>
+                    <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded">{user?.role === 'Administrator' ? 'Process Vacations' : 'My Vacations'}
+                    </Link>
                 </div>
             </div>
 

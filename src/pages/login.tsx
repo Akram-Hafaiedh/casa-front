@@ -24,12 +24,13 @@ const Login: React.FC = () => {
         }
 
         try {
+            console.log(apiUrl);
             const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
-            if (response.data.status === 200) {
+            if (response.data.status.code === 200) {
                 login({ token: response.data.data.token });
                 navigate('/home');
             } else {
-                toast.error(response.data.data.message);
+                toast.error(response.data.status.message);
             }
         } catch (error) {
             toast.error("An error occurred during login." + error);
@@ -49,7 +50,7 @@ const Login: React.FC = () => {
                         />
                     </div>
                     <p className="mb-2 font-bold text-center text-green-500">Log in to start your work.</p>
-                    <div className="mb-4 text-sm text-center text-gray-400">This account is for personal use only—do not share your credent</div>
+                    <div className="mb-4 text-sm text-center text-gray-400">This account is for personal use only—do not share your credentials with anyone</div>
 
                     <form onSubmit={handleLogin}>
                         <div className="relative w-full mb-4">
