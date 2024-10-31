@@ -21,6 +21,8 @@ import Vacations from './pages/vacations/index';
 import VacationsListing from './pages/vacations/list';
 import SetPassword from './pages/setPassword';
 
+import CustomerCreate from './pages/customers/create';
+
 const App: React.FC = () => {
   useEffect(() => {
     document.title = import.meta.env.VITE_APP_NAME || 'Default App Name';
@@ -62,6 +64,7 @@ const App: React.FC = () => {
               </ErrorBoundary>
             }
           />
+          <Route path="/customers/create" element={<ProtectedRoute element={< CustomerCreate />} />} />
           <Route path="/projects/:projectId" element={<ProtectedRoute element={<ProjectDetails />} />} />
           <Route path="/projects/create" element={<ProtectedRoute element={<ProjectCreate />} />} />
           <Route path="/vacations" element={<ProtectedRoute element={<Vacations />} />} />
