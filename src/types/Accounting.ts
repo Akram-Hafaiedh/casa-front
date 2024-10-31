@@ -1,4 +1,6 @@
 export interface Accounting {
-    contractStartDate: Date;
-    accountingDocuments: string[];
+    contract_start_date: Date;
+    tax_included: number;
+    status: string;
+    documents : object | null;
 }
