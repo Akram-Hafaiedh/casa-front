@@ -1,3 +1,5 @@
+import { Portfolio } from "./Portfolio";
+
 export interface Client {
     first_name: string;
     last_name: string;

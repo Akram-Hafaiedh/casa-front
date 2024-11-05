@@ -9,7 +9,7 @@ import Register from './pages/register';
 import Home from './pages/home';
 import ForgotPassword from './pages/forgotPassword';
 import { AuthProvider } from './contexts/authContext';
-import Users from './pages/users';
+import Users from './pages/users/list';
 import ProtectedRoute from './routing/ProtectedRoute';
 import ProjectDetails from './pages/projects/projectDetails';
 import ProjectListing from './pages/projects/list';
@@ -20,8 +20,12 @@ import ErrorBoundary from './ErrorBoundary';
 import Vacations from './pages/vacations/index';
 import VacationsListing from './pages/vacations/list';
 import SetPassword from './pages/setPassword';
+import Logs from './pages/logs';
 
 import CustomerCreate from './pages/customers/create';
+import UserCreate from './pages/users/create';
+import UserDetails from './pages/users/show';
+import Error404 from './pages/error/404';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -42,7 +46,13 @@ const App: React.FC = () => {
           pauseOnHover
         />
         <Routes>
-          <Route path="/set-password/:token" element={<SetPassword />} />
+          <Route path="/set-password/:token" 
+            element={
+              <ErrorBoundary>
+                <SetPassword />
+              </ErrorBoundary>
+            }
+          />
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -55,6 +65,8 @@ const App: React.FC = () => {
           />
           {/* <Route path="/settings" element={<Settings />} /> */}
           <Route path="/users" element={<ProtectedRoute element={<Users />} requiredRole="Administrator" />} />
+          <Route path="/users/create" element={<ProtectedRoute element={<UserCreate />} requiredRole="Administrator" />} />
+          <Route path="/users/:userId" element={<ProtectedRoute element={<UserDetails />} requiredRole="Administrator" />} />
           {/* <Route path="/customers" element={<ProtectedRoute element={<CustomerListing />} />} /> */}
           <Route path="/projects" element={<ProtectedRoute element={<ProjectListing />} />} />
           <Route path="/customers"
@@ -68,9 +80,9 @@ const App: React.FC = () => {
           <Route path="/projects/:projectId" element={<ProtectedRoute element={<ProjectDetails />} />} />
           <Route path="/projects/create" element={<ProtectedRoute element={<ProjectCreate />} />} />
           <Route path="/vacations" element={<ProtectedRoute element={<Vacations />} />} />
-          
           <Route path="/vacations/list" element={<ProtectedRoute element={<VacationsListing />} />} />
-          
+          <Route path="/logs" element={<ProtectedRoute element={<Logs />} />} />
+          <Route path="/404" element={<Error404 />} />
         </Routes>
       </Router>
     </AuthProvider>

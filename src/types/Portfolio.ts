@@ -4,6 +4,6 @@ import { Tax } from "./Tax";
 
 export interface Portfolio {
     insurances : Insurance[],
-    acccounting: Accounting[],
-    Taxes: Tax[],
+    accountings: Accounting[],
+    taxes: Tax[],
 }

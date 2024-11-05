@@ -29,14 +29,16 @@ const PrivateLayout: React.FC<PrivateLayoutProps> = ({ sidebar, children }) => {
                 </div>
 
                 <div className="p-6 mt-auto">
-                    {user && (<div className="flex items-center mb-4">
-                        <Avatar name={user.email} size="40" round={true} />
-                        <span className="ml-2 text-sm font-medium">{user.email}</span>
-                    </div>
+                    {user && (
+                        <div className="flex items-center mb-4">
+                            <Avatar name={user.email} size="40" round={true} />
+                            <span className="ml-2 text-sm font-medium">{user.email}</span>
+                        </div>
                     )}
                     <hr className="my-4 border-t border-gray-200" />
 
                     <button
+                        type="button"
                         onClick={handleLogout}
                         className="w-full px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
                     >

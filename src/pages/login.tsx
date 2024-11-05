@@ -24,7 +24,6 @@ const Login: React.FC = () => {
         }
 
         try {
-            console.log(apiUrl);
             const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
             if (response.data.status.code === 200) {
                 login({ token: response.data.data.token });

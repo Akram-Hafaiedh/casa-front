@@ -4,10 +4,6 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { FaLock } from "react-icons/fa6";
 
-import loginBg from '../../public/images/login-bg.jpg';
-import logoB from '../../public/images/logo-b.svg';
-import logoC from '../../public/images/logo-c.svg';
-
 
 const SetPassword: React.FC = () => {
     const {token} = useParams<{token: string}>()
@@ -17,7 +13,7 @@ const SetPassword: React.FC = () => {
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_REACT_APP_API_URL;
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSetPassword = async (e: React.FormEvent) => {
         e.preventDefault();
         // Call backend API for authentication
         if (passwordConfirmation === '' || password === '') {
@@ -26,12 +22,13 @@ const SetPassword: React.FC = () => {
         }
 
         try {
-            const response = await axios.post(`${apiUrl}/auth/set-password`, { token, password, passwordConfirmation });
-            if (response.data.status === 200) {
-                toast.success(response.data.data.message);
+            const response = await axios.post(`${apiUrl}/auth/set-password`, { token, password, password_confirmation: passwordConfirmation });
+            console.log(response.data.data.status.message);
+            if (response.data.data.status.code === 200) {
+                toast.success(response.data.data.status.message);
                 navigate('/');
             } else {
-                toast.error(response.data.data.message);
+                toast.error(response.data.data.status.message);
             }
         } catch (error) {
             toast.error("An error occurred setting the password." + error);
@@ -46,7 +43,7 @@ const SetPassword: React.FC = () => {
                     <h2 className="mb-6 text-3xl font-semibold text-center text-gray-700">Welcome to</h2>
                     <div className="my-10">
                         <img
-                            src={logoC}
+                            src="/images/logo-c.svg"
                             alt="Analytics"
                             className="mx-auto max-h-[130px]"
                         />
@@ -54,7 +51,7 @@ const SetPassword: React.FC = () => {
                     <p className="mb-2 font-bold text-center text-green-500">Choose a strong password.</p>
                     <div className="mb-4 text-sm text-center text-gray-400">This account is for personal use only—do not share your credent</div>
 
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleSetPassword}>
                         <div className="relative w-full mb-4">
                             <input
                                 type="password"
@@ -89,7 +86,7 @@ const SetPassword: React.FC = () => {
                     <div className="flex items-center justify-center px-8 mt-8">
                         <span className="text-gray-400">
                             Already have an account?
-                        <Link to="/forgot-password" className="text-sm text-blue-500 hover:underline ms-2">
+                        <Link to="/" className="text-sm text-blue-500 hover:underline ms-2">
                             Login
                         </Link>
                         </span>
@@ -104,13 +101,13 @@ const SetPassword: React.FC = () => {
             {/* Right Side - Info */}
             <div className="flex items-center justify-center w-1/2 bg-center bg-no-repeat bg-cover"
                 style={{
-                    backgroundImage: `url(${loginBg})`,
+                    backgroundImage: "url('/images/login-bg.jpg')",
                 }}>
                 <div className="px-8 text-center text-white">
                     {/* Add some mockup image or relevant data */}
                     <div className="my-8">
                         <img
-                            src={logoB}
+                            src="/images/logo-b.svg"
                             alt="Analytics"
                             className="mx-auto max-h-[375px]"
                         />

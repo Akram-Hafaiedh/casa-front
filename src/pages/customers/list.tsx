@@ -17,7 +17,7 @@ const CustomerListing: React.FC = () => {
             const response = await axiosInstance.get('/customers', {
                 params: { page, limit, search }
             });
-            setFilteredCustomers(response.data.data.customers);
+            setFilteredCustomers(response.data.data.clients.data);
             setTotalPages(response.data.data.totalPages);
             setCurrentPage(response.data.data.currentPage);
         } catch (error) {
@@ -75,7 +75,7 @@ const CustomerListing: React.FC = () => {
                     <tbody>
 
                         {filteredCustomers?.length > 0 && filteredCustomers.map((customer) => (
-                            <tr key={customer.id}>
+                            <tr key={customer.id} className="hover:bg-gray-100">
                                 <td className="px-4 py-2 text-sm text-gray-800 border">{customer.id}</td>
                                 <td className="px-4 py-2 text-sm text-gray-800 border">{customer.firstName} {customer.lastName}</td>
                                 <td className="px-4 py-2 text-sm text-gray-800 border">{customer.email}</td>
@@ -138,7 +138,6 @@ const CustomerListing: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Modal */}
 
             </div>
         </HomeLayout>
