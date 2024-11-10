@@ -17,6 +17,7 @@ const useAxiosInstance = () => {
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+        
         return config;
     })
     // Response interceptor to handle token expiration and refresh logic

@@ -5,6 +5,7 @@ import HomeLayout from '../../layouts/PrivateLayout';
 import { Switch } from '@headlessui/react';
 import AddMemberModal from '../../components/modals/AddMemberModal';
 import useAxiosInstance from '../../hooks/useAxiosInstance';
+import InfoSection from '../../layouts/Info';
 
 
 
@@ -187,158 +188,188 @@ const ProjectListing: React.FC = () => {
     };
 
     return (
-        <HomeLayout sidebar={<Sidebar />}>
-            <div>
-                <div className="flex items-center justify-between">
-                    <h1 className="mb-4 text-2xl font-bold">Projects</h1>
-                    {/* <button type="button" onClick={() => setIsModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">Create New Project</button> */}
-                    <Link to="/projects/create" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">Create New Project</Link>
+        <>
+            <div className="container-fixed">
+                <div>
+                    {/* <div className="flex items-center justify-between">
+                        <h1 className="mb-4 text-2xl font-bold">Projects</h1>
+                        <Link to="/projects/create" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">Create New Project</Link>
+                    </div> */}
 
-                </div>
-                {/* Search Bar */}
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        placeholder="Search projects..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        className="w-full px-4 py-2 border rounded"
+                    <InfoSection
+                        title="Projects"
+                        description="View, create, edit, and delete your projects. Click on a project name to edit its title."
+                        linkTo='/projects/create'
+                        linkText="Add new project"
                     />
-                </div>
+                    {/* Search Bar */}
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            placeholder="Search projects..."
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            className="w-full px-4 py-2 border rounded"
+                        />
+                    </div>
 
-                {filteredProjects && filteredProjects.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        {projects.map((project: Project) => (
-                            <div key={project._id} className="p-4 bg-white rounded-lg shadow-md">
+                    {filteredProjects && filteredProjects.length > 0 && (
+                        <>
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                {projects.map((project: Project) => (
+                                    <div key={project._id} className="p-4 bg-white rounded-lg shadow-md">
 
-                                {editingProjectId === project._id ? (
-                                    <input
-                                        type="text"
-                                        value={tempTitle}
-                                        onChange={handleTitleChange}
-                                        onBlur={() => handleTitleBlur(project._id)}
-                                        onKeyDown={(event) => handleTitleKeyDown(event, project._id)}
-                                        className="mb-2 text-lg font-bold text-gray-800 border-b-2 border-blue-500 focus:outline-none"
-                                        autoFocus
-                                    />
-                                ) : (
+                                        {editingProjectId === project._id ? (
+                                            <input
+                                                type="text"
+                                                value={tempTitle}
+                                                onChange={handleTitleChange}
+                                                onBlur={() => handleTitleBlur(project._id)}
+                                                onKeyDown={(event) => handleTitleKeyDown(event, project._id)}
+                                                className="mb-2 text-lg font-bold text-gray-800 border-b-2 border-blue-500 focus:outline-none"
+                                                autoFocus
+                                            />
+                                        ) : (
 
-                                    <h2 className="mb-2 text-lg font-bold"
-                                        onClick={() => handleTitleClick(project._id, project.name)}>
-                                        {project.name}
-                                    </h2>
-                                )}
+                                            <h2 className="mb-2 text-lg font-bold"
+                                                onClick={() => handleTitleClick(project._id, project.name)}>
+                                                {project.name}
+                                            </h2>
+                                        )}
 
-                                <p className="mb-2 text-gray-700">{project.description}</p>
+                                        <p className="mb-2 text-gray-700">{project.description}</p>
 
-                                {/* Members as overlapping circles */}
-                                <div className="flex items-center mb-4 -space-x-2">
-                                    {project.members.slice(0, 4).map((member, index) => (
-                                        <div
-                                            key={index}
-                                            className="relative z-10 flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-blue-500 border border-white rounded-full"
-                                            style={{ zIndex: project.members.length - index }}
-                                        >
-                                            {getInitials(member.email)}
+                                        {/* Members as overlapping circles */}
+                                        <div className="flex items-center mb-4 -space-x-2">
+                                            {project.members.slice(0, 4).map((member, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="relative z-10 flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-blue-500 border border-white rounded-full"
+                                                    style={{ zIndex: project.members.length - index }}
+                                                >
+                                                    {getInitials(member.email)}
+                                                    <button
+                                                        onClick={() => handleRemoveMember(member._id, project._id)}
+                                                        className="absolute top-0 flex items-center justify-center w-4 h-4 p-1 text-xs text-red-500 transform translate-x-1/2 -translate-y-1/2 bg-white border border-red-500 rounded-full right-2 hover:bg-gray-200"
+                                                        aria-label={`Remove ${member.email}`}
+                                                    >
+                                                        X
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            {project.members.length > 4 && (
+                                                <div className="relative z-10 flex items-center justify-center w-8 h-8 text-sm font-bold text-gray-600 bg-gray-200 border border-white rounded-full">
+                                                    +{project.members.length - 4}
+                                                </div>
+                                            )}
+                                            {/* Add Member Circle */}
                                             <button
-                                                onClick={() => handleRemoveMember(member._id, project._id)}
-                                                className="absolute top-0 flex items-center justify-center w-4 h-4 p-1 text-xs text-red-500 transform translate-x-1/2 -translate-y-1/2 bg-white border border-red-500 rounded-full right-2 hover:bg-gray-200"
-                                                aria-label={`Remove ${member.email}`}
+                                                onClick={() => handleAddMemberClick(project._id)}
+                                                className="relative z-0 flex items-center justify-center w-8 h-8 text-lg text-gray-500 border-2 border-gray-400 border-dotted rounded-full"
                                             >
-                                                X
+                                                +
                                             </button>
                                         </div>
-                                    ))}
-                                    {project.members.length > 4 && (
-                                        <div className="relative z-10 flex items-center justify-center w-8 h-8 text-sm font-bold text-gray-600 bg-gray-200 border border-white rounded-full">
-                                            +{project.members.length - 4}
+
+                                        {/* Project Start/End Date */}
+                                        <p className="text-sm text-gray-500">Start Date: {new Date(project.startDate).toLocaleDateString()}</p>
+                                        <p className="text-sm text-gray-500">End Date: {new Date(project.endDate).toLocaleDateString()}</p>
+
+                                        {/* Public/Private Switch */}
+                                        <div className="flex items-center justify-between mt-4">
+                                            <span className="text-sm text-gray-700">
+                                                {project.isPrivate ? 'Private' : 'Public'}
+                                            </span>
+                                            <Switch
+                                                checked={project.isPrivate}
+                                                onChange={() => togglePrivacy(project._id, project.isPrivate)}
+                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out ${project.isPrivate ? 'bg-red-500' : 'bg-green-500'} `}
+                                            >
+                                                <span
+                                                    className={`inline-block h-4 w-4 transform bg-white rounded-full transition-transform duration-300 ease-in-out ${project.isPrivate ? 'translate-x-6' : 'translate-x-1'}`}
+                                                />
+                                            </Switch>
                                         </div>
-                                    )}
-                                    {/* Add Member Circle */}
-                                    <button
-                                        onClick={() => handleAddMemberClick(project._id)}
-                                        className="relative z-0 flex items-center justify-center w-8 h-8 text-lg text-gray-500 border-2 border-gray-400 border-dotted rounded-full"
-                                    >
-                                        +
-                                    </button>
-                                </div>
 
-                                {/* Project Start/End Date */}
-                                <p className="text-sm text-gray-500">Start Date: {new Date(project.startDate).toLocaleDateString()}</p>
-                                <p className="text-sm text-gray-500">End Date: {new Date(project.endDate).toLocaleDateString()}</p>
-
-                                {/* Public/Private Switch */}
-                                <div className="flex items-center justify-between mt-4">
-                                    <span className="text-sm text-gray-700">
-                                        {project.isPrivate ? 'Private' : 'Public'}
-                                    </span>
-                                    <Switch
-                                        checked={project.isPrivate}
-                                        onChange={() => togglePrivacy(project._id, project.isPrivate)}
-                                        className={`${project.isPrivate ? 'bg-red-500' : 'bg-green-500'
-                                            } relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out`}
-                                    >
-                                        <span
-                                            className={`${project.isPrivate ? 'translate-x-6' : 'translate-x-1'
-                                                } inline-block h-4 w-4 transform bg-white rounded-full transition-transform duration-300 ease-in-out`}
-                                        />
-                                    </Switch>
-                                </div>
-
-                                {/* View Project Link */}
-                                <Link to={`/projects/${project._id}`} className="inline-block px-4 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-700">View Project</Link>
+                                        {/* View Project Link */}
+                                        <Link to={`/projects/${project._id}`} className="inline-block px-4 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-700">View Project</Link>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
+                                        {/* Pagination Controls */}
+                            <div className="flex items-center justify-between mt-6">
+                                <button
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+                                >
+                                    Previous
+                                </button>
+                                <span className="text-sm text-gray-600">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+                                >
+                                    Next
+                                </button>
+                            </div>
+                            {/* Optional: Page size selector */}
+                            <div>
+                                <label>
+                                    Items per page:
+                                    <select
+                                        className="p-2 mb-4 ml-4 border border-gray-300 rounded-md"
+                                        value={itemsPerPage}
+                                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+
+                
+
+                {/* Add Member Modal */}
+                <AddMemberModal
+                    isOpen={isAddMemberModalOpen}
+                    onClose={() => setIsAddMemberModalOpen(false)}
+                    onAddMembers={handleAddMembers}
+                    selectedUsers={currentProjectMembers}
+                />
+            </div>
+            {!projects.length && (
+                <div className="container-fixed">
+                    <div className="card p-8 lg:p-12">
+                        <div className="card-body">
+                            <div className="grid justify-center py-5">
+                                <img src="/images/illustrations/11.svg"
+                                    className="max-h-[170px]" alt=""
+                                />
+                            </div>
+                            <div className="text-lg font-medium text-gray-900 text-center">
+                                Upload Item to Get Started
+                            </div>
+                            <div className="text-sm text-gray-700 text-center gap-1">
+                                Begin by crafting your inaugural list in minutes.&nbsp;
+                            <a className="text-sm font-medium link"
+                                href="/metronic/tailwind/react/demo1/account/billing/plans">
+                                    Get Started!
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                ) : (
-                    <p className="mt-4">No projects found. Please create a new project.</p>
-                )}
-            </div>
-            {/* Pagination Controls */}
-            <div className="flex items-center justify-between mt-6">
-                <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                >
-                    Previous
-                </button>
-                <span className="text-sm text-gray-600">
-                    Page {currentPage} of {totalPages}
-                </span>
-                <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                >
-                    Next
-                </button>
-            </div>
-
-            {/* Optional: Page size selector */}
-            <div>
-                <label>
-                    Items per page:
-                    <select
-                        className="p-2 mb-4 ml-4 border border-gray-300 rounded-md"
-                        value={itemsPerPage}
-                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                    >
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                    </select>
-                </label>
-            </div>
-
-            {/* Add Member Modal */}
-            <AddMemberModal
-                isOpen={isAddMemberModalOpen}
-                onClose={() => setIsAddMemberModalOpen(false)}
-                onAddMembers={handleAddMembers}
-                selectedUsers={currentProjectMembers}
-            />
-        </HomeLayout>
+                </div>
+            )}
+        </>
     );
 };
 

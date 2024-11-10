@@ -1,5 +1,4 @@
-import Sidebar from '../components/Sidebar';
-import HomeLayout from '../layouts/PrivateLayout';
+
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -36,7 +35,7 @@ const Vacations: React.FC = () => {
         }
     }
     return (
-        <HomeLayout sidebar={<Sidebar />}>
+        <>
             <div className="flex justify-between items-center">
                 <h1 className="mb-4 text-3xl font-bold">Vacations</h1>
                 <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded">My Vacations</Link>
@@ -57,7 +56,7 @@ const Vacations: React.FC = () => {
                 eventClick={(arg) => handleEventClick(arg)}
                 dayMaxEvents={true}
             />
-        </HomeLayout>
+        </>
     );
 };
 export default Vacations;

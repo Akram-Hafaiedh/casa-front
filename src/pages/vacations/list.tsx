@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import useAuth from '../../hooks/useAuth';
 import { Vacation } from '../../types/Vacation';
+import InfoSection from '../../layouts/Info';
 
 const VacationListing = () => {
     const { user } = useAuth();
@@ -112,9 +113,10 @@ const VacationListing = () => {
             fetchVacationsForAdmin();
         }
     },[]);
+
     return (
-        <HomeLayout sidebar={<Sidebar />}>
-            <div className="flex justify-between items-center">
+        <div className="container-fixed">
+            {/* <div className="flex justify-between items-center">
                 <h1 className="mb-4 text-3xl font-bold">Vacations</h1>
                 <div className="flex space-x-2">
                     {user?.role !== 'admin' && (
@@ -125,7 +127,14 @@ const VacationListing = () => {
 
                     <Link to="/vacations" className="px-4 py-2 text-white bg-blue-500 rounded">Back to calendar</Link>
                 </div>
-            </div>
+            </div> */}
+
+            <InfoSection
+                title="My vacations"
+                description="View and manage your vacations here."
+                linkTo="/vacations"
+                linkText="Back to calendar"
+            />
 
             {user?.role === 'Administrator' ? (
                 <div className="mt-6">
@@ -244,7 +253,7 @@ const VacationListing = () => {
                 onClose={toggleModal}
                 onVacationCreated={refreshVacationList}
             />
-        </HomeLayout>
+        </div>
     )
 }
 

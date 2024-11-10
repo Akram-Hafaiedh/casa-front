@@ -1,3 +1,1090 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.header {
+    @apply h-17.5
+}
+
+.sidebar .sidebar-header {
+    @apply h-17.5
+}
+.sidebar {
+    @apply w-50
+}
+
+/* Base Button */
+.btn {
+    @apply inline-flex items-center justify-center cursor-pointer rounded-lg font-medium text-sm px-4 py-2 gap-1 border outline-none;
+}
+
+/* Button Sizes */
+.btn-xs {
+    @apply h-7 px-2 text-xs;
+}
+.btn-sm {
+    @apply h-8 px-3 text-sm;
+}
+.btn-md {
+    @apply h-10 px-4 text-base;
+}
+.btn-lg {
+    @apply h-12 px-5 text-lg;
+}
+
+/* Disabled Button */
+.btn-disabled {
+    @apply opacity-50 pointer-events-none;
+}
+/* Icon Button */
+.btn-icon {
+    @apply flex-shrink-0 p-0 gap-0 w-10 justify-center;
+}
+
+.btn-icon-xs {
+    @apply w-7;
+}
+  
+.btn-icon-sm {
+    @apply w-8;
+}
+  
+.btn-icon-md {
+    @apply w-10;
+}
+  
+.btn-icon-lg {
+    @apply w-12;
+}
+  
+
+/* Link Button */
+.btn-link {
+    @apply text-primary underline;
+}
+
+/* Button Variants */
+.btn-primary {
+    @apply bg-primary text-white border-transparent hover:bg-primary-dark;
+}
+  
+.btn-outline-primary {
+    @apply text-primary border-primary bg-transparent hover:bg-primary hover:text-white;
+}
+  
+.btn-clear-primary {
+    @apply bg-transparent text-primary hover:bg-primary hover:text-white;
+}
+
+.btn-subtle-primary {
+    @apply text-primary bg-transparent hover:bg-primary-light;
+}
+  
+
+/* Success Button */
+.btn-success {
+    @apply bg-green-500 text-white hover:bg-green-600;
+}
+
+.btn-outline-success {
+    @apply text-green-500 border-green-500 hover:bg-green-500 hover:text-white;
+}
+
+.btn-clear-success {
+    @apply text-green-500 bg-transparent hover:bg-green-500 hover:text-white;
+}
+
+/* Danger Button */
+.btn-danger {
+    @apply bg-red-500 text-white hover:bg-red-600;
+}
+  
+.btn-outline-danger {
+    @apply text-red-500 border-red-500 hover:bg-red-500 hover:text-white;
+}
+
+.btn-clear-danger {
+    @apply text-red-500 bg-transparent hover:bg-red-500 hover:text-white;
+}
+
+/* Light Button */
+.btn-light {
+    @apply bg-gray-100 text-gray-800 border border-gray-200 hover:bg-gray-200;
+}
+
+.btn-outline-light {
+    @apply text-gray-600 border-gray-600 hover:bg-gray-600 hover:text-white;
+}
+
+.btn-clear-light {
+    @apply text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    @apply bg-gray-600 text-white border-transparent hover:bg-gray-700;
+}
+
+.btn-outline-secondary {
+    @apply text-gray-600 border-gray-600 bg-transparent hover:bg-gray-600 hover:text-white;
+}
+
+.btn-clear-secondary {
+    @apply text-gray-600 bg-transparent hover:bg-gray-600 hover:text-white;
+}
+
+
+/* Warning Button */
+.btn-warning {
+    @apply bg-yellow-500 text-white hover:bg-yellow-600;
+}
+.btn-outline-warning {
+    @apply text-yellow-500 border-yellow-500 hover:bg-yellow-500 hover:text-white;
+}
+
+.btn-clear-warning {
+    @apply text-yellow-500 bg-transparent hover:bg-yellow-500 hover:text-white;
+}
+
+/* Container */
+
+.container-fixed {
+    @apply w-full flex-grow px-6;
+}
+.container-fluid {
+    @apply w-full flex-grow px-6;
+}
+
+@media (min-width: 1280px) {
+    .container-fixed {
+        @apply max-w-7xl px-7 mx-auto;
+    }
+    .container-fluid {
+        @apply px-7;
+    }
+
+    .header {
+        @apply h-15
+    }
+    .sidebar {
+        @apply w-70
+    }
+    .sidebar .sidebar-header {
+        @apply h-15
+    }
+}
+
+/* Menu */
+.menu {
+    @apply flex;
+}
+.menu-title {
+    @apply flex items-center flex-grow leading-none;
+}
+.menu-item {
+    @apply flex flex-col;
+}
+.menu-item{
+    @apply p-0 m-0;
+}
+.menu-item-active {
+    @apply border-none rounded-lg bg-light font-medium
+}
+
+.menu-item-active.menu-item\:rounded-lg{
+    @apply rounded-lg;
+}
+
+/* Text Color */
+.menu-item-active.menu-item\:text-primary{
+    @apply text-primary;
+}
+.menu-item-active.menu-item\:text-secondary{
+    @apply text-secondary;
+}
+.menu-item-active.menu-item\:text-gray-600{
+    @apply text-gray-600;
+}
+.menu-item-active.menu-item\:text-gray-700{
+    @apply text-gray-700;
+}
+.menu-item-active.menu-item\:text-gray-800{
+    @apply text-gray-800;
+}
+.menu-item-active.menu-item\:text-gray-900{
+    @apply text-gray-900;
+}
+/* Font */
+.menu-item-active.menu-item\:font-medium{
+    @apply font-medium;
+}
+.menu-item-active.menu-item\:font-semibold{
+    @apply font-semibold;
+}
+.menu-item-active.menu-item\:font-bold{
+    @apply font-bold;
+}
+
+
+/* Background */
+.menu-item-active.menu-item\:bg-light{
+    @apply bg-light;
+}
+.menu-item-active.menu-item\:\!bg-light{
+    @apply !bg-light;
+}
+.menu-item-active.menu-item\:bg-secondary-active{
+    @apply bg-secondary-active;
+}
+.menu-item-active.menu-item\:before\:bg-primary\:before{
+    @apply before:bg-primary;
+}
+/* Border Colors*/
+.menu-item-active.menu-item\:border-none{
+    @apply border-none;
+}
+.menu-item-active.menu-item\:border-gray-200{
+    @apply border-gray-200;
+}
+/* Border Bottom */
+.menu-item-active.menu-item\:border-b-primary{
+    @apply border-b-primary;
+}
+.menu-item-active.menu-item\:border-b-gray-400{
+    @apply border-b-gray-400;
+}
+.menu-item-active.menu-item\:border-b-gray-800{
+    @apply border-b-gray-800;
+}
+.menu-item-active.menu-item\:border-b-gray-900{
+    @apply border-b-gray-900;
+}
+/* Hover */
+.menu-item.here.menu-item-here\:border-gray-200{
+    @apply border-gray-200;
+}
+.menu-item.here.menu-item-here\:border-b-gray-400{
+    @apply border-b-gray-400;
+}
+.menu-item.here.menu-item-here\:border-b-gray-800{
+    @apply border-b-gray-800;
+}
+.menu-item.here.menu-item-here\:border-b-gray-900{
+    @apply border-b-gray-900;
+}
+.menu-item.here.menu-item-here\:bg-light{
+    @apply bg-light;
+}
+.menu-item.here.menu-item-here\:border-b-primary{
+    @apply border-b-primary;
+}
+
+.menu-item.here.menu-item-here\:font-medium{
+    @apply font-medium;
+}
+.menu-item.here.menu-item-here\:font-semibold{
+    @apply font-semibold;
+}
+.menu-item.here.menu-item-here\:font-bold{
+    @apply font-bold;
+}
+
+
+/* Text Colors */
+.menu-item.here.menu-item-here\:text-primary{
+    @apply text-primary;
+}
+.menu-item.here.menu-item-here\:text-gray-400{
+    @apply text-gray-400;
+}
+.menu-item.here.menu-item-here\:text-gray-800{
+    @apply text-gray-800;
+}
+.menu-item.here.menu-item-here\:text-gray-900{
+    @apply text-gray-900;
+}
+/* Menu Link */
+
+.menu-item.here>.menu-link {
+    @apply border-b-2;
+}
+.menu-item.here>.menu-link.menu-item-here\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-item.here>.menu-link.menu-item-here\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.here>.menu-link.menu-item-here\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.here>.menu-link.menu-item-here\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.here>.menu-link.menu-item-here\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.here>.menu-link.menu-item-here\:bg-light {
+    @apply bg-light;
+}
+.menu-item.here>.menu-link.menu-item-here\:font-medium {
+    @apply font-medium;
+}
+.menu-item.here>.menu-link.menu-item-here\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.here>.menu-link.menu-item-here\:text-gray-400 {
+    @apply text-gray-400;
+}
+.menu-item.here>.menu-link.menu-item-here\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.here>.menu-link.menu-item-here\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.here>.menu-link.menu-item-here\:text-primary {
+    @apply text-primary;
+}
+
+.menu-item.show {
+    @apply flex;
+}
+.menu-item.show.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-link {
+    @apply flex;
+}
+.menu-item.show > .menu-link.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-link.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-link.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-link.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-link.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-link > .menu-item-show {
+    @apply flex;
+}
+.menu-item.show > .menu-link > .menu-item-show.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-link > .menu-item-show.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-link > .menu-item-show.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-link > .menu-item-show.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-link > .menu-item-show.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-label {
+    @apply flex;
+}
+.menu-item.show > .menu-label.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-label.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-label.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-label.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-label.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-label > .menu-item-show {
+    @apply flex;
+}
+.menu-item.show > .menu-label > .menu-item-show.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-label > .menu-item-show.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-label > .menu-item-show.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-label > .menu-item-show.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-label > .menu-item-show.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-toggle {
+    @apply flex;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-toggle > .menu-item-show {
+    @apply flex;
+}
+.menu-item.show > .menu-toggle > .menu-item-show.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-toggle > .menu-item-show.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-toggle > .menu-item-show.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-toggle > .menu-item-show.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-toggle > .menu-item-show.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+
+
+.menu-item.here>.menu-link .menu-item-here\:border-b-gray-200{
+    @apply border-b-gray-200;
+}
+.menu-item.here>.menu-link .menu-item-here\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.here>.menu-link .menu-item-here\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.here>.menu-link .menu-item-here\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.here>.menu-link .menu-item-here\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.here>.menu-link .menu-item-here\:bg-light {
+    @apply bg-light;
+}
+.menu-item.here>.menu-link .menu-item-here\:font-medium {
+    @apply font-medium;
+}
+.menu-item.here>.menu-link .menu-item-here\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.here>.menu-link .menu-item-here\:text-gray-400 {
+    @apply text-gray-400;
+}
+.menu-item.here>.menu-link .menu-item-here\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.here>.menu-link .menu-item-here\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.here>.menu-link .menu-item-here\:text-primary {
+    @apply text-primary;
+}
+.menu-link:hover.menu-link-hover\:border-none {
+    @apply border-none;
+}
+.menu-link:hover.menu-link-hover\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-link:hover.menu-link-hover\:border-light {
+    @apply border-light;
+}
+.menu-link:hover.menu-link-hover\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-link:hover.menu-link-hover\:bg-gray-100 {
+    @apply bg-gray-100;
+}
+.menu-link:hover.menu-link-hover\:bg-light {
+    @apply bg-light;
+}
+.menu-link:hover.menu-link-hover\:\!text-primary {
+    @apply !text-primary;
+}
+.menu-link:hover.menu-link-hover\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-link:hover.menu-link-hover\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-link:hover.menu-link-hover\:text-primary {
+    @apply text-primary;
+}
+.menu-link:hover .menu-link-hover\:border-none {
+    @apply border-none;
+}
+.menu-link:hover .menu-link-hover\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-link:hover .menu-link-hover\:border-light {
+    @apply border-light;
+}
+.menu-link:hover .menu-link-hover\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-link:hover .menu-link-hover\:bg-gray-100 {
+    @apply bg-gray-100;
+}
+.menu-link:hover .menu-link-hover\:bg-light {
+    @apply bg-light;
+}
+.menu-link:hover .menu-link-hover\:\!text-primary {
+    @apply !text-primary;
+}
+.menu-link:hover .menu-link-hover\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-link:hover .menu-link-hover\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-link:hover .menu-link-hover\:text-primary {
+    @apply text-primary;
+}
+
+
+
+.menu-item.show>.menu-label .menu-item-show\:text-primary {
+  @apply text-primary;
+}
+
+.menu-item.show>.menu-toggle.menu-item-show\:\!flex {
+  @apply flex;
+}
+
+.menu-item.show>.menu-toggle.menu-item-show\:inline-flex {
+  @apply inline-flex;
+}
+
+.menu-item.show>.menu-toggle.menu-item-show\:hidden {
+  @apply hidden;
+}
+
+.menu-item.show>.menu-toggle.menu-item-show\:text-gray-800 {
+  @apply text-gray-800;
+}
+
+.menu-item.show>.menu-toggle.menu-item-show\:text-gray-900 {
+  @apply text-gray-900;
+}
+
+.menu-item.show>.menu-toggle.menu-item-show\:text-primary {
+  @apply text-primary;
+}
+
+.menu-item.show>.menu-toggle .menu-item-show\:\!flex {
+  @apply flex;
+}
+
+.menu-item.show>.menu-toggle .menu-item-show\:inline-flex {
+  @apply inline-flex;
+}
+
+.menu-item.show>.menu-toggle .menu-item-show\:hidden {
+  @apply hidden;
+}
+
+.menu-item.show>.menu-toggle .menu-item-show\:text-gray-800 {
+  @apply text-gray-800;
+}
+
+.menu-item.show>.menu-toggle .menu-item-show\:text-gray-900 {
+  @apply text-gray-900;
+}
+
+.menu-item.show>.menu-toggle .menu-item-show\:text-primary {
+  @apply text-primary;
+}
+
+
+.menu-item.here > .menu-label.menu-item-here\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-item.here > .menu-label.menu-item-here\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.here > .menu-label.menu-item-here\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.here > .menu-label.menu-item-here\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.here > .menu-label.menu-item-here\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.here > .menu-label.menu-item-here\:bg-light {
+    @apply bg-light;
+}
+.menu-item.here > .menu-label.menu-item-here\:font-medium {
+    @apply font-medium;
+}
+.menu-item.here > .menu-label.menu-item-here\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.here > .menu-label.menu-item-here\:text-gray-400 {
+    @apply text-gray-400;
+}
+.menu-item.here > .menu-label.menu-item-here\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.here > .menu-label.menu-item-here\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.here > .menu-label.menu-item-here\:text-primary {
+    @apply text-primary;
+}
+.menu-item.here > .menu-label .menu-item-here\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-item.here > .menu-label .menu-item-here\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.here > .menu-label .menu-item-here\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.here > .menu-label .menu-item-here\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.here > .menu-label .menu-item-here\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.here > .menu-label .menu-item-here\:bg-light {
+    @apply bg-light;
+}
+.menu-item.here > .menu-label .menu-item-here\:font-medium {
+    @apply font-medium;
+}
+.menu-item.here > .menu-label .menu-item-here\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.here > .menu-label .menu-item-here\:text-gray-400 {
+    @apply text-gray-400;
+}
+.menu-item.here > .menu-label .menu-item-here\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.here > .menu-label .menu-item-here\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.here > .menu-label .menu-item-here\:text-primary {
+    @apply text-primary;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:bg-light {
+    @apply bg-light;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:font-medium {
+    @apply font-medium;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:text-gray-400 {
+    @apply text-gray-400;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.here > .menu-toggle.menu-item-here\:text-primary {
+    @apply text-primary;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:bg-light {
+    @apply bg-light;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:font-medium {
+    @apply font-medium;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:text-gray-400 {
+    @apply text-gray-400;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.here > .menu-toggle .menu-item-here\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show.menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-link.menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show > .menu-link.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-link.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-link.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-link.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-link.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-link .menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show > .menu-link .menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-link .menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-link .menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-link .menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-link .menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-label.menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show > .menu-label.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-label.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-label.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-label.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-label.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-label .menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show > .menu-label .menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-label .menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-label .menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-label .menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-label .menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-toggle.menu-item-show\:text-primary {
+    @apply text-primary;
+}
+.menu-item.show > .menu-toggle .menu-item-show\:\!flex {
+    @apply !flex;
+}
+.menu-item.show > .menu-toggle .menu-item-show\:inline-flex {
+    @apply inline-flex;
+}
+.menu-item.show > .menu-toggle .menu-item-show\:hidden {
+    @apply hidden;
+}
+.menu-item.show > .menu-toggle .menu-item-show\:text-gray-800 {
+    @apply text-gray-800;
+}
+.menu-item.show > .menu-toggle .menu-item-show\:text-gray-900 {
+    @apply text-gray-900;
+}
+.menu-item.show > .menu-toggle .menu-item-show\:text-primary {
+    @apply text-primary;
+}
+
+/* Card */
+.card {
+    @apply flex flex-col bg-white rounded-lg border border-gray-200 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)];
+}
+.card-title {
+    @apply text-lg font-semibold text-gray-900;
+}
+.card-header {
+    @apply flex items-center justify-between border-b border-gray-200 p-4;
+}
+.card-body {
+    @apply flex-grow p-4;
+}
+.card-footer {
+    @apply flex items-center justify-between border-t border-gray-200 p-4;
+}
+
+/* Form */
+
+.form-label {
+    @apply flex w-full text-gray-700 font-medium text-sm leading-4;
+}
+
+
+.input {
+    @apply block w-full appearance-none outline-none shadow-none font-medium text-sm leading-4 bg-light-active border border-gray-300 text-gray-700 px-3 rounded-md h-10;
+}
+
+.input::placeholder,
+.input input::placeholder {
+    @apply text-gray-400
+}
+.input:hover {
+    @apply border-gray-400
+}
+.input:focus,
+.input:has(input:focus) {
+    @apply border-primary text-gray-700 shadow-[0_0_10px_0px_rgba(0,0,0,0.1)];
+}
+.input:focus::placeholder,
+.input:focus input::placeholder,
+.input:has(input:focus)::placeholder,
+.input:has(input:focus) input::placeholder {
+    @apply text-gray-600
+}
+.input:active,
+.input:has(input:active) {
+    @apply text-gray-700
+}
+.input:active::placeholder,
+.input:active input::placeholder,
+.input:has(input:active)::placeholder,
+.input:has(input:active) input::placeholder {
+    @apply text-gray-600
+}
+.input:active,
+.input:has(input:active) {
+    @apply shadow-none
+}
+.input:disabled,
+.input:has(input:disabled) {
+    @apply text-gray-400 bg-gray-100
+}
+.input:disabled::placeholder,
+.input:disabled input::placeholder,
+.input:has(input:disabled)::placeholder,
+.input:has(input:disabled) input::placeholder {
+    @apply text-gray-300
+
+}
+.input-sm {
+    @apply px-2.5 h-8 font-medium text-xs
+}
+.input-lg {
+    @apply px-3 h-12 font-medium text-sm
+}
+.input:not(input) {
+    @apply flex gap-1.5 items-center appearance-none outline-none shadow-none text-gray-600
+}
+.input:not(input) input {
+    @apply grow bg-transparent border-transparent text-inherit outline-none font-inherit;
+}
+.input:not(input) i {
+    @apply text-xl
+}
+.input:not(input) .btn-icon {
+    @apply border-0 h-auto w-auto
+}
+.input:not(input) .btn-icon:hover i,
+.input:not(input) .btn-icon:focus i,
+.input:not(input) .btn-icon:active i,
+.input:not(input) .btn-icon.active i {
+    @apply text-gray-800
+}
+.input:not(input).input-xs i {
+    @apply text-xs
+}
+.input:not(input).input-sm i {
+    @apply text-sm
+}
+.input:not(input).input-lg i {
+    @apply text-xl
+}
+.input-group {
+    @apply flex items-stretch
+}
+.input-group .btn {
+    @apply shrink-0
+}
+.input-group .input {
+    @apply grow
+}
+.input-group .input~.btn,
+.input-group .input~.dropdown>.btn {
+    @apply rounded-tl-none rounded-bl-none
+}
+.input-group .input+.btn,
+.input-group .input+.dropdown>.btn {
+    border-inline-start:0
+}
+.input-group .btn~.input,
+.input-group .btn~.btn,
+.input-group .input~.input {
+    border-start-start-radius:0;
+    border-end-start-radius:0
+}
+.input-group .input:has(~.btn),
+.input-group .input:has(~.input),
+.input-group .input:has(~.dropdown>.btn) {
+    border-start-end-radius:0;
+    border-end-end-radius:0
+}
+.input-group .btn:has(~.input,
+~.btn),
+.input-group .input:has(~.input) {
+    border-start-end-radius:0;
+    border-end-end-radius:0;
+    border-inline-end:0
+}
+.image-input {
+    @apply inline-flex relative items-stretch justify-center;
+}
+.image-input input[type="file"]{
+    @apply absolute appearance-none !w-0 !h-0 opacity-0 overflow-hidden;
+}
+.image-input .image-input-preview {
+    @apply cursor-pointer relative overflow-hidden w-full h-full bg-cover bg-no-repeat;
+}
+.image-input .image-input-placeholder {
+    @apply relative overflow-hidden w-full h-full bg-cover bg-no-repeat;
+}
+.select {
+    @apply block w-full appearance-none shadow-none outline-none bg-no-repeat bg-right-3 bg-14px-11px font-medium text-sm bg-light-active rounded-md h-10 px-3 border border-gray-300 text-gray-700;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2378829D' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+.select[multiple],
+.select[size]:not([size="1"]) {
+    @apply pe-4;
+    background-image: none;
+}
+.select:-moz-focusring {
+    @apply text-transparent 
+}
+.select:hover{
+    @apply border-gray-400
+}
+.select:focus {
+    @apply border-primary text-gray-700 shadow-[0_0_10px_0px_rgba(0,0,0,0.1)];
+}
+.select:focus::placeholder {
+    @apply text-gray-600
+}
+.select:active {
+    @apply text-gray-700
+}
+.select:active::placeholder {
+    @apply text-gray-600
+}
+.select:active {
+    @apply shadow-none
+}
+.select:disabled {
+    @apply text-gray-400 bg-gray-100
+}
+.select:disabled::placeholder {
+    @apply text-gray-300
+}
+.select-sm {
+    @apply px-2.5 h-8 font-medium text-xs bg-14px-10px bg-inset-inline-end-center
+}
+
+

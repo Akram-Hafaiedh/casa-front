@@ -5,17 +5,18 @@ import { User } from "../../types/User";
 import useAxiosInstance from "../../utils/axiosInstance";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
-import { FaImage, FaLocationArrow, FaPhone } from "react-icons/fa6";
+import { FaLocationArrow, FaLocationDot, FaPhone } from "react-icons/fa6";
 import { TbCalendarUser } from "react-icons/tb";
 import { LiaFileContractSolid } from "react-icons/lia";
-import { RiContractFill } from "react-icons/ri";
 import Avatar from "react-avatar";
 import { IoMail } from "react-icons/io5";
 import { FaCaretDown } from 'react-icons/fa';
 import { Contract } from "../../types/Contract";
 import FileUpload from "../../components/FileUpload";
 import Swal from "sweetalert2";
-
+import { UserDocument } from "../../types/UserDocument";
+import { toast } from "react-toastify";
+import { SiAbstract } from "react-icons/si";
 const UserDetails = () => {
     const navigate = useNavigate();
     const storageUrl = import.meta.env.VITE_REACT_APP_STORAGE_URL;
@@ -28,16 +29,15 @@ const UserDetails = () => {
     const [activeTab, setActiveTab] = useState("profile");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isContractTabDisabled, setIsContractTabDisabled] = useState(true);
-    
-    const [contractToEdit, setContractToEdit] = useState<Contract | null>(null);
-    const [isAddingContract, setIsAddingContract] = useState(false);
     const [contract, setContract] = useState<Contract | null>(null);
+    const [contractDocuments, setContractDocuments] = useState<File | null>(null);
 
     const defaultContract: Contract = {
-        type: "",
+        type: "permanent",
         start_date: new Date(),
         end_date: new Date(),
-        status: "",
+        status: "active",
+        user_id: '',
     };
 
     const statusOptions = [
@@ -57,13 +57,31 @@ const UserDetails = () => {
         { value: 'training', label: 'Training' },
     ];
 
+    const handleContractChange = (field : keyof Contract, value : string | Date) => {
+        setContract((prevContract) => {
+            if (!prevContract) return null;
+            return { ...prevContract, [field]: value };
+        });
+
+    }
+
+    useEffect(() => {
+        console.log('contract', contract);
+    }, [contract]);
+
     const fetchUser = useCallback(async () => {
         try {
             const response = await axiosInstance.get(`/users/${userId}`);
-            console.log(response.data);
             if (response.data.status.code == 200) {
                 const userData = response.data.data.user;
                 setUser(userData);
+                if(userData?.contract) {
+                    setContract(userData.contract)
+                    setIsContractTabDisabled(false); 
+                }else{
+                    setIsContractTabDisabled(true);
+                };
+                setContractDocuments(userData?.contract && userData?.documents && userData?.documents.find((doc:UserDocument) => doc.type === 'contract')?.path);
                 setOverviewUser({...userData}); // This is a shallow copy of the user
             } else {
                 navigate('/404');
@@ -81,6 +99,10 @@ const UserDetails = () => {
     }, [axiosInstance, userId, navigate]);
 
     const handleAddContractClick = () => {
+        if (contract){
+            toast.error('User already have a contract');
+            return;
+        }
         setContract(defaultContract);
         setActiveTab("contract");
         setIsContractTabDisabled(false);
@@ -109,10 +131,10 @@ const UserDetails = () => {
     };
 
     const handleSubmitContract = () => {
+        console.log('submit', contract);
         if (!user || !contract) return;
-        
-        setIsAddingContract(false);
-        setActiveTab("profile");
+        // setIsAddingContract(false);
+        // setActiveTab("profile");
     };
     
 
@@ -129,14 +151,14 @@ const UserDetails = () => {
             <div className="flex items-center justify-between">
                 <h1 className="mb-4 text-2xl font-bold">Employee Details</h1>
                 {/* <button type="button" onClick={() => setIsModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded">Add User</button> */}
-                <Link to="/users/create" className="px-4 py-2 text-white bg-blue-500 rounded">Add User</Link>
+                <Link to="/users/create" className="px-4 py-2 text-white bg-blue-500 rounded">Add Employee</Link>
             </div>
             {/* Overview with Tabs */}
             <div className="bg-white relative">
                 {/* Overview */}
                 <div className="border-b border-gray-200">
                     <div className="flex flex-row p-4 gap-4">
-                        <Avatar name={overviewUser.first_name + " " + overviewUser.last_name} size="130" round={false} className="rounded-md" />
+                        <Avatar name={overviewUser.first_name + " " + overviewUser.last_name } size="130" round={false} className="rounded-md" />
                         <div>
                             <h1 className="text-2xl font-bold">{overviewUser.first_name + " " + overviewUser.last_name}</h1>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-2">
@@ -175,9 +197,10 @@ const UserDetails = () => {
                     {dropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
                             <button
-                                type="button" 
-                                className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left"
-                                onClick={handleAddContractClick}>
+                                type="button"
+                                className={`block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left ${contract?.user_id ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                onClick={handleAddContractClick}
+                                disabled={contract?.user_id ? true : false}>
                                 Add Contract
                             </button>
                             <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -333,7 +356,7 @@ const UserDetails = () => {
                 )}
 
                 {/* Contract Tab */}
-                {activeTab === "contract" && user.contract && (
+                {activeTab === "contract" && (
                     <div>
                         <h3 className="text-2xl font-semibold mb-4">Contract Details</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -342,7 +365,9 @@ const UserDetails = () => {
                                 <select
                                     className="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
                                     id="type"
-                                    value={user.contract.type}
+                                    value={contract?.type}
+                                    disabled={user.contract ? true : false}
+                                    onChange={(e) => handleContractChange('type', e.target.value)}
                                 >
                                     {contractTypeOptions.map((option) => (
                                         <option key={option.value} value={option.value}>
@@ -353,44 +378,26 @@ const UserDetails = () => {
                             </div>
                             <div>
                                 <label className="block text-sm text-gray-600" htmlFor="start_date">Start Date</label>
-                                {user.contract.id ? (
                                     <input
                                         type="text"
                                         id="start_date"
-                                        value={moment(user.contract.start_date).format("YYYY-MM-DD")}
-                                        readOnly
+                                        value={moment(contract?.start_date).format("YYYY-MM-DD")}
+                                        onChange={(e) => handleContractChange('start_date', new Date(e.target.value))}
+                                        readOnly={user.contract ? true : false}
                                         className="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
                                     />
-                                ): (
-                                    <input
-                                        type="text"
-                                        id="start_date"
-                                        onChange={(e) => setStartDate(e.target.value)}
-                                        value={moment().format("YYYY-MM-DD")}
-                                        className="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
-                                    />
-                                )}
                             </div>
-                            {user.contract.status !== "active" && (<div>
+                            {contract?.status !== "active" && (<div>
                                 <label className="block text-sm text-gray-600" htmlFor="end_date">End Date</label>
                                 
-                                {user.contract.id ? (
                                     <input
                                         id="end_date"
                                         type="text"
-                                        value={moment(user.contract.end_date).format("YYYY-MM-DD")}
-                                        readOnly
+                                        value={moment(contract?.end_date).format("YYYY-MM-DD")}
+                                        onChange={(e) => handleContractChange('end_date', new Date(e.target.value))}
+                                        readOnly={user.contract ? true : false}
                                         className="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
                                     />
-                                ): (
-                                    <input
-                                        id="end_date"
-                                        type="text"
-                                        onChange={(e) => setEndDate(e.target.value)}
-                                        value={moment().format("YYYY-MM-DD")}
-                                        className="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
-                                    />
-                                )}
                             </div>
                             )}
                             <div>
@@ -398,7 +405,9 @@ const UserDetails = () => {
                                 <select 
                                     className="w-full mt-1 px-3 py-2 border rounded-lg bg-gray-100"
                                     id="status"
-                                    value={user.contract.status}>
+                                    value={contract?.status}
+                                    onChange={(e) => handleContractChange('status', e.target.value)}
+                                >
                                     {statusOptions.map((option) => (
                                         <option key={option.value} value={option.value}>{option.label}</option>
                                     ))}

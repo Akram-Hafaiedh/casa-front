@@ -8,6 +8,7 @@ import Sidebar from "../../components/Sidebar";
 import moment from "moment";
 import FileUpload from "../../components/FileUpload";
 import Modal from "react-modal";
+import InfoSection from "../../layouts/Info";
 
 
 
@@ -128,15 +129,16 @@ const UserCreate: React.FC = () => {
 
 
     return (
-        <HomeLayout sidebar={<Sidebar />}>
+        <div className="container-fixed">
         <div>
-            <div className="flex items-center justify-between">
-                <h1 className="mb-4 text-2xl font-bold">Add Employee</h1>
-                {/* <button type="button" onClick={() => setIsModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded">Add User</button> */}
-                <Link to="/users" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 flex items-center space-x-4">
-                    <IoReturnDownBackOutline /> <span>Employees List</span>
-                </Link>
-            </div>
+            <InfoSection
+                title="New employee"
+                description="Create a new employee on the platform"
+                linkText="Employees List"
+                icon={<IoReturnDownBackOutline />}
+                iconPosition="start"
+                linkTo="/users"
+            />
             <div className="p-6 bg-white rounded-lg shadow-md">
                 <h2 className="text-xl font-bold mb-4 text-center">Employee - Personnal Informations:</h2>
                 <form onSubmit={handleSubmit} className="gap-4 grid grid-cols-1 md:grid-cols-2">
@@ -373,7 +375,7 @@ const UserCreate: React.FC = () => {
                 </form>
             </div>
         </div>
-        </HomeLayout>
+        </div>
     )
 }
 

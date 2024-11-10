@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import useAuth from '../../hooks/useAuth';
 import { Vacation } from '../../types/Vacation';
+import InfoSection from '../../layouts/Info';
 
 /**
  * Page component for the vacations page.
@@ -114,8 +115,8 @@ const Vacations: React.FC = () => {
     };
     
     return (
-        <HomeLayout sidebar={<Sidebar />}>
-            <div className="flex justify-between items-center">
+        <div className='container-fixed'>
+            {/* <div className="flex justify-between items-center">
                 <h1 className="mb-4 text-3xl font-bold">Vacations</h1>
                 <div className="flex space-x-2">
                     <button type='button' onClick={toggleModal} className="px-4 py-2 text-white bg-green-500 rounded">
@@ -124,7 +125,14 @@ const Vacations: React.FC = () => {
                     <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded">{user?.role === 'Administrator' ? 'Process Vacations' : 'My Vacations'}
                     </Link>
                 </div>
-            </div>
+            </div> */}
+
+            <InfoSection 
+                title="Vacations" 
+                description="Manage your vacations"
+                linkText={user?.role === 'Administrator'? 'Create New Vacation' : 'My Vacations'}
+                linkTo={user?.role === 'Administrator'? '/vacations/list' : '/vacations/create'}
+            />
 
             <FullCalendar
                 plugins={[multiMonthPlugin, dayGridPlugin, interactionPlugin]}
@@ -147,7 +155,7 @@ const Vacations: React.FC = () => {
                 selectedVacation={selectedVacation}
                 onVacationCreated={refreshVacations}
             />
-        </HomeLayout>
+        </div>
     );
 };
 export default Vacations;

@@ -9,6 +9,9 @@ import Switch from "../../components/Switch";
 import { FaUser, FaCog, FaGlobe, FaCheckCircle, FaArrowRight, FaPlus  } from 'react-icons/fa';
 import { IoReturnDownBackOutline } from "react-icons/io5";
 import moment from "moment";
+import DropZone from "../../components/DropZone";
+import { FaXmark } from "react-icons/fa6";
+import InfoSection from "../../layouts/Info";
 const CustomerCreate: React.FC = () => {
   const axiosInstance = useAxiosInstance();
   const [step, setStep] = useState<number>(0);
@@ -44,7 +47,7 @@ const CustomerCreate: React.FC = () => {
       ],
       accountings: [
         {
-          contract_start_date: new Date(),
+          start_date: new Date(),
           tax_included: 0,
           status: '',
           documents: null,
@@ -79,7 +82,7 @@ const CustomerCreate: React.FC = () => {
         accountings: [
           ...prevClient.portfolio.accountings,
           {
-            contract_start_date: new Date(),
+            start_date: new Date(),
             tax_included: 0,
             status: '',
             documents: null,
@@ -122,6 +125,10 @@ const CustomerCreate: React.FC = () => {
   };
 
   const removeInsurance = (index: number) => {
+    if(index === 0) {
+      toast.error("You cannot remove the last insurance.");
+      return;
+    }
     setClient((prevClient) => ({
       ...prevClient,
       portfolio: {
@@ -156,16 +163,40 @@ const CustomerCreate: React.FC = () => {
     }));
   };
 
+  const handleAccountingFileChange = (files: File[], index: number) =>{
+    setClient((prevClient) => {
+      const portfolio = { ...prevClient.portfolio };
+      portfolio.accountings[index].documents = files;
+      return { ...prevClient, portfolio };
+    });
+  }
+
+  const handleTaxFileChange = (files: File[], index: number) => {
+    setClient((prevClient) => {
+      const portfolio = { ...prevClient.portfolio };
+      portfolio.taxes[index].documents = files;
+      return { ...prevClient, portfolio };
+    });
+  }
+
   const handleNext = () => {
     console.log(client);
     setStep((prevStep) => Math.min(prevStep + 1, steps.length - 1))
   };
-  const handleBack = () => setStep((prevStep) => Math.max(prevStep - 1, 0));
+  const handleBack = () => {
+    console.log(client);
+    setStep((prevStep) => Math.max(prevStep - 1, 0))
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(client);
     try {
-      const response = await axiosInstance.post('/api/clients', client);
+      const response = await axiosInstance.post('/customers', client,{
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       if (response.data.status.code === 201) {
         toast.success(response.data.status.message);
         setClient({
@@ -194,7 +225,7 @@ const CustomerCreate: React.FC = () => {
             ],
             accountings: [
               {
-                contract_start_date: new Date(),
+                start_date: new Date(),
                 tax_included: 0,
                 status: '',
                 documents: null,
@@ -210,9 +241,12 @@ const CustomerCreate: React.FC = () => {
             ],
           }
         });
+      }else {
+        toast.error(response.data.status.message);
       }
     } catch (error) {
       console.error('Error creating client:', error);
+      toast.error('An error occurred while creating the client');
     }
   };
 
@@ -230,6 +264,11 @@ const CustomerCreate: React.FC = () => {
     "MN Broker",
     "Markler Zentrum",
     "Helve",
+  ];
+
+  const taxTypeOptions = [
+    "Percentage",
+    "Fixed Amount",
   ];
 
   const paymentFrequencyOptions = [
@@ -253,7 +292,7 @@ const CustomerCreate: React.FC = () => {
     "Baugarantie",
   ];
 
-  const handleAccountingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, index: number) => {
+  const handleAccountingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement >, index: number) => {
     const { name, value, type, checked } = e.target;
     setClient((prevClient) => {
       const portfolio = { ...prevClient.portfolio };
@@ -311,14 +350,22 @@ const CustomerCreate: React.FC = () => {
   };
 
   return (
-    <HomeLayout sidebar={<Sidebar />}>
+    <div className="container-fixed">
     <div>
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-between">
             <h1 className="mb-4 text-2xl font-bold">Create Customer</h1>
             <Link to="/customers" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 flex items-center space-x-4">
               <IoReturnDownBackOutline /> <span>Customers List</span>
             </Link>
-        </div>
+        </div> */}
+        <InfoSection
+          title="Create Customer"
+          description="Fill out the form below to create a new customer."
+          icon={<IoReturnDownBackOutline />}
+          iconPosition="start"
+          linkTo="/customers"
+          linkText="Customers List"
+        />
 
         <div className="flex items-center justify-between my-6 border-b p-6 bg-white rounded-md">
           {steps.map((stepObj, index) => (
@@ -476,9 +523,9 @@ const CustomerCreate: React.FC = () => {
                     type="button"
                     title="Remove Insurance"
                     onClick={() => removeInsurance(index)}
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-fit"
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 w-fit text-red-500"
                   >
-                    Remove Accounting
+                    <FaXmark />
                   </button>
                 </div>
                 <div>
@@ -656,13 +703,13 @@ const CustomerCreate: React.FC = () => {
                   Remove Accounting
                 </button>
                 <div>
-                  <label htmlFor="contract_start_date" className="block mb-1">Contract Start Date</label>
+                  <label htmlFor="start_date" className="block mb-1">Start Date</label>
 
                   <input
-                    title="Contract Start Date"
+                    title="Start Date"
                     type="date"
-                    name="contract_start_date"
-                    value={moment(accounting.contract_start_date).format('YYYY-MM-DD')} 
+                    name="start_date"
+                    value={moment(accounting.start_date).format('YYYY-MM-DD')} 
                     onChange={(e) => handleAccountingChange(e, index)}
                     className="w-full p-2 border rounded mb-2"
                   />
@@ -699,17 +746,19 @@ const CustomerCreate: React.FC = () => {
 
 
                 {/* File input for documents */}
-                <label className="block mb-2 cursor-pointer">
-                  <span className="inline-block px-4 py-2 text-center text-white bg-blue-500 rounded hover:bg-blue-600">
-                    Upload Documents
-                  </span>
-                  <input
+                <div className="block mb-2 cursor-pointer col-span-3">
+                  {/* <input
                     type="file"
                     name="documents"
                     onChange={(e) => handleAccountingChange(e, index)} // Adjust handling as needed
                     className="hidden" // Hide the default file input
+                  /> */}
+                  <DropZone 
+                    label={`Upload Documents ${index + 1}`}
+                    onChange={(files) => handleAccountingFileChange(files, index)}
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                   />
-                </label>
+                </div>
               </div>
             ))}
             
@@ -737,33 +786,64 @@ const CustomerCreate: React.FC = () => {
                   >
                     Remove Tax
                   </button>
-                <input
-                  type="text"
-                  name="name"
-                  value={tax.name}
-                  placeholder="Tax Name"
-                  onChange={(e) => handleTaxChange(e, index)}
-                  className="w-full p-2 border rounded mb-2"
-                />
-                <input
-                  type="number"
-                  name="percentage"
-                  value={tax.percentage}
-                  placeholder="Tax Percentage"
-                  onChange={(e) => handleTaxChange(e, index)}
-                  className="w-full p-2 border rounded mb-2"
-                />
-                <input
-                  type="text"
-                  name="type"
-                  value={tax.type}
-                  placeholder="Tax Type"
-                  onChange={(e) => handleTaxChange(e, index)}
-                  className="w-full p-2 border rounded mb-2"
-                />
+                <div>
+                  <label className="block text-sm font-bold mb-2" htmlFor="name">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={tax.name}
+                    placeholder="Tax Name"
+                    onChange={(e) => handleTaxChange(e, index)}
+                    className="w-full p-2 border rounded mb-2"
+                  />
+                </div>
+                <div>
+                  {/* TODO: This needs to be changed to value */}
+                  <label className="block text-sm font-bold mb-2" htmlFor="percentage">Percentage</label>
+                  <input
+                    type="number"
+                    name="percentage"
+                    value={tax.percentage}
+                    placeholder="Tax Percentage"
+                    onChange={(e) => handleTaxChange(e, index)}
+                    className="w-full p-2 border rounded mb-2"
+                  />
+                </div>
+                <div>
+                  {/* TODO: This needs to be changed to select with types : percentage, amount */}
+                  <label className="block text-sm font-bold mb-2" htmlFor="type">Type</label>
+                  {/* <input
+                    type="text"
+                    name="type"
+                    value={tax.type}
+                    placeholder="Tax Type"
+                    onChange={(e) => handleTaxChange(e, index)}
+                    className="w-full p-2 border rounded mb-2"
+                  /> */}
+                  <select 
+                    title="Type"
+                    id="type"
+                    name="type"
+                    value={tax.type}
+                    onChange={(e) => handleTaxChange(e, index)}
+                    className="w-full p-3 border rounded mb-2 bg-white"  
+                  >
+                    <option value="">Select The Tax Type</option>
+                    {taxTypeOptions.map((type, index) => (
+                      <option key={index} value={type}>
+                        {type}
+                    </option>
+                    ))}
+                  </select>
+                </div>
                 {/* Tailwind Styled File Input */}
-                <label className="block mb-2 cursor-pointer">
-                  <span className="inline-block px-4 py-2 text-center text-white bg-blue-500 rounded hover:bg-blue-600">
+                <div className="block mb-2 cursor-pointer col-span-3">
+                  <DropZone 
+                    label={`Upload Documents ${index + 1}`}
+                    onChange={(files) => handleTaxFileChange(files, index)}
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                  />
+                  {/* <span className="inline-block px-4 py-2 text-center text-white bg-blue-500 rounded hover:bg-blue-600">
                     Upload Documents
                   </span>
                   <input
@@ -771,8 +851,8 @@ const CustomerCreate: React.FC = () => {
                     name="documents"
                     onChange={(e) => handleTaxChange(e, index)} // Adjust handling as needed
                     className="hidden" // Hide the default file input
-                  />
-                </label>
+                  /> */}
+                </div>
 
               </div>
             ))}
@@ -805,7 +885,7 @@ const CustomerCreate: React.FC = () => {
         </div>
       </form>
     </div>
-    </HomeLayout>
+    </div>
   )
 }
 

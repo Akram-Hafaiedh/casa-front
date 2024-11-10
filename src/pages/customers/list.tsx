@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import useAxiosInstance from "../../hooks/useAxiosInstance";
 import { Customer } from "../../types/Customer";
+import InfoSection from "../../layouts/Info";
 const CustomerListing: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
@@ -43,13 +44,20 @@ const CustomerListing: React.FC = () => {
         fetchCustomers(currentPage, itemsPerPage, query);
     };
     return (
-        <HomeLayout sidebar={<Sidebar />}>
+        <div className="container-fixed">
             <div>
-                <div className="flex items-center justify-between">
+                {/* <div className="flex items-center justify-between">
                     <h1 className="mb-4 text-2xl font-bold">Customers</h1>
                     <Link to="/customers/create" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">Create New Customer</Link>
 
-                </div>
+                </div> */}
+
+                <InfoSection 
+                    title="Customers"
+                    description="List of all customers"
+                    linkTo="/customers/create"
+                    linkText="Create New Customer"
+                />
                 {/* Search Bar */}
                 <div className="mb-4">
                     <input
@@ -140,7 +148,7 @@ const CustomerListing: React.FC = () => {
 
 
             </div>
-        </HomeLayout>
+        </div>
 
     );
 };
