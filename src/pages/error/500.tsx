@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
-const Error404 = () => {
+const Error500 = () => {
     const { user } = useAuth();
     return (
         <div className="flex-grow h-screen w-full">
             <div className="flex flex-col items-center justify-center grow h-[95%]">
                 <div className="mb-10">
-                    <img src="/images/illustrations/19.svg"
+                    <img src="images/illustrations/20.svg"
                         className="dark:hidden max-h-[160px]"
                         alt="image" />
                     {/* <img src="images/illustrations/19-dark.svg"
@@ -16,21 +16,25 @@ const Error404 = () => {
                     /> */}
                 </div>
                 <span className="badge badge-primary badge-outline mb-3">
-                    404 Error
+                    500 Error
                 </span>
                 <h3 className="text-2.5xl font-semibold text-gray-900 text-center mb-2">
-                    We have lost this page
+                    Internal Server Error
                 </h3>
                 <div className="text-md text-center text-gray-700 mb-10">
-                    The requested page is missing. Check the URL or&nbsp;
+                    Server error occurred. Please try again later or&nbsp;
                     <Link className="text-primary font-medium hover:text-primary-active" 
                         to={user ? '/home' : '/'}>
                         {user ? 'Return Home' : 'Login'}
-                    </Link>.
+                    </Link> for assistance.
                 </div>
+                <Link className="btn btn-primary flex justify-center"
+                    to="/">
+                        Back to Home
+                </Link>
             </div>
         </div>
     );
 };
 
-export default Error404;
+export default Error500;
