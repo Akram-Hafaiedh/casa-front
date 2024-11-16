@@ -34,13 +34,26 @@ import UserProjects from './pages/users/projects';
 import UserProfile from './pages/users/profile';
 import UserActivity from './pages/users/activity';
 import UserDocuments from './pages/users/documents';
-import { Layout } from './pages/users/Layout';
+import UserLayout from './pages/users/Layout';
+import ProjectLayout from './pages/projects/Layout';
 import UserContracts from './pages/users/contracts';
 import PrivateLayout from './layouts/PrivateLayout';
+import Error500 from './pages/error/500';
+import ComingSoon from './pages/comingSoon';
+import ProjectOverview from './pages/projects/overview';
+import ProjectUsers from './pages/projects/users';
+import ProjectBudget from './pages/projects/budget';
+import ProjectTasks from './pages/projects/tasks';
+import ProjectActivity from './pages/projects/activity';
 
 const App: React.FC = () => {
   useEffect(() => {
+    document.body.classList.add('text-base','header-fixed', 'sidebar-fixed');
     document.title = import.meta.env.VITE_APP_NAME || 'Default App Name';
+
+    return () => {
+      document.body.classList.remove('text-base','header-fixed', 'sidebar-fixed');
+    };
   }, []);
   return (
     <AuthProvider>
@@ -66,7 +79,7 @@ const App: React.FC = () => {
             <Route path="/home" element={<Home />}/>
             <Route path="/users" element={<ProtectedRoute element={<Users />} requiredRole="Administrator" />} />
             <Route path="/users/create" element={<ProtectedRoute element={<UserCreate />} requiredRole="Administrator" />} />
-            <Route path="/users/:userId"element={<ProtectedRoute element={<Layout />} requiredRole="Administrator" />} >
+            <Route path="/users/:userId"element={<ProtectedRoute element={<UserLayout />} requiredRole="Administrator" />} >
               <Route path="profile" element={<ProtectedRoute element={<UserProfile />} requiredRole="Administrator" />} />
               <Route path="contracts" element={<ProtectedRoute element={<UserContracts />} requiredRole="Administrator" />} />
               <Route path="projects" element={<ProtectedRoute element={<UserProjects />} requiredRole="Administrator" />} />
@@ -79,8 +92,17 @@ const App: React.FC = () => {
             <Route path="/vacations/list" element={<ProtectedRoute element={<VacationsListing />} />} />
 
             <Route path="/projects" element={<ProtectedRoute element={<ProjectListing />} />} />
-            <Route path="/projects/:projectId" element={<ProtectedRoute element={<ProjectDetails />} />} />
             <Route path="/projects/create" element={<ProtectedRoute element={<ProjectCreate />} />} />
+            <Route path="/projects/:projectId" element={<ProtectedRoute element={<ProjectLayout />} />} >
+              <Route path="overview" element={<ProtectedRoute element={<ProjectOverview />} />} />
+              <Route path="details" element={<ProtectedRoute element={<ProjectDetails />} />} />
+              <Route path="users" element={<ProtectedRoute element={<ProjectUsers />} />} />
+              <Route path="budget" element={<ProtectedRoute element={<ProjectBudget />} />} />
+              <Route path="tasks" element={<ProtectedRoute element={<ProjectTasks />} />} />
+              <Route path="activity" element={<ProtectedRoute element={<ProjectActivity />} />} />
+            </Route>
+            
+            {/* <Route path="/projects/:projectId" element={<ProtectedRoute element={<ProjectDetails />} />} /> */}
 
             <Route path="/contracts" element={<ProtectedRoute element={<Contracts />} requiredRole="Administrator" />} />
             <Route path="/contracts/create" element={<ProtectedRoute element={<ContractCreate />} requiredRole="Administrator" />} />
@@ -96,18 +118,11 @@ const App: React.FC = () => {
           {/* <Route path="/settings" element={<Settings />} /> */}
           {/* <Route path="/users/:userId" element={<ProtectedRoute element={<UserDetails />} requiredRole="Administrator" />} /> */}
           {/* <Route path="notifications" element={<ProtectedRoute element={<UserNotifications />} requiredRole="Administrator" />} /> */}
-         
-
-
-
           {/* <Route path="/customers" element={<ProtectedRoute element={<CustomerListing />} />} /> */}
-        
           
-          
-
-
-
           <Route path="/404" element={<Error404 />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/500" element={<Error500 />} />
           <Route path="*" element={<Error404 />} />
         </Routes>
       </Router>
