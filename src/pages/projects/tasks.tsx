@@ -1,121 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';  // Import SweetAlert2
-import { toast } from 'react-toastify';
-import useAxiosInstance from '../../hooks/useAxiosInstance';
-import TaskModal from '../../components/modals/TaskModal';
-import TaskCard from '../../components/TaskCard';
-import { Task } from '../../types/Task';
-import { Member } from '../../types/Member';
-import { Project } from '../../types/Project';
-import { Event } from '../../types/Event';
-import { HiMiniEllipsisVertical, HiMiniSquaresPlus, HiOutlineChatBubbleBottomCenterText, HiOutlineLink, HiOutlineSquaresPlus } from 'react-icons/hi2';
+import { HiMiniEllipsisVertical, HiMiniSquaresPlus, HiOutlineChatBubbleBottomCenterText, HiOutlineLink, HiOutlineSquaresPlus } from "react-icons/hi2";
 
-const ProjectDetails: React.FC = () => {
-    const axiosInstance = useAxiosInstance();
-    const { projectId } = useParams();
-    const [project, setProject] = useState<Project | null>(null);
-    const [tasks, setTasks] = useState<Task[]>([]);
-
-    const [events, setEvents] = useState<Event[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false); // Modal open state
-    const [members, setMembers] = useState<Member[]>([]);
-    const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
-
-    const fetchEvents = useCallback(async () => {
-        try {
-            const response = await axiosInstance.get(`/projects/${projectId}/events`);
-            const eventsData = response.data.data.events;
-            setEvents(eventsData || []);
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
-    }, [axiosInstance, projectId]);
-
-    const fetchProject = useCallback(async () => {
-        try {
-            const response = await axiosInstance.get(`/projects/${projectId}`);
-            const projectData = response.data.data;
-            setProject(projectData.project);
-            setTasks(projectData.tasks || []);  // Assuming tasks are part of the response
-            setMembers(projectData.project.members || []);
-            setEvents(projectData.events || []);
-        } catch (error) {
-            console.error('Error fetching project details:', error);
-        }
-    }, [axiosInstance, projectId]);
-
-    useEffect(() => {
-        fetchProject();
-    }, []);
-
-
-
-    const handleAddTask = async (task: Task) => {
-        try {
-            const response = await axiosInstance.post(`/projects/${projectId}/tasks/create`, task);
-            if (response && response.data.status === 201) {
-                toast.success(response.data.data.message);
-                setTasks([...tasks, response.data.data.task]);
-                setIsModalOpen(false);
-                await fetchEvents();
-            }
-        } catch (error) {
-            console.error('Error adding task:', error);
-        }
-    };
-
-
-    const handleEditTask = async (task: Task) => {
-        try {
-            const response = await axiosInstance.put(`/projects/${projectId}/tasks/${task.id}`, task);
-            if (response && response.data.status === 200) {
-                toast.success(response.data.data.message);
-                setTasks(tasks.map(t => t.id === task.id ? response.data.data.task : t));
-                setIsModalOpen(false);
-                setTaskToEdit(null);
-                await fetchEvents();
-            }
-        } catch (error) {
-            console.error('Error editing task:', error);
-        }
-    }
-    const handleDeleteTask = async (taskId: string) => {
-        if (!taskId) {
-            toast.error('Error: Task is missing or invalid')
-            return;
-        }
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this task!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it',
-            customClass: {
-                container: 'font-base',
-                confirmButton: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
-                cancelButton: 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded',
-                title: 'text-xxl font-semibold mb-2',
-            }
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const response = await axiosInstance.delete(`/projects/${projectId}/tasks/${taskId}`);
-                    if (response && response.data.status === 200) {
-                        toast.success(response.data.data.message);
-                        setTasks(tasks.filter(task => task.id !== taskId));
-                        await fetchEvents(); 
-                    }
-                } catch (error) {
-                    console.error('Error deleting task:', error);
-                }
-            }
-        });
-    }
-
-
-    const getTasksByStatus = (status: string) => tasks.filter(task => task.status === status);
+const ProjectTasks: React.FC = () => {
     return (
         <div className="grid flex-grow grid-cols-1 md:grid-cols-3 gap-4">
             <div className="card grow">
@@ -380,8 +265,6 @@ const ProjectDetails: React.FC = () => {
             </div>
         </div>
     );
+}
 
-};
-
-export default ProjectDetails;
-
+export default ProjectTasks;

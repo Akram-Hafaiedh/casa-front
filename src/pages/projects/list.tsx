@@ -10,11 +10,11 @@ import InfoSection from '../../layouts/Info';
 
 
 interface Member {
-    _id: string;
+    id: string;
     email: string;
 }
 interface Task {
-    _id: string;
+    id: string;
     name: string;
     description: string;
     assignedTo: string;
@@ -25,7 +25,7 @@ interface Task {
     updatedDate: string;
 }
 interface Project {
-    _id: string;
+    id: string;
     name: string;
     owner: string;
     members: Member[];
@@ -212,141 +212,651 @@ const ProjectListing: React.FC = () => {
                             className="w-full px-4 py-2 border rounded"
                         />
                     </div>
-
-                    {filteredProjects && filteredProjects.length > 0 && (
-                        <>
-                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                                {projects.map((project: Project) => (
-                                    <div key={project._id} className="p-4 bg-white rounded-lg shadow-md">
-
-                                        {editingProjectId === project._id ? (
-                                            <input
-                                                type="text"
-                                                value={tempTitle}
-                                                onChange={handleTitleChange}
-                                                onBlur={() => handleTitleBlur(project._id)}
-                                                onKeyDown={(event) => handleTitleKeyDown(event, project._id)}
-                                                className="mb-2 text-lg font-bold text-gray-800 border-b-2 border-blue-500 focus:outline-none"
-                                                autoFocus
-                                            />
-                                        ) : (
-
-                                            <h2 className="mb-2 text-lg font-bold"
-                                                onClick={() => handleTitleClick(project._id, project.name)}>
-                                                {project.name}
-                                            </h2>
-                                        )}
-
-                                        <p className="mb-2 text-gray-700">{project.description}</p>
-
-                                        {/* Members as overlapping circles */}
-                                        <div className="flex items-center mb-4 -space-x-2">
-                                            {project.members.slice(0, 4).map((member, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="relative z-10 flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-blue-500 border border-white rounded-full"
-                                                    style={{ zIndex: project.members.length - index }}
-                                                >
-                                                    {getInitials(member.email)}
-                                                    <button
-                                                        onClick={() => handleRemoveMember(member._id, project._id)}
-                                                        className="absolute top-0 flex items-center justify-center w-4 h-4 p-1 text-xs text-red-500 transform translate-x-1/2 -translate-y-1/2 bg-white border border-red-500 rounded-full right-2 hover:bg-gray-200"
-                                                        aria-label={`Remove ${member.email}`}
-                                                    >
-                                                        X
-                                                    </button>
-                                                </div>
-                                            ))}
-                                            {project.members.length > 4 && (
-                                                <div className="relative z-10 flex items-center justify-center w-8 h-8 text-sm font-bold text-gray-600 bg-gray-200 border border-white rounded-full">
-                                                    +{project.members.length - 4}
-                                                </div>
-                                            )}
-                                            {/* Add Member Circle */}
-                                            <button
-                                                onClick={() => handleAddMemberClick(project._id)}
-                                                className="relative z-0 flex items-center justify-center w-8 h-8 text-lg text-gray-500 border-2 border-gray-400 border-dotted rounded-full"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-
-                                        {/* Project Start/End Date */}
-                                        <p className="text-sm text-gray-500">Start Date: {new Date(project.startDate).toLocaleDateString()}</p>
-                                        <p className="text-sm text-gray-500">End Date: {new Date(project.endDate).toLocaleDateString()}</p>
-
-                                        {/* Public/Private Switch */}
-                                        <div className="flex items-center justify-between mt-4">
-                                            <span className="text-sm text-gray-700">
-                                                {project.isPrivate ? 'Private' : 'Public'}
-                                            </span>
-                                            <Switch
-                                                checked={project.isPrivate}
-                                                onChange={() => togglePrivacy(project._id, project.isPrivate)}
-                                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out ${project.isPrivate ? 'bg-red-500' : 'bg-green-500'} `}
-                                            >
-                                                <span
-                                                    className={`inline-block h-4 w-4 transform bg-white rounded-full transition-transform duration-300 ease-in-out ${project.isPrivate ? 'translate-x-6' : 'translate-x-1'}`}
-                                                />
-                                            </Switch>
-                                        </div>
-
-                                        {/* View Project Link */}
-                                        <Link to={`/projects/${project._id}`} className="inline-block px-4 py-2 mt-4 text-white bg-blue-500 rounded hover:bg-blue-700">View Project</Link>
-                                    </div>
-                                ))}
-                            </div>
-                                        {/* Pagination Controls */}
-                            <div className="flex items-center justify-between mt-6">
-                                <button
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                                >
-                                    Previous
-                                </button>
-                                <span className="text-sm text-gray-600">
-                                    Page {currentPage} of {totalPages}
-                                </span>
-                                <button
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                    className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                                >
-                                    Next
-                                </button>
-                            </div>
-                            {/* Optional: Page size selector */}
-                            <div>
-                                <label>
-                                    Items per page:
-                                    <select
-                                        className="p-2 mb-4 ml-4 border border-gray-300 rounded-md"
-                                        value={itemsPerPage}
-                                        onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                                    >
-                                        <option value={10}>10</option>
-                                        <option value={20}>20</option>
-                                        <option value={50}>50</option>
-                                    </select>
-                                </label>
-                            </div>
-                        </>
-                    )}
                 </div>
-
-
-                
-
-                {/* Add Member Modal */}
-                <AddMemberModal
-                    isOpen={isAddMemberModalOpen}
-                    onClose={() => setIsAddMemberModalOpen(false)}
-                    onAddMembers={handleAddMembers}
-                    selectedUsers={currentProjectMembers}
-                />
             </div>
-            {!projects.length && (
+            <div className="container-fixed">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5">
+                    <div className="card p-7.5">
+                        <div className="flex items-center justify-between mb-3 lg:mb-6">
+                            <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                                <img alt="" className="" src="images/brand-logos/plurk.svg"/>
+                            </div>
+                            <span className="badge badge-primary badge-outline">
+                                In Progress
+                            </span>
+                        </div>
+                        <div className="flex flex-col mb-3 lg:mb-6">
+                            <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                                Phoenix SaaS
+                            </a>
+                            <span className="text-sm font-medium text-gray-600">
+                                Real-time photo sharing app
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                            <span className="text-sm font-medium text-gray-500">
+                                Start:
+                                <span className="text-sm font-semibold text-gray-700">
+                                Mar 06
+                                </span>
+                            </span>
+                            <span className="text-sm font-medium text-gray-500">
+                                End:
+                                <span className="text-sm font-semibold text-gray-700">
+                                Dec 21
+                                </span>
+                            </span>
+                        </div>
+                        <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
+                            <div className="progress-bar" style={{width: '55%'}}></div>
+                        </div>
+                        <div className="flex -space-x-2">
+                            <div className="flex">
+                                <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                                    src="images/avatars/300-4.png"
+                                    alt="Images"
+                                />
+                            </div>
+                            <div className="flex">
+                                <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                                    src="images/avatars/300-2.png"
+                                    alt="Images"
+                                />
+                            </div>
+                            <div className="flex">
+                                <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
+                                S
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/telegram.svg"/>
+                </div>
+                <span className="badge badge-success badge-outline">
+                    Completed
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    Radiant Wave
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Short-term accommodation marketplace
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 09
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 23
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-success mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '100%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                        src="images/avatars/300-24.png"
+                    />
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                        src="images/avatars/300-7.png"
+                    />
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/kickstarter.svg"/>
+                </div>
+                <span className="badge badge-outline">
+                    Upcoming
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    Dreamweaver
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Social media photo sharing
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 05
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 12
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '100%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-21.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-1.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
+                </div>
+                <div className="flex">
+                    <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
+                    +10
+                    </span>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/quickbooks.svg"/>
+                </div>
+                <span className="badge badge-primary badge-outline">
+                    In Progress
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    Horizon Quest
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Team communication and collaboration
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 03
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 11
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
+                <div className="progress-bar" style={{ width : '19%' }}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-1.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
+                </div>
+                <div className="flex">
+                    <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-danger-inverse ring-danger-light bg-danger">
+                    M
+                    </span>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/google-analytics.svg"/>
+                </div>
+                <span className="badge badge-outline">
+                    Upcoming
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    Golden Gate Analytics
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Note-taking and organization app
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 22
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 14
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '100%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-5.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-17.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-16.png"/>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                    <div className="flex items-center justify-between mb-3 lg:mb-6">
+                        <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                            <img alt="" className="" src="images/brand-logos/google-webdev.svg"/>
+                        </div>
+                        <span className="badge badge-success badge-outline">
+                            Completed
+                        </span>
+                    </div>
+                    <div className="flex flex-col mb-3 lg:mb-6">
+                        <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                            Celestial SaaS
+                        </a>
+                        <span className="text-sm font-medium text-gray-600">
+                            CRM App application to HR efficienty
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                        <span className="text-sm font-medium text-gray-500">
+                            Start:
+                            <span className="text-sm font-semibold text-gray-700">
+                            Mar 14
+                            </span>
+                        </span>
+                        <span className="text-sm font-medium text-gray-500">
+                            End:
+                            <span className="text-sm font-semibold text-gray-700">
+                            Dec 25
+                            </span>
+                        </span>
+                    </div>
+                    <div className="progress h-1.5 progress-success mb-4 lg:mb-8">
+                        <div className="progress-bar" style={{width: '100%'}}>
+                        </div>
+                    </div>
+                    <div className="flex -space-x-2">
+                        <div className="flex">
+                            <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-6.png"/>
+                        </div>
+                        <div className="flex">
+                            <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-23.png"/>
+                        </div>
+                        <div className="flex">
+                            <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-12.png"/>
+                        </div>
+                        <div className="flex">
+                            <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
+                            +10
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="card p-7.5">
+                    <div className="flex items-center justify-between mb-3 lg:mb-6">
+                        <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                            <img alt="" className="" src="images/brand-logos/figma.svg"/>
+                        </div>
+                        <span className="badge badge-outline">
+                            Upcoming
+                        </span>
+                    </div>
+                    <div className="flex flex-col mb-3 lg:mb-6">
+                        <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                            Nexus Design System
+                        </a>
+                        <span className="text-sm font-medium text-gray-600">
+                            Online discussion and forum platform
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                        <span className="text-sm font-medium text-gray-500">
+                            Start:
+                            <span className="text-sm font-semibold text-gray-700">
+                            Mar 17
+                            </span>
+                        </span>
+                        <span className="text-sm font-medium text-gray-500">
+                            End:
+                            <span className="text-sm font-semibold text-gray-700">
+                            Dec 08
+                            </span>
+                        </span>
+                    </div>
+                    <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
+                        <div className="progress-bar" style={{width: '100%'}}></div>
+                    </div>
+                    <div className="flex -space-x-2">
+                        <div className="flex">
+                            <img 
+                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                                src="/images/avatars/300-14.png"
+                                alt=""
+                            />
+                        </div>
+                        <div className="flex">
+                            <img 
+                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                                src="/images/avatars/300-3.png"
+                                alt=""
+                            />
+                        </div>
+                        <div className="flex">
+                            <img 
+                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                                src="/images/avatars/300-19.png"
+                                alt=""
+                            />
+                        </div>
+                        <div className="flex">
+                            <img 
+                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
+                                src="/images/avatars/300-9.png"
+                                alt=""
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/btcchina.svg"/>
+                </div>
+                <span className="badge badge-primary badge-outline">
+                    In Progress
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    Neptune App
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Team messaging and collaboration
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 09
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 23
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '35%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-21.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-32.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
+                </div>
+                <div className="flex">
+                    <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
+                    +1
+                    </span>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/patientory.svg"/>
+                </div>
+                <span className="badge badge-outline">
+                    Upcoming
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    SparkleTech
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Meditation and relaxation app
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 14
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 21
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '100%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-4.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
+                </div>
+                <div className="flex">
+                    <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
+                    K
+                    </span>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/jira.svg"/>
+                </div>
+                <span className="badge badge-success badge-outline">
+                    Completed
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    EmberX CRM
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Commission-free stock trading
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 01
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 13
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-success mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '100%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-12.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-20.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-3.png"/>
+                </div>
+                <div className="flex">
+                    <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
+                    +5
+                    </span>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/plastic-scm.svg"/>
+                </div>
+                <span className="badge badge-outline">
+                    Upcoming
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    LunaLink
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Meditation and relaxation app
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 14
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 21
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '100%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-16.png"/>
+                </div>
+                </div>
+                </div>
+                <div className="card p-7.5">
+                <div className="flex items-center justify-between mb-3 lg:mb-6">
+                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
+                    <img alt="" className="" src="images/brand-logos/perrier.svg"/>
+                </div>
+                <span className="badge badge-primary badge-outline">
+                    In Progress
+                </span>
+                </div>
+                <div className="flex flex-col mb-3 lg:mb-6">
+                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
+                    TerraCrest App
+                </a>
+                <span className="text-sm font-medium text-gray-600">
+                    Video conferencing software
+                </span>
+                </div>
+                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
+                <span className="text-sm font-medium text-gray-500">
+                    Start:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Mar 22
+                    </span>
+                </span>
+                <span className="text-sm font-medium text-gray-500">
+                    End:
+                    <span className="text-sm font-semibold text-gray-700">
+                    Dec 28
+                    </span>
+                </span>
+                </div>
+                <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
+                <div className="progress-bar" style={{width: '55%'}}>
+                </div>
+                </div>
+                <div className="flex -space-x-2">
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-4.png"/>
+                </div>
+                <div className="flex">
+                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-9.png"/>
+                </div>
+                <div className="flex">
+                    <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
+                    F
+                    </span>
+                </div>
+                </div>
+                </div>
+                </div>
+                <div className="flex grow justify-center pt-5 lg:pt-7.5">
+                    <a className="btn btn-link" href="#">
+                        Show more projects
+                    </a>
+                </div>
+            </div>
+                        {/* Pagination Controls */}
+                        {/* <div className="flex items-center justify-between mt-6">
+                            <button
+                                onClick={() => handlePageChange(currentPage - 1)}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+                            >
+                                Previous
+                            </button>
+                            <span className="text-sm text-gray-600">
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <button
+                                onClick={() => handlePageChange(currentPage + 1)}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+                            >
+                                Next
+                            </button>
+                        </div> */}
+
+
+            {/* {!projects.length && (
                 <div className="container-fixed">
                     <div className="card p-8 lg:p-12">
                         <div className="card-body">
@@ -368,7 +878,7 @@ const ProjectListing: React.FC = () => {
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
         </>
     );
 };
