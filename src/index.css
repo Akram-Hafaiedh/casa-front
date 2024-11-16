@@ -2,16 +2,283 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.total-label { @apply text-xl font-bold text-blue-600; } 
+.total-number { @apply text-2xl font-semibold text-red-500; }
 .header {
-    @apply h-17.5
+    @apply h-15
 }
 
+/* Switch */
+
+
+.switch {
+    @apply flex items-center cursor-pointer gap-2.5
+}
+.switch input[type=checkbox] {
+    @apply flex appearance-none bg-gray-300 relative cursor-pointer shrink-0 h-5.5 w-8.5 rounded-2.5xl transition-all duration-150 ease-in-out;
+}
+.switch input[type=checkbox]:before {
+    @apply flex content-[""] transform -translate-y-1/2 absolute w-4 h-4 rounded-full bg-light start-1 top-1/2 transition-all duration-150 ease-in-out drop-shadow-md;
+}
+.switch input[type=checkbox]:checked,
+.switch input[type=checkbox][aria-checked=true] {
+    @apply bg-primary transition-all duration-150 ease-in-out;
+}
+
+.switch input[type=checkbox]:checked:before,
+.switch input[type=checkbox][aria-checked=true]:before {
+    @apply bg-white transition-all start-[calc(100%-0.25rem)] duration-150 ease-in-out filter-none transform -translate-x-full -translate-y-1/2;
+}
+.switch input[type=checkbox]:disabled {
+    @apply border-1 border-gray-300 border-solid bg-gray-100 cursor-not-allowed opacity-50;
+}
+.switch input[type=checkbox]:disabled:before {
+    @apply bg-gray-300;
+}
+.switch input[type=checkbox]:disabled:checked,
+.switch input[type=checkbox]:disabled[aria-checked=true] {
+    @apply bg-primary-clarity border-0;
+}
+.switch input[type=checkbox]:disabled:checked:before,
+.switch input[type=checkbox]:disabled[aria-checked=true]:before {
+    background-color:var(--tw-light)
+}
+.switch:has([type=checkbox]:checked) .switch-on\:inline {
+    @apply hidden
+}
+.switch:has([type=checkbox]:checked) .switch-on\:hidden {
+    @apply hidden
+}
+.switch .switch-label {
+    @apply text-gray-700 text-sm font-medium leading-4;
+}
+
+.switch input[type=checkbox]+.switch-label {
+    @apply text-gray-800;
+}
+.switch:has(input[type=checkbox]:disabled) .switch-label {
+    @apply text-gray-500;
+}
+
+.switch-sm input[type=checkbox] {
+    @apply h-4.5 w-7.5 rounded-2.25xl;
+}
+
+.switch-sm input[type=checkbox]:before {
+    @apply h-3 w-3;
+}
+.switch-sm .switch-label {
+    @apply text-sm;
+}
+.switch-lg .switch-label {
+    @apply text-[0.9375rem];
+}
+[dir=rtl] .switch input[type=checkbox]:checked:before,
+[dir=rtl] .switch input[type=checkbox][aria-checked=true]:before {
+    @apply transform translate-x-full -translate-y-1/2;
+}
+/* TODO ADD THE COLLAPSE CSS */
+/* Sidebar */
 .sidebar .sidebar-header {
-    @apply h-17.5
+    @apply h-15
 }
 .sidebar {
     @apply w-50
 }
+
+.sidebar-fixed.header-fixed .header {
+    @apply start-50
+}
+
+
+.header-fixed .wrapper {
+    @apply pt-17.5
+}
+.sidebar-fixed .wrapper {
+    @apply ps-50
+}
+/* Size */
+.size-0\.75 {
+    @apply h-0.75 w-0.75
+}
+.size-1 {
+    @apply h-1 w-1
+}
+.size-1\.5 {
+    @apply h-1.5 w-1.5
+}
+.size-2 {
+    @apply h-2 w-2
+}
+.size-2\.5 {
+    @apply h-2.5 w-2.5
+}
+.size-3 {
+    @apply h-3 w-3
+}
+.size-3\.5 {
+    @apply h-3.5 w-3.5
+}
+.size-4 {
+    @apply h-4 w-4
+}
+.size-5 {
+    @apply h-5 w-5
+}
+.size-6 {
+    @apply h-6 w-6
+}
+.size-7 {
+    @apply h-7 w-7
+}
+.size-7\.5 {
+    @apply h-7.5 w-7.5
+}
+.size-8 {
+    @apply h-8 w-8
+}
+.size-9 {
+    @apply h-9 w-9
+}
+.size-10 {
+    @apply h-10 w-10
+}
+.size-11 {
+    @apply h-11 w-11
+}
+.size-12 {
+    @apply h-12 w-12
+}
+.size-13 {
+    @apply h-13 w-13
+}
+.size-14 {
+    @apply h-14 w-14
+}
+.size-15 {
+    @apply h-15 w-15
+}
+.size-16 {
+    @apply h-16 w-16
+}
+.size-17 {
+    @apply h-17 w-17
+}
+.size-18 {
+    @apply h-18 w-18
+}
+.size-19 {
+    @apply h-19 w-19
+}
+.size-20 {
+    @apply h-20 w-20
+}
+.size-\[4\.8px\] {
+    @apply h-[4.8px] w-[4.8px]
+}
+.size-\[5px\] {
+    @apply h-[5px] w-[5px]
+}
+.size-\[6px\] {
+    @apply h-[6px] w-[6px]
+}
+.size-\[7px\] {
+    @apply h-[7px] w-[7px]
+}
+.size-\[8px\] {
+    @apply h-[8px] w-[8px]
+}
+.size-\[9px\] {
+    @apply h-[9px] w-[9px]
+}
+.size-\[10px\] {
+    @apply h-[10px] w-[10px]
+}
+.size-\[11px\] {
+    @apply h-[11px] w-[11px]
+}
+.size-\[12px\] {
+    @apply h-[12px] w-[12px]
+}
+.size-\[13px\] {
+    @apply h-[13px] w-[13px]
+}
+.size-\[14px\] {
+    @apply h-[14px] w-[14px]
+}
+.size-\[15px\] {
+    @apply h-[15px] w-[15px]
+}
+.size-\[16px\] {
+    @apply h-[16px] w-[16px]
+}
+.size-\[17px\] {
+    @apply h-[17px] w-[17px]
+}
+.size-\[18px\] {
+    @apply h-[18px] w-[18px]
+}
+.size-\[19px\] {
+    @apply h-[19px] w-[19px]
+}
+.size-\[20px\] {
+    @apply h-[20px] w-[20px]
+}
+.size-\[30px\] {
+    @apply h-[30px] w-[30px]
+}
+.size-\[34px\] {
+    @apply h-[34px] w-[34px]
+}
+.size-\[40px\] {
+    @apply h-[40px] w-[40px]
+}
+.size-\[44px\] {
+    @apply h-[44px] w-[44px]
+}
+.size-\[45px\] {
+    @apply h-[45px] w-[45px]
+}
+.size-\[50px\] {
+    @apply h-[50px] w-[50px]
+}
+.size-\[60px\] {
+    @apply h-[60px] w-[60px]
+}
+.size-\[70px\] {
+    @apply h-[70px] w-[70px]
+}
+.size-\[80px\] {
+    @apply h-[80px] w-[80px]
+}
+.size-\[90px\] {
+    @apply h-[90px] w-[90px]
+}
+.size-\[100px\] {
+    @apply h-[100px] w-[100px]
+}
+.size-\[120px\] {
+    @apply h-[120px] w-[120px]
+}
+.size-\[140px\] {
+    @apply h-[140px] w-[140px]
+}
+.size-\[150px\] {
+    @apply h-[150px] w-[150px]
+}
+.size-\[160px\] {
+    @apply h-[160px] w-[160px]
+}
+.size-\[170px\] {
+    @apply h-[170px] w-[170px]
+}
+.size-\[180px\] {
+    @apply h-[180px] w-[180px]
+}
+
+
+
 
 /* Base Button */
 .btn {
@@ -36,31 +303,91 @@
 .btn-disabled {
     @apply opacity-50 pointer-events-none;
 }
+.btn i {
+    font-size:1.125rem;
+    line-height:0!important
+}
 /* Icon Button */
 .btn-icon {
     @apply flex-shrink-0 p-0 gap-0 w-10 justify-center;
 }
 
-.btn-icon-xs {
+.btn-icon.btn-xs {
     @apply w-7;
 }
-  
-.btn-icon-sm {
+.btn-icon.btn-sm {
     @apply w-8;
 }
-  
-.btn-icon-md {
-    @apply w-10;
-}
-  
-.btn-icon-lg {
+.btn-icon.btn-lg {
     @apply w-12;
 }
+.btn-icon svg {
+    @apply size-6
+}
+.btn-xs svg {
+    @apply size-3
+}
+.btn-xs.btn-icon svg {
+    @apply size-4
+}
+.btn-sm svg {
+    @apply size-3.5
+}
+.btn-sm.btn-icon svg {
+    @apply size-4.5
+}
+.btn-lg.btn-icon svg {
+    @apply size-7
+}
+.btn-icon-xs svg {
+    @apply size-3
+}
+.btn-icon-sm svg {
+    @apply size-3.5
+}
+.btn-icon-md svg {
+    @apply size-3.75
+}
+.btn-icon-lg svg {
+    @apply size-4.5
+}
+.btn-icon-xl svg {
+    @apply size-5
+}
+.btn.btn-icon-sm svg {
+    @apply size-3.5;
+}
+.btn.btn-icon-md svg {
+    @apply size-3.75;
+}
+.btn.btn-icon-lg svg {
+    @apply size-4.5;
+}
+.btn.btn-icon-xl svg {
+    @apply size-5;
+}
+.btn.btn-icon-2xl svg {
+    @apply size-6;
+}
+  
   
 
 /* Link Button */
 .btn-link {
-    @apply text-primary underline;
+    @apply text-primary underline border-b border-dashed border-b-primary bg-transparent rounded-none pe-0 ps-0 pt-1 h-auto text-sm;
+}
+
+.btn-link:hover,
+.btn-link:focus,
+.btn-link:active,
+.btn-link.active {
+    @apply text-primary-active bg-transparent border-b border-solid border-b-primary-active;
+}
+.btn-link.btn-sm {
+    @apply text-xs;
+}
+.btn-link.btn-lg {
+    @apply text-sm;
 }
 
 /* Button Variants */
@@ -155,6 +482,23 @@
     @apply w-full flex-grow px-6;
 }
 
+
+
+@media (max-width : 1024px) {
+    .scrollable,
+    .scrollable-hover {
+        @apply overflow-auto
+    }
+    .scrollable-y,
+    .scrollable-y-hover {
+        @apply overflow-y-auto
+    }
+    .scrollable-x,
+    .scrollable-x-hover {
+        @apply overflow-x-auto
+    }
+}
+
 @media (min-width: 1280px) {
     .container-fixed {
         @apply max-w-7xl px-7 mx-auto;
@@ -164,19 +508,163 @@
     }
 
     .header {
-        @apply h-15
+        @apply h-17.5
     }
     .sidebar {
         @apply w-70
     }
+
+    .sidebar-fixed.header-fixed .header {
+        @apply start-70
+    }
     .sidebar .sidebar-header {
-        @apply h-15
+        @apply h-17.5
+    }
+    .header-fixed .wrapper {
+        @apply pt-17.5
+    }
+    .sidebar-fixed .wrapper {
+        @apply ps-70
     }
 }
 
+/* Scrollable */
+.scrollable,
+.scrollable-hover {
+    @apply overflow-scroll;
+}
+
+.scrollable-y,
+.scrollable-y-hover {
+    @apply overflow-y-scroll;
+}
+.scrollable-x,
+.scrollable-x-hover {
+    @apply overflow-x-scroll;
+}
+.scrollable-auto {
+    @apply overflow-auto;
+}
+.scrollable-y-auto {
+    @apply overflow-y-auto;
+}
+.scrollable-x-auto {
+    @apply overflow-x-auto;
+}
+
+
+.scrollable,
+.scrollable-y,
+.scrollable-x,
+.scrollable-auto,
+.scrollable-y-auto,
+.scrollable-x-auto,
+.scrollable-hover:hover,
+.scrollable-y-hover:hover,
+.scrollable-x-hover:hover {
+    scrollbar-color: #e5e7eb #e5e7eb transparent;
+}
+.scrollable::-webkit-scrollbar-thumb,
+.scrollable-y::-webkit-scrollbar-thumb,
+.scrollable-x::-webkit-scrollbar-thumb,
+.scrollable-auto::-webkit-scrollbar-thumb,
+.scrollable-y-auto::-webkit-scrollbar-thumb,
+.scrollable-x-auto::-webkit-scrollbar-thumb,
+.scrollable-hover:hover::-webkit-scrollbar-thumb,
+.scrollable-y-hover:hover::-webkit-scrollbar-thumb,
+.scrollable-x-hover:hover::-webkit-scrollbar-thumb {
+    @apply bg-gray-200
+}
+.scrollable::-webkit-scrollbar-corner,
+.scrollable-y::-webkit-scrollbar-corner,
+.scrollable-x::-webkit-scrollbar-corner,
+.scrollable-auto::-webkit-scrollbar-corner,
+.scrollable-y-auto::-webkit-scrollbar-corner,
+.scrollable-x-auto::-webkit-scrollbar-corner,
+.scrollable-hover:hover::-webkit-scrollbar-corner,
+.scrollable-y-hover:hover::-webkit-scrollbar-corner,
+.scrollable-x-hover:hover::-webkit-scrollbar-corner {
+    @apply bg-transparent
+}
+
+.scrollable,
+.scrollable-auto,
+.scrollable-hover,
+.scrollable-y,
+.scrollable-x,
+.scrollable-y-hover,
+.scrollable-x-hover,
+.scrollable-y-auto,
+.scrollable-x-auto {
+    @apply relative;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.scrollable::-webkit-scrollbar,
+.scrollable-auto::-webkit-scrollbar,
+.scrollable-hover::-webkit-scrollbar,
+.scrollable-y::-webkit-scrollbar,
+.scrollable-x::-webkit-scrollbar,
+.scrollable-y-hover::-webkit-scrollbar,
+.scrollable-x-hover::-webkit-scrollbar,
+.scrollable-y-auto::-webkit-scrollbar,
+.scrollable-x-auto::-webkit-scrollbar {
+    @apply w-1.4 h-1.4;
+}
+
+.scrollable::-webkit-scrollbar-track,
+.scrollable-auto::-webkit-scrollbar-track,
+.scrollable-hover::-webkit-scrollbar-track,
+.scrollable-y::-webkit-scrollbar-track,
+.scrollable-x::-webkit-scrollbar-track,
+.scrollable-y-hover::-webkit-scrollbar-track,
+.scrollable-x-hover::-webkit-scrollbar-track,
+.scrollable-y-auto::-webkit-scrollbar-track,
+.scrollable-x-auto::-webkit-scrollbar-track {
+    @apply bg-transparent;
+}
+
+.scrollable::-webkit-scrollbar-thumb,
+.scrollable-auto::-webkit-scrollbar-thumb,
+.scrollable-hover::-webkit-scrollbar-thumb,
+.scrollable-y::-webkit-scrollbar-thumb,
+.scrollable-x::-webkit-scrollbar-thumb,
+.scrollable-y-hover::-webkit-scrollbar-thumb,
+.scrollable-x-hover::-webkit-scrollbar-thumb,
+.scrollable-y-auto::-webkit-scrollbar-thumb,
+.scrollable-x-auto::-webkit-scrollbar-thumb {
+    @apply rounded-[1.25rem];
+}
+.scrollable::-webkit-scrollbar-corner {
+    @apply bg-transparent;
+}
+
+/* Stepper */
+
+[data-stepper-item].active .stepper-item-active\:bg-primary {
+    @apply bg-blue-500 text-white;
+}
+[data-stepper-item].completed .stepper-item-completed\:bg-success {
+    @apply bg-success text-white
+}
+[data-stepper-item].completed .stepper-item-completed\:text-gray-600 {
+    @apply text-gray-600;
+}  
+[data-stepper-item].completed .stepper-item-completed\:inline {
+    @apply inline;
+}  
+[data-stepper-item].completed .stepper-item-completed\:hidden {
+    @apply hidden;
+}  
 /* Menu */
 .menu {
     @apply flex;
+}
+.menu-link,
+.menu-label,
+.menu-toggle {
+    @apply flex items-center cursor-pointer grow;
 }
 .menu-title {
     @apply flex items-center flex-grow leading-none;
@@ -184,9 +672,377 @@
 .menu-item {
     @apply flex flex-col;
 }
-.menu-item{
+.menu-icon,
+.menu-bullet,
+.menu-badge,
+.menu-arrow {
+    @apply flex items-center shrink-0;
+}
+.menu-item,
+.menu-link{
     @apply p-0 m-0;
 }
+.menu-item.active.menu-item-active\:rounded-lg {
+    @apply rounded-lg;
+}
+.menu-item.active.menu-item-active\:border-none {
+    @apply border-none;
+}
+
+.menu-item.active.menu-item-active\:border-gray-200 {
+    @apply border-gray-200;
+}
+.menu-item.active.menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400;
+}
+.menu-item.active.menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800;
+}
+.menu-item.active.menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900;
+}
+.menu-item.active.menu-item-active\:border-b-primary {
+    @apply border-b-primary;
+}
+.menu-item.active.menu-item-active\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-item.active.menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100;
+}
+.menu-item.active.menu-item-active\:bg-light {
+    @apply bg-light;
+}
+.menu-item.active.menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active;
+}
+.menu-item.active.menu-item-active\:font-medium {
+    @apply font-medium;
+}
+.menu-item.active.menu-item-active\:font-semibold {
+    @apply font-semibold;
+}
+.menu-item.active.menu-item-active\:font-bold {
+    @apply font-bold;
+}
+.menu-item.active.menu-item-active\:text-primary {
+    @apply text-primary;
+}
+
+.menu-item.active.menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+
+
+.menu-item.active>.menu-link.menu-item-active\:rounded-lg {
+    @apply rounded-lg
+}
+.menu-item.active>.menu-link.menu-item-active\:border-none {
+    @apply border-none
+}
+.menu-item.active>.menu-link.menu-item-active\:border-gray-200 {
+    @apply border-gray-200
+}
+.menu-item.active>.menu-link.menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400
+}
+.menu-item.active>.menu-link.menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800
+}
+.menu-item.active>.menu-link.menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900
+}
+.menu-item.active>.menu-link.menu-item-active\:border-b-primary {
+    @apply border-b-primary
+}
+.menu-item.active>.menu-link.menu-item-active\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-item.active>.menu-link.menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100
+}
+.menu-item.active>.menu-link.menu-item-active\:bg-light {
+    @apply bg-light
+}
+.menu-item.active>.menu-link.menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active
+}
+.menu-item.active>.menu-link.menu-item-active\:font-medium {
+    @apply font-medium
+}
+.menu-item.active>.menu-link.menu-item-active\:font-semibold {
+    @apply font-medium
+}
+.menu-item.active>.menu-link.menu-item-active\:text-gray-800 {
+    @apply text-gray-800
+}
+.menu-item.active>.menu-link.menu-item-active\:text-gray-900 {
+    @apply text-gray-900
+}
+.menu-item.active>.menu-link.menu-item-active\:text-primary {
+   @apply text-primary
+}
+.menu-item.active>.menu-link.menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+.menu-item.active>.menu-link .menu-item-active\:rounded-lg {
+    @apply rounded-lg
+}
+.menu-item.active>.menu-link .menu-item-active\:border-none {
+    @apply border-none
+}
+.menu-item.active>.menu-link .menu-item-active\:border-gray-200 {
+    @apply border-gray-200
+}
+.menu-item.active>.menu-link .menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400
+}
+.menu-item.active>.menu-link .menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800
+}
+.menu-item.active>.menu-link .menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900
+}
+.menu-item.active>.menu-link .menu-item-active\:border-b-primary {
+    @apply border-b-primary
+}
+.menu-item.active>.menu-link .menu-item-active\:\!bg-light {
+    @apply !bg-light
+}
+.menu-item.active>.menu-link .menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100
+}
+.menu-item.active>.menu-link .menu-item-active\:bg-light {
+    @apply bg-light
+}
+.menu-item.active>.menu-link .menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active
+}
+.menu-item.active>.menu-link .menu-item-active\:font-medium {
+    @apply font-medium
+}
+.menu-item.active>.menu-link .menu-item-active\:font-semibold {
+    @apply font-medium
+}
+.menu-item.active>.menu-link .menu-item-active\:text-gray-800 {
+    @apply text-gray-800
+}
+.menu-item.active>.menu-link .menu-item-active\:text-gray-900 {
+    @apply text-gray-900
+}
+.menu-item.active>.menu-link .menu-item-active\:text-primary {
+    @apply text-primary
+}
+.menu-item.active>.menu-link .menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+.menu-item.active>.menu-label.menu-item-active\:rounded-lg {
+    @apply rounded-lg
+}
+.menu-item.active>.menu-label.menu-item-active\:border-none {
+    @apply border-none
+}
+.menu-item.active>.menu-label.menu-item-active\:border-gray-200 {
+    @apply border-gray-200
+}
+.menu-item.active>.menu-label.menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400
+}
+.menu-item.active>.menu-label.menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800
+}
+.menu-item.active>.menu-label.menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900
+}
+.menu-item.active>.menu-label.menu-item-active\:border-b-primary {
+    @apply border-b-primary
+}
+.menu-item.active>.menu-label.menu-item-active\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-item.active>.menu-label.menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100
+}
+.menu-item.active>.menu-label.menu-item-active\:bg-light {
+    @apply bg-light
+}
+.menu-item.active>.menu-label.menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active
+}
+.menu-item.active>.menu-label.menu-item-active\:font-medium {
+    @apply font-medium
+}
+.menu-item.active>.menu-label.menu-item-active\:font-semibold {
+    @apply font-medium
+}
+.menu-item.active>.menu-label.menu-item-active\:text-gray-800 {
+    @apply text-gray-800
+}
+.menu-item.active>.menu-label.menu-item-active\:text-gray-900 {
+    @apply text-gray-900
+}
+.menu-item.active>.menu-label.menu-item-active\:text-primary {
+    @apply text-primary
+}
+.menu-item.active>.menu-label.menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+.menu-item.active>.menu-label .menu-item-active\:rounded-lg {
+    @apply rounded-lg
+}
+.menu-item.active>.menu-label .menu-item-active\:border-none {
+    @apply border-none
+}
+.menu-item.active>.menu-label .menu-item-active\:border-gray-200 {
+    @apply border-gray-200
+}
+.menu-item.active>.menu-label .menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400
+}
+.menu-item.active>.menu-label .menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800
+}
+.menu-item.active>.menu-label .menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900
+}
+.menu-item.active>.menu-label .menu-item-active\:border-b-primary {
+    @apply border-b-primary
+}
+.menu-item.active>.menu-label .menu-item-active\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-item.active>.menu-label .menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100
+}
+.menu-item.active>.menu-label .menu-item-active\:bg-light {
+    @apply bg-light
+}
+.menu-item.active>.menu-label .menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active
+}
+.menu-item.active>.menu-label .menu-item-active\:font-medium {
+    @apply font-medium
+}
+.menu-item.active>.menu-label .menu-item-active\:font-semibold {
+    @apply font-medium
+}
+.menu-item.active>.menu-label .menu-item-active\:text-gray-800 {
+    @apply text-gray-800
+}
+.menu-item.active>.menu-label .menu-item-active\:text-gray-900 {
+    @apply text-gray-900
+}
+.menu-item.active>.menu-label .menu-item-active\:text-primary {
+    @apply text-primary
+}
+.menu-item.active>.menu-label .menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+.menu-item.active>.menu-toggle.menu-item-active\:rounded-lg {
+    @apply rounded-lg
+}
+.menu-item.active>.menu-toggle.menu-item-active\:border-none {
+    @apply border-none
+}
+.menu-item.active>.menu-toggle.menu-item-active\:border-gray-200 {
+    @apply border-gray-200
+}
+.menu-item.active>.menu-toggle.menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400
+}
+.menu-item.active>.menu-toggle.menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800
+}
+.menu-item.active>.menu-toggle.menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900
+}
+.menu-item.active>.menu-toggle.menu-item-active\:border-b-primary {
+    @apply border-b-primary
+}
+.menu-item.active>.menu-toggle.menu-item-active\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-item.active>.menu-toggle.menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100
+}
+.menu-item.active>.menu-toggle.menu-item-active\:bg-light {
+    @apply bg-light
+}
+.menu-item.active>.menu-toggle.menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active
+}
+.menu-item.active>.menu-toggle.menu-item-active\:font-medium {
+    @apply font-medium
+}
+.menu-item.active>.menu-toggle.menu-item-active\:font-semibold {
+    @apply font-medium
+}
+.menu-item.active>.menu-toggle.menu-item-active\:text-gray-800 {
+    @apply text-gray-800
+}
+.menu-item.active>.menu-toggle.menu-item-active\:text-gray-900 {
+    @apply text-gray-900
+}
+.menu-item.active>.menu-toggle.menu-item-active\:text-primary {
+   @apply text-primary
+}
+.menu-item.active>.menu-toggle.menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+.menu-item.active>.menu-toggle .menu-item-active\:rounded-lg {
+    @apply rounded-lg
+}
+.menu-item.active>.menu-toggle .menu-item-active\:border-none {
+    @apply border-none
+}
+.menu-item.active>.menu-toggle .menu-item-active\:border-gray-200 {
+    @apply border-gray-200
+}
+.menu-item.active>.menu-toggle .menu-item-active\:border-b-gray-400 {
+    @apply border-b-gray-400
+}
+.menu-item.active>.menu-toggle .menu-item-active\:border-b-gray-800 {
+    @apply border-b-gray-800
+}
+.menu-item.active>.menu-toggle .menu-item-active\:border-b-gray-900 {
+    @apply border-b-gray-900
+}
+.menu-item.active>.menu-toggle .menu-item-active\:border-b-primary {
+    @apply border-b-primary
+}
+.menu-item.active>.menu-toggle .menu-item-active\:\!bg-light {
+    @apply !bg-light;
+}
+.menu-item.active>.menu-toggle .menu-item-active\:bg-gray-100 {
+    @apply bg-gray-100
+}
+.menu-item.active>.menu-toggle .menu-item-active\:bg-light {
+    @apply bg-light
+}
+.menu-item.active>.menu-toggle .menu-item-active\:bg-secondary-active {
+    @apply bg-secondary-active
+}
+.menu-item.active>.menu-toggle .menu-item-active\:font-medium {
+    @apply font-medium
+}
+.menu-item.active>.menu-toggle .menu-item-active\:font-semibold {
+    @apply font-medium
+}
+  .menu-item.active>.menu-toggle .menu-item-active\:text-gray-800 {
+    @apply text-gray-800
+}
+.menu-item.active>.menu-toggle .menu-item-active\:text-gray-900 {
+    @apply text-gray-900
+}
+.menu-item.active>.menu-toggle .menu-item-active\:text-primary {
+    @apply text-primary
+}
+.menu-item.active>.menu-toggle .menu-item-active\:before\:bg-primary:before {
+    @apply bg-primary content-[""];
+}
+
+
+
 .menu-item-active {
     @apply border-none rounded-lg bg-light font-medium
 }
@@ -913,13 +1769,284 @@
     @apply flex items-center justify-between border-t border-gray-200 p-4;
 }
 
+.card-grid .card-header,
+.card-grid .card-footer {
+    @apply ps-5 pe-5;
+}
+.card-grid .card-body {
+    @apply p-0;
+}
+.card-grid .card-body .table {
+    @apply border-0
+}
+.card-grid .card-body .\!table {
+    @apply !border-0
+}
+.card-table table th:first-child,
+.card-table table td:first-child {
+    @apply ps-7.5;
+}
+.card-table table th:last-child,
+.card-table table td:last-child {
+    @apply pe-7.5;
+}
+.card-table table.table-border {
+    @apply border-none
+}
+
+.card-grid .card-body .table th:first-child,
+.card-grid .card-body .table td:first-child {
+    @apply ps-5;
+}
+
+.card-grid .card-body .\!table th:first-child,
+.card-grid .card-body .\!table td:first-child {
+    @apply !ps-5;
+}
+
+.card-grid .card-body .table th:first-child.table-cell-center,
+.card-grid .card-body .table td:first-child.table-cell-center {
+    @apply pe-5;
+}
+.card-grid .card-body .\!table th:first-child.table-cell-center,
+.card-grid .card-body .\!table td:first-child.table-cell-center {
+    @apply !pe-5;
+}
+.card-grid .card-body .table th:last-child,
+.card-grid .card-body .table td:last-child {
+    @apply pe-5;
+}
+.card-grid .card-body .\!table th:last-child,
+.card-grid .card-body .\!table td:last-child {
+    @apply !pe-5;
+}
+.card-grid .card-body .table th:last-child.table-cell-center,
+.card-grid .card-body .table td:last-child.table-cell-center {
+    @apply ps-5;
+}
+.card-grid .card-body .\!table th:last-child.table-cell-center,
+.card-grid .card-body .\!table td:last-child.table-cell-center {
+    @apply !ps-5;
+}
+.card-border {
+    @apply border-gray-200 border-solid border;
+}
+.card-rounded {
+    @apply rounded-xl;
+}
+
+.card-rounded.table {
+    @apply border-separate border-spacing-0;
+}
+.card-rounded.\!table {
+    @apply !border-separate !border-spacing-0;
+}
+.card-rounded-b {
+    @apply rounded-ee-xl rounded-es-xl;
+}
+
+.card-rounded-t {
+    @apply rounded-ss-xl rounded-se-xl;
+}
+
+.card-header+.card-body table th:first-child,
+.card-header+.card-body table th:last-child,
+.card-header+.card-table table th:first-child,
+.card-header+.card-table table th:last-child {
+    @apply rounded-none;
+}
+.card-group{
+    @apply pe-7.5 ps-7.5 py-3 border-solid border border-b-gray-200
+}
+
+.card-group:last-child{
+    @apply border-b-0
+}
+
+.card-group+.card-footer{
+    @apply border-t-0
+}
+
+/* Table */
+.table {
+    @apply w-full border-collapse caption-bottom align-middle text-left text-gray-700 text-sm font-medium;
+}
+.table th input[type=checkbox],
+.table td input[type=checkbox] {
+    @apply align-[inherit];
+}
+.\!table th input[type=checkbox],
+.\!table td input[type=checkbox] {
+    @apply !align-[inherit];
+}
+
+.table thead td,
+.table thead th,
+.table tfoot td,
+.table tfoot th {
+    @apply bg-light-active text-gray-600 font-medium text-sm leading-5;
+}
+.\!table thead td,
+.\!table thead th,
+.\!table tfoot td,
+.\!table tfoot th {
+    @apply !bg-light-active !text-gray-600 !font-medium !text-sm !leading-5;
+}
+
+.table thead td,
+.table thead th {
+    @apply border-b border-b-gray-200;
+}
+.\!table thead td,
+.\!table thead th {
+    @apply !border-b !border-b-gray-200;
+}
+.table tfoot td,
+.table tfoot th {
+    @apply border-t border-t-gray-200;
+}
+.\!table tfoot td,
+.\!table tfoot th {
+    @apply !border-t !border-t-gray-200;
+}
+
+.\!table tbody {
+    @apply !align-[inherit]
+}
+.table tbody {
+    @apply align-[inherit]
+}
+.table tbody tr td,
+.table tbody tr th {
+    @apply border-b border-b-gray-200;
+}
+.\!table tbody tr td,
+.\!table tbody tr th {
+    @apply!border-b!border-b-gray-200;
+}
+.table tbody tr:last-child td,
+.table tbody tr:last-child th {
+    @apply border-b-0
+}
+.\!table tbody tr:last-child td,
+.\!table tbody tr:last-child th {
+    @apply !border-b-0
+}
+[dir=rtl] .\!table {
+    @apply !text-right
+}
+[dir=rtl] .table {
+    @apply text-right
+}
+
+.table thead td,
+.table thead th,
+.table tfoot td,
+.table tfoot th {
+    @apply py-2.5 ps-4 pe-4;
+}
+.\!table thead td,
+.\!table thead th,
+.\!table tfoot td,
+.\!table tfoot th {
+    @apply !py-2.5 !ps-4 !pe-4;
+}
+
+.table tbody tr td,
+.table tbody tr th {
+    @apply py-3 ps-4 pe-4;
+}
+.\!table tbody tr td,
+.\!table tbody tr th {
+    @apply !py-3 !ps-4 !pe-4;
+}
+
+/* Progress */
+.progress {
+    @apply w-full flex min-h-1 bg-gray-200 rounded-lg overflow-hidden;
+}
+.progress-basic {
+    @apply min-h-[0.5rem];
+}
+.progress-sm {
+    @apply min-h-[0.25rem];
+}
+.progress-md {
+    @apply min-h-[0.5rem];
+}
+.progress-lg {
+    @apply min-h-[0.75rem];
+}
+.progress-xl {
+    @apply min-h-[1rem];
+}
+.progress-bar {
+    @apply flex flex-col justify-center overflow-hidden text-center whitespace-nowrap bg-gray-300 rounded-lg;
+}
+.progress-primary {
+    @apply bg-primary/20;
+}
+.progress-primary .progress-bar {
+    @apply bg-primary;
+}
+.progress-success {
+    @apply bg-success-light/40;
+}
+.progress-success .progress-bar {
+    @apply bg-success;
+}
+.progress-danger .progress-bar {
+    @apply bg-danger;
+}
+.progress-warning .progress-bar {
+    @apply bg-warning;
+}
+.progress-info .progress-bar {
+    @apply bg-info;
+}
+.progress-dark .progress-bar {
+    @apply bg-dark;
+}
+
 /* Form */
 
 .form-label {
     @apply flex w-full text-gray-700 font-medium text-sm leading-4;
 }
 
-
+.textarea {
+    @apply block w-full appearance-none outline-none shadow-none font-medium text-sm leading-4 bg-light-active border border-gray-300 text-gray-700 px-3 py-3 rounded-md resize-y;
+}
+.textarea:hover {
+    @apply border-gray-400
+}
+.textarea:focus {
+    @apply border-primary text-gray-700 shadow-[0_0_10px_0px_rgba(0,0,0,0.1)];
+}
+.textarea::placeholder {
+    @apply text-gray-400 opacity-100;
+}
+.textarea:focus::placeholder {
+    @apply text-gray-600;
+}
+.textarea:active {
+    @apply text-gray-700 shadow-none;
+}
+.textarea[disabled] {
+    @apply text-gray-400 bg-gray-100
+}
+.textarea[disabled]::placeholder {
+    @apply text-gray-300
+}
+.textarea[readonly]{
+    @apply text-gray-400 bg-gray-100
+}
+.textarea[readonly]::placeholder {
+    @apply text-gray-300
+}
+.textarea:active::placeholder {
+    @apply text-gray-600;
+}
 .input {
     @apply block w-full appearance-none outline-none shadow-none font-medium text-sm leading-4 bg-light-active border border-gray-300 text-gray-700 px-3 rounded-md h-10;
 }
@@ -984,19 +2111,19 @@
 .input:not(input) .btn-icon {
     @apply border-0 h-auto w-auto
 }
-.input:not(input) .btn-icon:hover i,
-.input:not(input) .btn-icon:focus i,
-.input:not(input) .btn-icon:active i,
-.input:not(input) .btn-icon.active i {
+.input:not(input) .btn-icon:hover svg,
+.input:not(input) .btn-icon:focus svg,
+.input:not(input) .btn-icon:active svg,
+.input:not(input) .btn-icon.active svg {
     @apply text-gray-800
 }
-.input:not(input).input-xs i {
+.input:not(input).input-xs svg {
     @apply text-xs
 }
-.input:not(input).input-sm i {
+.input:not(input).input-sm svg {
     @apply text-sm
 }
-.input:not(input).input-lg i {
+.input:not(input).input-lg svg {
     @apply text-xl
 }
 .input-group {
@@ -1087,4 +2214,259 @@
     @apply px-2.5 h-8 font-medium text-xs bg-14px-10px bg-inset-inline-end-center
 }
 
+/* dropdown */
 
+.menu-dropdown,
+.menu-accordion {
+    @apply flex-col p-0 m-0 absolute z-10 right-0 top-12 items-stretch border rounded-lg shadow-lg bg-white; 
+}
+.menu-container>.menu-dropdown,
+.menu-dropdown.menu.show{
+    @apply flex will-change-transform
+}
+
+.menu-default {
+    @apply py-2.5
+}
+
+.menu-default .menu-link,
+.menu-default .menu-label {
+    @apply ms-2.5 me-2.5 p-2.5 rounded-md
+}
+.menu-default .menu-title {
+    @apply font-medium text-sm
+}
+.menu-default .menu-icon {
+    @apply me-2.5
+}
+.menu-default .menu-icon svg {
+    @apply w-5 h-5
+}
+.menu-default .menu-bullet {
+    @apply me-2.5
+}
+.menu-default .menu-arrow {
+    @apply ms-2.5
+}
+.menu-default .menu-arrow svg {
+    @apply h-5 w-5
+}
+.menu-default .menu-badge {
+    @apply ms-2.5
+}
+
+.menu-default .menu-separator {
+    @apply border border-gray-200 my-2.5
+}
+
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-link,
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-label {
+    @apply ms-5;
+}
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-accordion .menu-item>.menu-link,
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-accordion .menu-item>.menu-label {
+    @apply ms-8;
+}
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-accordion .menu-item>.menu-accordion .menu-item>.menu-link,
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-accordion .menu-item>.menu-accordion .menu-item>.menu-label {
+    @apply ms-11;
+}
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-accordion .menu-item>.menu-accordion .menu-item>.menu-accordion .menu-item>.menu-link,
+.menu-default .menu-accordion:not(.menu-no-indent) .menu-item>.menu-accordion .menu-item>.menu-accordion .menu-item>.menu-accordion .menu-item>.menu-label {
+    @apply ms-14;
+}
+
+.menu-default .menu-item .menu-title {
+    @apply text-gray-800
+}
+.menu-default .menu-item .menu-icon svg,
+.menu-default .menu-item .menu-arrow svg {
+    @apply text-gray-500
+}
+.menu-default .menu-item .menu-link:hover .menu-title,
+.menu-default .menu-item .menu-label:hover .menu-title {
+    @apply text-gray-900
+}
+.menu-default .menu-item .menu-link:hover .menu-icon svg,
+.menu-default .menu-item .menu-label:hover .menu-icon svg {
+    @apply text-primary
+}
+.menu-default .menu-item.active>.menu-link .menu-title,
+.menu-default .menu-item.active>.menu-label .menu-title,
+.menu-default .menu-item.show>.menu-link .menu-title,
+.menu-default .menu-item.show>.menu-label .menu-title,
+.menu-default .menu-item.here>.menu-link .menu-title,
+.menu-default .menu-item.here>.menu-label .menu-title,
+.menu-default .menu-item.focus>.menu-link .menu-title,
+.menu-default .menu-item.focus>.menu-label .menu-title {
+    @apply text-gray-900
+}
+.menu-default .menu-item.active>.menu-link .menu-icon svg,
+.menu-default .menu-item.active>.menu-label .menu-icon svg,
+.menu-default .menu-item.show>.menu-link .menu-icon svg,
+.menu-default .menu-item.show>.menu-label .menu-icon svg,
+.menu-default .menu-item.here>.menu-link .menu-icon svg,
+.menu-default .menu-item.here>.menu-label .menu-icon svg,
+.menu-default .menu-item.focus>.menu-link .menu-icon svg,
+.menu-default .menu-item.focus>.menu-label .menu-icon svg {
+    @apply text-primary
+}
+.menu-default .menu-item.active>.menu-link,
+.menu-default .menu-item.active>.menu-label,
+.menu-default .menu-item.here>.menu-link,
+.menu-default .menu-item.here>.menu-label {
+    @apply bg-gray-100
+}
+
+.dark .menu-default .menu-item.active>.menu-link,
+.dark .menu-default .menu-item.active>.menu-label,
+.dark .menu-default .menu-item.here>.menu-link,
+.dark .menu-default .menu-item.here>.menu-label {
+    @apply bg-coal-300;
+}
+.menu-default .menu-item>.menu-link:hover,
+.menu-default .menu-item>.menu-label:hover {
+    @apply bg-gray-200;
+}
+.dark .menu-default .menu-item>.menu-link:hover,
+.dark .menu-default .menu-item>.menu-label:hover {
+    @apply bg-coal-300;
+}
+.menu-default .menu-item.disabled>.menu-link,
+.menu-default .menu-item.disabled>.menu-label {
+    @apply opacity-50
+}
+
+/* Rating */
+
+.rating {
+    @apply inline-flex items-stretch;
+}
+.rating input {
+    @apply appearance-none absolute start-[9999px];
+}
+.rating input[disabled] {
+    @apply hidden;
+}
+.rating-on {
+    @apply text-warning;
+}
+.rating-off {
+    @apply text-gray-400;
+}
+.rating-label {
+    @apply inline-flex items-center;
+}
+.rating-label .rating-on {
+    @apply hidden;
+}
+.rating-label .rating-off,
+.rating:hover label.rating-label .rating-on,
+label.rating-label .rating-on,
+label.rating-label.checked .rating-on,
+div.rating-label.checked .rating-on {
+    @apply inline-flex;
+}
+.rating:hover label.rating-label .rating-off,
+label.rating-label .rating-off,
+label.rating-label.checked .rating-off,
+div.rating-label.checked .rating-off {
+    @apply hidden;
+}
+label.rating-label:hover~label.rating-label .rating-on,
+.rating-input:checked~.rating-label .rating-on {
+    @apply hidden;
+}
+label.rating-label:hover~label.rating-label .rating-off,
+.rating-input:checked~.rating-label .rating-off {
+    @apply inline-flex;
+}
+.rating-label.indeterminate {
+    @apply relative;
+}
+.rating-label.indeterminate .rating-on {
+    @apply inline-flex absolute z-1 overflow-hidden start-0;
+}
+.rating-label.indeterminate .rating-off {
+    @apply inline-flex;
+}
+label.rating-label {
+    @apply cursor-pointer;
+}
+
+/* Badge */
+.badge {
+    @apply inline-flex items-center justify-center text-2xs border border-transparent p-2 rounded;
+}
+
+.badge.badge-pill {
+    @apply pe-2.5 ps-2.5 rounded-[1.875rem];
+}
+.badge-dot {
+    @apply p-0 rounded-1/2;
+}
+.badge-circle {
+    @apply p-0 rounded-1/2 shrink-0 leading-[0];
+}
+.badge-xs {
+    @apply text-xs py-0.75 px-1.25;
+}
+.badge-xs.badge-pill {
+    @apply pe-1 ps-1;
+}
+.badge-sm {
+    @apply py-1.25 px-1.5;
+}
+.badge-sm.badge-pill {
+    @apply pe-1.5 ps-1.5;
+}
+.badge-lg.badge-pill {
+    @apply pe-2.75 ps-3;
+}
+.badge {
+    @apply border-transparent text-gray-700 bg-gray-200;
+}
+.badge-outline {
+    @apply border-gray-300 bg-gray-100 text-gray-600;
+}
+.badge-primary {
+    @apply text-white bg-primary;
+}
+.badge-outline.badge-primary {
+    @apply text-primary bg-primary-light border-primary-clarity;
+}
+.badge-success {
+    @apply text-white bg-success;
+}
+.badge-outline.badge-success {
+    @apply text-success bg-success-light border-success-clarity;
+}
+.badge-danger {
+    @apply text-white bg-danger
+}
+.badge-outline.badge-danger {
+    @apply text-danger bg-danger-light border-danger-clarity
+}
+.badge-warning {
+    @apply text-white bg-warning
+}
+.badge-outline.badge-warning {
+    @apply text-warning bg-warning-light border-warning-clarity
+}
+.badge-info {
+    @apply text-white bg-info
+}
+.badge-outline.badge-info {
+    @apply text-info bg-info-light border-info-clarity
+}
+.badge-outline.badge-dark {
+    @apply text-dark bg-dark-light border-dark-clarity
+}
+
+.channel-stats-bg {
+    background-image: url('images/bg-3.png');
+}
+
+.dark .channel-stats-bg {
+    background-image: url('images/bg-3-dark.png');
+}
