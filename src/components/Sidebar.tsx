@@ -1,28 +1,43 @@
 // src/Sidebar.tsx
-import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUser, FaFolder, FaTasks, FaProjectDiagram, FaSun, FaCog, FaFileContract } from 'react-icons/fa';
-import { RxDashboard, RxPerson } from "react-icons/rx";
-import { IoLogOutOutline } from 'react-icons/io5';
+import { RxAvatar, RxDashboard, RxFile, RxPerson } from "react-icons/rx";
+import { HiOutlineClipboardList, HiOutlineOfficeBuilding, HiOutlineSun, HiOutlineCog, HiOutlineDocumentText, HiOutlineFolder } from 'react-icons/hi';
+import { GoMoveToStart } from "react-icons/go";
 import useAuth from '../hooks/useAuth';
+import MenuItem from './MenuItem';
 const Sidebar: React.FC = () => {
     const { user } = useAuth();
-    const location = useLocation();
     return (
         <aside className="sidebar bg-light border-e border-e-gray-200 fixed top-0 bottom-0 z-20 lg:flex flex-col items-stretch shrink-0">
             
-            <div className="sidebar-header">
-                <img src="/images/logo-c.svg" className="w-15 mb-10" alt="Logo" />
+            <div className="sidebar-header hidden lg:flex items-center relative justify-between px-3 lg:px-6 shrink-0">
+                <img src="/images/logo-c2.svg" className="default-logo h-[60px] max-w-none ms-6" alt="Logo" />
+                <button type="button" 
+                    className="btn btn-icon btn-icon-md size-[30px] rounded-lg border bg-light text-gray-500 hover:text-gray-700 toggle absolute start-full top-2/4 rtl:translate-x-2/4 -translate-x-2/4 -translate-y-2/4 border-gray-200 dark:border-gray-300" aria-label="Toggle sidebar">
+                    {/* <i className="ki-filled ki-black-left-line transition-all duration-300 rtl:rotate-180"></i> */}
+                    <GoMoveToStart className="transition-all duration-300 rtl:rotate-180" />
+                </button>
             </div>
-            <div className="sidebar-content">
-                
+            <div className="sidebar-content flex grow shrink-0 py-5 pe-2">
+                <div className="scrollable-y-hover grow shrink-0 flex ps-2 lg:ps-5 pe-1 lg:pe-3 h-[601px]">
+                    <div className="menu flex flex-col grow !gap-1">
+                        <MenuItem to="/home" icon={RxDashboard} title="Dashboard" isPrefixMatch />
+                        <MenuItem to="/users" icon={RxAvatar} title="Employees" />
+                        <MenuItem to="/contracts" icon={RxFile} title="Contracts" />
+                        <MenuItem to="/customers" icon={HiOutlineFolder} title="Customers" /> 
+                        <MenuItem to="/projects" icon={HiOutlineOfficeBuilding} title="Projects" />
+                        <MenuItem to="/vacations" icon={HiOutlineSun} title="Vacations" />
+                        <MenuItem to="/settings" icon={HiOutlineCog} title="Settings" isPrefixMatch />
+                        <MenuItem to="/logs" icon={HiOutlineDocumentText} title="Logs" isPrefixMatch />
+                    </div>
+                </div>
             </div>
-            <div className="p-6">
+            {/* <div className="p-6">
                 <nav className="mt-4 bg-">
                     <ul>
                         <li>
                             <Link to="/home" className={`flex items-center px-4 py-2 text-gray-700 rounded hover:bg-gray-200 ${location.pathname === '/home' ? 'bg-gray-300' : ''}`}>
                                 <RxDashboard className="mr-2 text-xl" />
-                                Dashboard
+                                DashboardH
                             </Link>
                         </li>
                         {user?.role === 'Administrator' && (
@@ -47,12 +62,6 @@ const Sidebar: React.FC = () => {
                                 Customers
                             </Link>
                         </li>
-                        {/* <li>
-                            <Link to="/tasks" className={`flex items-center px-4 py-2 text-gray-700 rounded hover:bg-gray-200 ${location.pathname === '/tasks' ? 'bg-gray-300' : ''}`}>
-                                <FaTasks className="mr-2" />
-                                Tasks
-                            </Link>
-                        </li> */}
                         <li>
                             <Link to="/projects" className={`flex items-center px-4 py-2 text-gray-700 rounded hover:bg-gray-200 ${location.pathname === '/projects' ? 'bg-gray-300' : ''}`}>
                                 <FaProjectDiagram className="mr-2" />
@@ -82,7 +91,7 @@ const Sidebar: React.FC = () => {
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div> */}
         </aside>
 
     );
