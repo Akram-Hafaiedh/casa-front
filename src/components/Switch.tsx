@@ -1,12 +1,12 @@
 interface SwitchProps {
     isChecked: boolean;
     onChange: () => void;
-    label: string;
+    label?: string;
 }
 const Switch : React.FC<SwitchProps> = ({ isChecked, onChange, label }) => {
   return (
     <label className="flex items-center cursor-pointer">
-      <span className="mr-2">{label}</span>
+      {label && <span className="mr-2">{label}</span>}
       <input
         type="checkbox"
         checked={isChecked}
@@ -19,8 +19,8 @@ const Switch : React.FC<SwitchProps> = ({ isChecked, onChange, label }) => {
         } rounded-full`}
       >
         <span
-          className={`absolute left-0 w-6 h-6 rounded-full bg-white shadow transform transition-transform duration-300 ease-in-out ${
-            isChecked ? 'translate-x-6' : ''
+          className={`absolute left-1 top-1 w-4 h-4 rounded-full bg-white shadow transform transition-transform duration-300 ease-in-out ${
+            isChecked ? 'translate-x-5' : ''
           }`}
         />
       </span>
