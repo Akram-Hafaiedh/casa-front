@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import Sidebar from "../../components/Sidebar"
-import PrivateLayout from "../../layouts/PrivateLayout"
 import { User } from "../../types/User";
 import useAxiosInstance from "../../utils/axiosInstance";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
@@ -10,7 +8,7 @@ import { SiAbstract } from "react-icons/si";
 import { IoMail } from "react-icons/io5";
 import { FaEllipsisV } from "react-icons/fa";
 
-export const Layout: React.FC = () => {
+const Layout: React.FC = () => {
     const axiosInstance = useAxiosInstance();
     const { userId } = useParams<{ userId: string }>();
     const navigate = useNavigate();
@@ -168,3 +166,6 @@ export const Layout: React.FC = () => {
         </>
     )
 }
+
+
+export default Layout;

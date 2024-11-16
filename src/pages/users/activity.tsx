@@ -143,17 +143,17 @@ const UserActivity: React.FC = () => {
                             </span>
                             <div className="flex -space-x-2">
                               <div className="flex">
-                                <img src="/metronic/tailwind/react/demo1/media/avatars/300-4.png" 
+                                <img src="/images/avatars/300-4.png" 
                                   className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-7" alt=""
                                 />
                               </div>
                               <div className="flex">
-                                <img src="/metronic/tailwind/react/demo1/media/avatars/300-1.png"
+                                <img src="/images/avatars/300-1.png"
                                   className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-7" alt=""
                                 />
                               </div>
                               <div className="flex">
-                                <img src="/metronic/tailwind/react/demo1/media/avatars/300-2.png"
+                                <img src="/images/avatars/300-2.png"
                                   className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-7" alt=""
                                 />
                               </div>
