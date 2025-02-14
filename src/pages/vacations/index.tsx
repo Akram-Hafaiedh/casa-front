@@ -1,12 +1,9 @@
-import Sidebar from '../../components/Sidebar';
-import HomeLayout from '../../layouts/PrivateLayout';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import multiMonthPlugin from '@fullcalendar/multimonth';
-import { useEffect, useState } from 'react';
+import listPlugin from '@fullcalendar/list';
+import { useEffect, useState, Fragment } from 'react';
 import { EventClickArg } from '@fullcalendar/core/index.js';
-import { Link } from 'react-router-dom';
 import VacationModal from '../../components/modals/VacationModal';
 import useAxiosInstance from '../../utils/axiosInstance';
 import Swal from 'sweetalert2';
@@ -14,6 +11,8 @@ import { toast } from 'react-toastify';
 import useAuth from '../../hooks/useAuth';
 import { Vacation } from '../../types/Vacation';
 import InfoSection from '../../layouts/Info';
+import { HiOutlineCalendar, HiOutlinePlus } from 'react-icons/hi2';
+
 
 /**
  * Page component for the vacations page.
@@ -34,17 +33,13 @@ const Vacations: React.FC = () => {
     };
 
     useEffect(() => {
-        const buttons = document.querySelectorAll('.fc-button');
-        buttons.forEach(button => {
-            button.classList.add('bg-blue-500', 'text-white', 'px-4', 'py-2', 'rounded');
-        });
         fetchVacations();
     }, []);
 
     const handleEventClick = (arg: EventClickArg) => {
         const event = arg.event;
         const vacationId = event.extendedProps.vacationId;
-        if (user && user.role === 'admin') {
+        if (user && (user.roles.includes('admin') || user.roles.includes('developer'))) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'You will not be able to recover this vacation!',
@@ -80,7 +75,7 @@ const Vacations: React.FC = () => {
                 start: event.start ? event.start.toISOString() : "",
                 end: event.end ? event.end.toISOString() : "",
                 status: event.extendedProps.status,
-                userId: event.extendedProps.userId,
+                user_id: event.extendedProps.userId,
             };
             setSelectedVacation(vacationDetails);
         }
@@ -88,7 +83,7 @@ const Vacations: React.FC = () => {
 
     const fetchVacations = async () =>{
         try {
-            const response = await axiosInstance.get('/vacations/my-vacations');
+            const response = await axiosInstance.get('/vacations');
             if (response.data.status.code === 200) {
                 console.log(response.data);
                 const fetchedVacations = response.data.data.vacations;
@@ -96,10 +91,18 @@ const Vacations: React.FC = () => {
                 const mappedEvents = fetchedVacations.map((vacation: Vacation) => ({
                     title: vacation.title || 'Vacation',
                     vacationId: vacation.id,
-                    start: vacation.start,         
+                    start: vacation.start,
                     end: vacation.end,
-                    status: vacation.status
+                    status: vacation.status,
+                    classNames: vacation.status === 1 
+                        ? 'bg-success text-white' 
+                        : vacation.status === 2 
+                        ? 'bg-warning text-dark border-none' 
+                        : vacation.status === 3 
+                        ? 'bg-danger hover:text-dark text-white border-none text-center'
+                        : ''
                 }));
+                
     
                 setEvents(mappedEvents);
             } else {
@@ -130,21 +133,44 @@ const Vacations: React.FC = () => {
             <InfoSection 
                 title="Vacations" 
                 description="Manage your vacations"
-                linkText={user?.role === 'Administrator'? 'Create New Vacation' : 'My Vacations'}
-                linkTo={user?.role === 'Administrator'? '/vacations/list' : '/vacations/create'}
+                actions={[
+                    {
+                        type: 'button',
+                        text: 'Create New Vacation',
+                        onClick: toggleModal,
+                        icon: <HiOutlinePlus />,
+                        iconPosition: 'start'
+                    },
+                    {
+                        type: 'link',
+                        text: 'Vacations',
+                        to: '/vacations/list',
+                        icon: <HiOutlineCalendar />,
+                        iconPosition: 'start'
+                    },
+                ]}
             />
 
             <FullCalendar
-                plugins={[multiMonthPlugin, dayGridPlugin, interactionPlugin]}
-                initialView="multiMonthYear"
+                plugins={[ listPlugin, dayGridPlugin, interactionPlugin]}
+                initialDate={new Date()}
+                initialView="dayGridMonth"
                 events={events}
                 dateClick={handleDateClick}
-                weekNumbers={true}
                 headerToolbar={{
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'multiMonthYear,dayGridMonth'
+                    right: 'dayGridMonth,listWeek,listDay'
                 }}
+                views={{ 
+                    listWeek: { buttonText: 'Week' },
+                    listMonth: { buttonText: 'Month' },
+                    listDay: { buttonText: 'Day' },
+                    dayGridMonth: { buttonText: 'Month' }  // other views are also available, just uncomment the ones you want to use
+                }}
+                height={800}
+                contentHeight={780}
+                aspectRatio={3}
                 eventClick={(arg) => handleEventClick(arg)}
                 dayMaxEvents={true}
             />

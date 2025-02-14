@@ -87,8 +87,15 @@ const ContractCreate: React.FC = () => {
                 <InfoSection 
                     title="Create Contract"
                     description="Fill out the form below to create a new contract."
-                    linkTo="/contracts"
-                    linkText="Contracts List"
+                    actions={[
+                        { 
+                            type: 'link',
+                            text: 'Contracts List',
+                            to: '/contracts',
+                            icon: <IoReturnDownBackOutline />,
+                            iconPosition: 'start'
+                        }
+                    ]}
                 />
                 <form onSubmit={handleContractSubmit} className="p-4 bg-white rounded-lg shadow-md">
                     <div className="mb-4">

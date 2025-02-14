@@ -1,7 +1,15 @@
 import { useState } from "react";
 import DonutChart from "../../components/charts/Donut";
+import { useOutletContext } from "react-router-dom";
+import { Project } from "../../types/Project";
+import moment from "moment";
+import { User } from "../../types/User";
+
 
 const ProjectOverview = () => {
+    
+    const { project, users: allMembers } = useOutletContext<{ project: Project, users: User[] }>();
+
     const [selectedDate, setSelectedDate] = useState('Mo 23');
     const events = [
         { time: '12:00 - 13:00 PM', title: 'Committee Review Approvals', lead: 'Kendell Trevor' },
@@ -12,6 +20,8 @@ const ProjectOverview = () => {
     const labels = ['Yet to start', 'Overdue', 'Completed', 'Active'];
 
     const dates = ['Su 22', 'Mo 23', 'Tu 24', 'We 25', 'Th 26', 'Fr 27', 'Sa 28', 'Su 29', 'Mo 30', 'Tu 31'];
+    
+    if (!project) return <div>Loading...</div>;
     return (
         <div className="grid gap-5 lg:gap-7.5">
             <div className="grid lg:grid-cols-2 gap-5 lg:gap-7.5">
@@ -21,37 +31,19 @@ const ProjectOverview = () => {
                             <div className="flex lg:px-10 py-1.5 gap-2">
                                 <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
                                     <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-                                        624
+                                        {project.tasks?.length || 0}
                                     </span>
                                     <span className="text-gray-700 text-sm">
-                                        Employees
+                                        Open Tasks
                                     </span>
                                 </div>
                                 <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
                                 <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
                                     <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-                                        60.7M
+                                        {moment(project.due_date).format('DD MMM YYYY').toLowerCase()}
                                     </span>
                                     <span className="text-gray-700 text-sm">
-                                        Users
-                                    </span>
-                                </div>
-                                <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
-                                <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-                                    <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-                                        369M
-                                    </span>
-                                    <span className="text-gray-700 text-sm">
-                                        Revenue
-                                    </span>
-                                </div>
-                                <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
-                                <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-                                    <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
-                                        27
-                                    </span>
-                                    <span className="text-gray-700 text-sm">
-                                        Company Rank
+                                        Due Date
                                     </span>
                                 </div>
                                 <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>

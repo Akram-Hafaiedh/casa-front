@@ -29,15 +29,13 @@ const HomePage: React.FC = () => {
                 <InfoSection
                     title="Dashboard"
                     description="Central Hub for Personal Customization"
-                    linkText="View Profile"
-                    linkTo="/profile"
-                    />
+                />
             </div>
 
             <div className="container-fixed mb-7.5">
                 <div className="grid lg:grid-cols-3 gap-y-5 lg:gap-7.5 items-stretch">
                     <div className="lg:col-span-1">
-                        <div className="grid grid-cols-1 gap-5 lg:gap-7.5 h-full items-stretch" style={{backgroundImage: 'url("/metronic/tailwind/react/demo1/media/images/2600x1600/bg-3.png")'}}>
+                        <div className="grid grid-cols-1 gap-5 lg:gap-7.5 h-full items-stretch" style={{backgroundImage: 'url("/images/2600x1600/bg-3.png")'}}>
                             <div className="card flex-col justify-center gap-6 h-full bg-cover rtl:bg-[left_top_-1.7rem] bg-[right_top_-1.7rem] bg-no-repeat channel-stats-bg">
                                 {/* <img src="images/brand-logos/linkedin-2.svg" 
                                     className="w-7 mt-4 ms-5" alt="" 

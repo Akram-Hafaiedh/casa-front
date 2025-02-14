@@ -1,3 +1,8 @@
+import { FaStar } from "react-icons/fa6"
+import { HiOutlineAdjustments } from "react-icons/hi"
+import { HiMiniSquaresPlus, HiOutlineBeaker, HiOutlineCake, HiOutlineCodeBracketSquare, HiOutlineMap, HiOutlineShare, HiOutlineTrophy, HiOutlineUserGroup, HiOutlineUsers } from "react-icons/hi2"
+import Hexagon from "../../components/Hexagon"
+
 const UserActivity: React.FC = () => {
   return (
     <>
@@ -13,7 +18,8 @@ const UserActivity: React.FC = () => {
               <div className="flex items-start relative">
                 <div className="w-9 start-0 top-9 absolute bottom-0 rtl:-translate-x-1/2 translate-x-1/2 border-s border-s-gray-300"></div>
                 <div className="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
-                  <i className="ki-filled ki-share text-base"></i>
+                  {/* <i className="ki-filled ki-share text-base"></i> */}
+                  <HiOutlineShare className="size-5" />
                 </div>
                 <div className="ps-2.5 mb-7 text-md grow">
                   <div className="flex flex-col">
@@ -32,7 +38,8 @@ const UserActivity: React.FC = () => {
               <div className="flex items-start relative">
                 <div className="w-9 start-0 top-9 absolute bottom-0 rtl:-translate-x-1/2 translate-x-1/2 border-s border-s-gray-300"></div>
                 <div className="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
-                  <i className="ki-filled ki-coffee text-base"></i>
+                  {/* <i className="ki-filled ki-coffee text-base"></i> */}
+                  <HiOutlineCake className="size-5" />
                 </div>
                 <div className="ps-2.5 mb-7 text-md grow">
                   <div className="flex flex-col">
@@ -53,6 +60,7 @@ const UserActivity: React.FC = () => {
                 <div className="w-9 start-0 top-9 absolute bottom-0 rtl:-translate-x-1/2 translate-x-1/2 border-s border-s-gray-300"></div>
                 <div className="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
                   <i className="ki-filled ki-design-1 text-base"></i>
+                  <HiOutlineAdjustments className="size-5" />
                 </div>
                 <div className="ps-2.5 mb-7 text-md grow">
                   <div className="flex flex-col">
@@ -70,7 +78,8 @@ const UserActivity: React.FC = () => {
                 <div className="w-9 start-0 top-9 absolute bottom-0 rtl:-translate-x-1/2 translate-x-1/2 border-s border-s-gray-300">
                 </div>
                 <div className="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
-                  <i className="ki-filled ki-code text-base"></i>
+                  {/* <i className="ki-filled ki-code text-base"></i> */}
+                  <HiOutlineCodeBracketSquare className="size-5" />
                 </div>
                 <div className="ps-2.5 mb-7 text-md grow">
                   <div className="grow">
@@ -87,19 +96,14 @@ const UserActivity: React.FC = () => {
                       <div className="card shadow-none p-4">
                         <div className="flex flex-wrap justify-between items-center gap-7">
                           <div className="flex items-center gap-4">
-                            <div className="relative size-[50px] shrink-0">
-                              <svg className="w-full h-full stroke-primary-clarity fill-primary-light" width={44} height={48} viewBox="0 0 44 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 2.4641C19.7128 0.320509 24.2872 0.320508 28 2.4641L37.6506 8.0359C41.3634 10.1795 43.6506 14.141 43.6506
-                                  18.4282V29.5718C43.6506 33.859 41.3634 37.8205 37.6506 39.9641L28 45.5359C24.2872 47.6795 19.7128 47.6795 16 45.5359L6.34937
-                                  39.9641C2.63655 37.8205 0.349365 33.859 0.349365 29.5718V18.4282C0.349365 14.141 2.63655 10.1795 6.34937 8.0359L16 2.4641Z" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"></path>
-                                <path d="M16.25 2.89711C19.8081 0.842838 24.1919 0.842837 27.75 2.89711L37.4006 8.46891C40.9587 10.5232 43.1506 14.3196 43.1506
-                                  18.4282V29.5718C43.1506 33.6804 40.9587 37.4768 37.4006 39.5311L27.75 45.1029C24.1919 47.1572 19.8081 47.1572 16.25 45.1029L6.59937
-                                  39.5311C3.04125 37.4768 0.849365 33.6803 0.849365 29.5718V18.4282C0.849365 14.3196 3.04125 10.5232 6.59937 8.46891L16.25 2.89711Z" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round"></path>
-                              </svg>
-                              <div className="absolute leading-none start-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 rtl:translate-x-2/4">
-                                <i className="ki-filled ki-abstract-39 text-xl ps-px text-primary"></i>
-                              </div>
-                            </div>
+                            <Hexagon 
+                                  icon={HiOutlineMap}
+                                  strokeClass="stroke-red-300"
+                                  fillClass="fill-gray-100"
+                                  size={50}
+                                  iconClassName="text-red-300"
+                                  iconSize={20}
+                              />
                             <div className="flex flex-col gap-1.5">
                               <a href="#" className="text-base font-medium hover:text-primary text-gray-900">
                                 Market Mavericks
@@ -110,32 +114,40 @@ const UserActivity: React.FC = () => {
                             </div>
                           </div>
                           <div className="flex flex-wrap items-center gap-6 lg:gap-12">
-                            <div className="flex flex-col items-end gap-5">
-                              <span className="text-2xs text-gray-600 uppercase">
-                                rating
-                              </span>
-                              <div className="rating">
-                                <div className="rating-label checked">
-                                  <i className="rating-on ki-solid ki-star text-base leading-none"></i>
-                                  <i className="rating-off ki-outline ki-star text-base leading-none"></i>
-                                </div>
-                                <div className="rating-label checked">
-                                  <i className="rating-on ki-solid ki-star text-base leading-none"></i>
-                                  <i className="rating-off ki-outline ki-star text-base leading-none"></i>
-                                </div>
-                                <div className="rating-label checked">
-                                  <i className="rating-on ki-solid ki-star text-base leading-none"></i>
-                                  <i className="rating-off ki-outline ki-star text-base leading-none"></i>
-                                </div>
-                                <div className="rating-label checked">
-                                  <i className="rating-on ki-solid ki-star text-base leading-none"></i>
-                                  <i className="rating-off ki-outline ki-star text-base leading-none"></i>
-                                </div>
-                              <div className="rating-label indeterminate">
-                                <i className="rating-on ki-solid ki-star text-base leading-none" style={{width: '50%'}}></i>
-                                <i className="rating-off ki-outline ki-star text-base leading-none"></i>
+                                <div className="flex flex-col items-end gap-5">
+                                <span className="text-2xs text-gray-600 uppercase">
+                                    rating
+                                </span>
+                                <div className="rating">
+                                    <div className="rating-label checked">
+                                        <FaStar className="rating-off"/>
+                                        <FaStar className="rating-on" />
+                                    </div>
+                                    <div className="rating-label checked">
+                                        <FaStar className="rating-off"/>
+                                        <FaStar className="rating-on" />
+                                    </div>
+                                    <div className="rating-label checked">
+                                        <FaStar className="rating-off"/>
+                                        <FaStar className="rating-on" />
+                                    </div>
+                                    <div className="rating-label checked">
+                                        <FaStar className="rating-off"/>
+                                        <FaStar className="rating-on" />
+                                    </div>
+                                    <div className="rating-label indeterminate">
+                                        <FaStar className="rating-off"/>
+                                        <FaStar className="rating-on" />
+                                    </div>
+                                    <div className="relative inline-block">
+                                        <FaStar className="rating-off text-gray-300" />
+                                        <div className="absolute top-0 left-0 overflow-hidden" 
+                                            style={{ width: '50%' }} 
+                                        >
+                                            <FaStar className="rating-on text-yellow-500" />
+                                    </div>
+                                  </div>
                               </div>
-                            </div>
                           </div>
                           <div className="flex flex-col items-end gap-3 lg:min-w-24 shrink-0 max-w-auto">
                             <span className="text-2xs text-gray-600 uppercase">
@@ -166,7 +178,8 @@ const UserActivity: React.FC = () => {
                           </div>
                           <div className="grid justify-end min-w-20">
                             <a className="btn btn-sm btn-primary">
-                              <i className="ki-filled ki-people"></i>
+                              {/* <i className="ki-filled ki-people"></i> */}
+                              <HiOutlineUserGroup className="size-4" />
                               Join
                             </a>
                           </div>
@@ -179,6 +192,7 @@ const UserActivity: React.FC = () => {
               <div className="flex items-start relative">
                 <div className="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
                   <i className="ki-filled ki-like-shapes text-base"></i>
+                  <HiOutlineUsers className="size-4" />
                 </div>
                 <div className="ps-2.5 mb-7 text-md grow">
                   <div className="flex flex-col">
@@ -197,7 +211,8 @@ const UserActivity: React.FC = () => {
               </div>
               <div className="flex items-start relative">
                 <div className="flex items-center justify-center shrink-0 rounded-full bg-gray-100 border border-gray-300 size-9 text-gray-600">
-                  <i className="ki-filled ki-cup text-base"></i>
+                  {/* <i className="ki-filled ki-cup text-base"></i> */}
+                  <HiOutlineTrophy className="size-5" />
                 </div>
                 <div className="ps-2.5  text-md grow">
                   <div className="flex flex-col">
@@ -248,7 +263,7 @@ const UserActivity: React.FC = () => {
         </div>
       </div>
       {/* Empty */}
-      <div className="container-fixed">
+      {/* <div className="container-fixed">
         <div className="card p-8 lg:p-12">
           <div className="card-body">
             <div className="grid justify-center py-5">
@@ -268,7 +283,7 @@ const UserActivity: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

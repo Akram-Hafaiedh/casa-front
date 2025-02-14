@@ -26,13 +26,14 @@ const Login: React.FC = () => {
         try {
             const response = await axios.post(`${apiUrl}/auth/login`, { email, password });
             if (response.data.status.code === 200) {
-                login({ token: response.data.data.token });
+                await login({ token: response.data.data.token });
                 navigate('/home');
             } else {
                 toast.error(response.data.status.message);
             }
         } catch (error) {
-            toast.error("An error occurred during login." + error);
+            toast.error("An error occurred during login.");
+            console.log('An error occurred during login.', error);
         }
     };
     return (

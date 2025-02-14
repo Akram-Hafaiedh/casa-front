@@ -17,7 +17,9 @@ const useAxiosInstance = () => {
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-        
+        if (!(config.data instanceof FormData)) {
+            config.headers['Content-Type'] = 'application/json';
+        }
         return config;
     })
     // Response interceptor to handle token expiration and refresh logic
@@ -30,7 +32,7 @@ const useAxiosInstance = () => {
 
                 // Call backend API for token refresh
                 try {
-                    const response = await axios.post(`${apiUrl}/auth/refresh`, {
+                    const response = await axios.post(`${apiUrl}/auth/refresh`, {}, {
                         withCredentials: true,
                     });
                     const newAccessToken = response.data.data.token;
@@ -44,7 +46,7 @@ const useAxiosInstance = () => {
                 } catch (refreshError) {
                     localStorage.removeItem('token');
                     console.log('Token expired. Please login again.', refreshError);
-                    navigate('/login');
+                    setTimeout(() => navigate('/login'), 0);
                 }
             }
             return Promise.reject(error);

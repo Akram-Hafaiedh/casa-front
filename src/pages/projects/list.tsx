@@ -1,191 +1,155 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
-import HomeLayout from '../../layouts/PrivateLayout';
-import { Switch } from '@headlessui/react';
-import AddMemberModal from '../../components/modals/AddMemberModal';
 import useAxiosInstance from '../../hooks/useAxiosInstance';
 import InfoSection from '../../layouts/Info';
+import { Project } from '../../types/Project';
+import ProjectCard from './components/ProjectCard';
+import { HiOutlinePlus } from 'react-icons/hi2';
+import { User } from '../../types/User';
+import { Link } from 'react-router-dom';
+import Loader from '../../components/Loader';
 
-
-
-interface Member {
-    id: string;
-    email: string;
-}
-interface Task {
-    id: string;
-    name: string;
-    description: string;
-    assignedTo: string;
-    status: string;
-    priority: string;
-    dueDate: string;
-    createdDate: string;
-    updatedDate: string;
-}
-interface Project {
-    id: string;
-    name: string;
-    owner: string;
-    members: Member[];
-    description: string;
-    tasks: Task[];
-    startDate: string;
-    endDate: string;
-    isPrivate: boolean;
-    createdDate: string;
-    updatedDate: string;
-}
 const ProjectListing: React.FC = () => {
     const axiosInstance = useAxiosInstance();
+
+    const [loading, setLoading] = useState<boolean>(true);
     const [projects, setProjects] = useState<Project[]>([]);
-    const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
-    const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState<boolean>(false);
-    const [currentProjectMembers, setCurrentProjectMembers] = useState<Member[]>([]);
-    const [tempTitle, setTempTitle] = useState<string>('');
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
-    const [editingMemberProjectId, setEditingMemberProjectId] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [itemsPerPage, setItemsPerPage] = useState<number>(10); // Items per page (limit)
+    const [totalProjects, setTotalProjects] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(1);
+    const [statuses, setStatuses] = useState<{ value: number | null; label: string }[]>([]);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [selectedStatus, setSelectedStatus] = useState<number | null>(null);
+    
+    const [availableMembers, setAvailableMembers] = useState<User[]>([]);
+    const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+    
+    const [isAddMemberModalOpen, setIsAddMemberModalOpen] = useState<boolean>(false);
+    const [currentProjectMembers, setCurrentProjectMembers] = useState<User[]>([]);
+    const [tempTitle, setTempTitle] = useState<string>('');
+    const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
+    const [editingMemberProjectId, setEditingMemberProjectId] = useState<string | null>(null);
 
 
-    const fetchProjects = useCallback(async (page: number, limit: number, search: string) => {
+
+    const fetchProjects = useCallback(async (page: number = 1, status ?: null | number) => {
+        if (page === currentPage && status === selectedStatus && projects.length > 0) return;
+        setLoading(true);
         try {
-            const response = await axiosInstance.get('/projects', {
-                params: { page, limit, search }
-            });
-            setProjects(response.data.data.projects);
-            setFilteredProjects(response.data.data.projects);
+            const params: Record<string, string | number | null> = { page };
+            if (status) {
+                params.status = status;
+            }
+            const response = await axiosInstance.get('/projects', { params });
+            setProjects((prevProjects) =>
+                page === 1 ? [... response.data.data.projects.data] : [...prevProjects, ...response.data.data.projects.data]);
+            
+            setTotalProjects(response.data.data.totalProjects);
+            setItemsPerPage(response.data.data.perPage);
+            setHasMore(response.data.data.projects.length === itemsPerPage);
             setTotalPages(response.data.data.totalPages);
+            
             setCurrentPage(response.data.data.currentPage);
         } catch (error) {
             console.error('Error fetching projects:', error);
+        } finally {
+            setLoading(false);
         }
     }, [axiosInstance]);
 
 
-    useEffect(() => {
-        fetchProjects(currentPage, itemsPerPage, searchQuery);
-    }, [currentPage, itemsPerPage, searchQuery]);
-
-    const togglePrivacy = async (projectId: string, currentPrivacy: boolean) => {
+    const fetchStatuses = useCallback(async () => {
         try {
-            const response = await axiosInstance.put(`/projects/${projectId}`, { isPrivate: !currentPrivacy });
-            if (response && response.data.status === 200) {
-                setProjects((prevProjects) =>
-                    prevProjects.map((project) =>
-                        project._id === projectId ? { ...project, isPrivate: !currentPrivacy } : project
-                    )
-                );
+            const response = await axiosInstance.get('/projects/statuses');
+            if (response.data.status.code === 200) {
+                const statusOptions = response.data.data.project_statuses.map((status: { id: number; name: string }) => ({ value: status.id, label: status.name }));
+                statusOptions.unshift({ value: null, label: 'All Projects' });
+                setStatuses(statusOptions);
+            } else {
+                console.error('Error fetching statuses:', response.data.status.message);
             }
         } catch (error) {
-            console.error('Error updating project privacy:', error);
+            console.error('Error fetching statuses:', error);
         }
-    };
+    }, [axiosInstance]);
 
-    const getInitials = (name: string) => {
-        const words = name.split(' ');
-        let initials = '';
-        for (let i = 0; i < words.length; i++) {
-            initials += words[i][0];
-        }
-        return initials.toUpperCase();
-    }
-    const handleAddMemberClick = (projectId: string) => {
-        setEditingMemberProjectId(projectId);
-        setCurrentProjectMembers(projects.find(project => project._id === projectId)?.members || []);
-        setIsAddMemberModalOpen(true);
-    };
+    useEffect(() => {
+        fetchProjects(1, selectedStatus);
+        fetchStatuses();
+    }, []);
 
-
-    const handleTitleClick = (projectId: string, currentTitle: string) => {
-        setEditingProjectId(projectId); // Set the project ID in editing mode
-        setTempTitle(currentTitle); // Store the current title temporarily
-    };
-
-    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTempTitle(event.target.value); // Update temporary title as user types
-    };
-
-    const handleTitleBlur = async (projectId: string) => {
-        await saveProjectTitle(projectId);
-    };
-
-    const handleTitleKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>, projectId: string) => {
-        if (event.key === 'Enter') {
-            await saveProjectTitle(projectId);
-        }
-    };
-
-    const saveProjectTitle = async (projectId: string) => {
+    const fetchAvailableMembers = useCallback(async () => {
         try {
-            await axiosInstance.put(`/projects/${projectId}`, { name: tempTitle });
-            // Update local project title after saving
-            setProjects((prevProjects) =>
-                prevProjects.map((project) =>
-                    project._id === projectId ? { ...project, name: tempTitle } : project
-                )
-            );
-            setEditingProjectId(null); // Exit editing mode after saving
+            const response = await axiosInstance.get('/users');
+            if (response.data.data.status.code === 200) {
+                return response.data.data.users;
+                setAvailableMembers(response.data.data.users);
+            } else {
+                console.error('Error fetching available members:', response.data.status.message);
+            }
         } catch (error) {
-            console.error('Error saving project title:', error);
+            console.error('Error fetching available members:', error);
         }
+    }, [axiosInstance]);
+
+
+    const handleLoadMore = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
     };
-
-    const handleRemoveMember = async (memberId: string, projectId: string) => {
+    
+    const handleRemoveMember = async (projectId: string, memberId: string) => {
         try {
-            const projectToUpdate = projects.find(project => project._id === projectId);
-            if (!projectToUpdate) return;
-
-            const updatedMembers = projectToUpdate.members.filter(member => member._id !== memberId);
-            const response = await axiosInstance.put(`/projects/${projectId}`, { members: updatedMembers });
-            if (response && response.data.status === 200) {
-                // Update the local state with the new list of members
-                setProjects(prevProjects =>
-                    prevProjects.map(project =>
-                        project._id === projectId ? { ...project, members: updatedMembers } : project
+            const response = await axiosInstance.delete(`/projects/${projectId}/members/${memberId}`);
+            if (response.data.status === 200) {
+                setProjects((prevProjects) =>
+                    prevProjects.map((project) =>
+                        Number(projectId) === project.id
+                            ? { ...project, members: project.members.filter((member) => member._id !== memberId) }
+                            : project
                     )
                 );
             }
         } catch (error) {
             console.error('Error removing member from project:', error);
         }
-    }
+    };
 
-    const handleAddMembers = async (selectedUsers: Member[]) => {
-        if (!editingMemberProjectId) return;
+    const handleAddMembers = (projectId: string, selectedUsers: string[]) => {
+        fetchAvailableMembers();
+        setIsAddMemberModalOpen(true);
+        setEditingProjectId(projectId);
+        setCurrentProjectMembers(
+            projects
+                .map((project) => project.members)
+                .flat()
+                .filter((member) => selectedUsers.includes(member.id))
+        );
+    };
+
+    const submitAddedMembers = async (projectId: string, selectedUsers: User[]) => {
         try {
-            const memberIds = selectedUsers.map(user => user._id);
-            console.log(memberIds);
-
-            const response = await axiosInstance.put(`/projects/${editingMemberProjectId}`, { members: memberIds });
-            console.log(response);
-            if (response && response.data.status === 200) {
+            const memberIds = selectedUsers.map((user) => user.id);
+            const response = await axiosInstance.put(`/projects/${projectId}/members`, { members: memberIds });
+            if (response.data.data.status.code === 200) {
                 setProjects((prevProjects) =>
                     prevProjects.map((project) =>
-                        project._id === editingMemberProjectId ? { ...project, members: selectedUsers } : project
+                        Number(projectId) === project.id ? { ...project, members: selectedUsers } : project
                     )
                 );
             }
+            setCurrentProjectMembers([]);
+            setIsAddMemberModalOpen(false);
         } catch (error) {
             console.error('Error adding members to project:', error);
-        } finally {
-            setEditingMemberProjectId(null);
         }
-    }
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        fetchProjects(page, itemsPerPage, searchQuery);
     };
+    
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const query = event.target.value;
-        setSearchQuery(query);
-        fetchProjects(currentPage, itemsPerPage, query);
-    };
+    const handleFilterButtonClick = ( selectedStatus: number | null) => {
+        setSelectedStatus(selectedStatus)
+        fetchProjects(1, selectedStatus);
+    }
+
 
     return (
         <>
@@ -199,686 +163,73 @@ const ProjectListing: React.FC = () => {
                     <InfoSection
                         title="Projects"
                         description="View, create, edit, and delete your projects. Click on a project name to edit its title."
-                        linkTo='/projects/create'
-                        linkText="Add new project"
+                        actions={[
+                            {
+                                type: 'link',
+                                text: 'Add new project',
+                                to: '/projects/create',
+                                icon: <HiOutlinePlus />,
+                                iconPosition: 'start'
+                            },
+                        ]}
+                        showFilterButton={true}
+                        filterButtonTitle="Filter Projects"
+                        onFilterButtonClick={(selectedStatus ?: number | null) => handleFilterButtonClick(selectedStatus)}
+                        statuses={statuses}
                     />
-                    {/* Search Bar */}
-                    <div className="mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search projects..."
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                            className="w-full px-4 py-2 border rounded"
-                        />
-                    </div>
+                    
                 </div>
             </div>
             <div className="container-fixed">
                 <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-7.5">
-                    <div className="card p-7.5">
-                        <div className="flex items-center justify-between mb-3 lg:mb-6">
-                            <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                                <img alt="" className="" src="images/brand-logos/plurk.svg"/>
-                            </div>
-                            <span className="badge badge-primary badge-outline">
-                                In Progress
-                            </span>
-                        </div>
-                        <div className="flex flex-col mb-3 lg:mb-6">
-                            <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                                Phoenix SaaS
-                            </a>
-                            <span className="text-sm font-medium text-gray-600">
-                                Real-time photo sharing app
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                            <span className="text-sm font-medium text-gray-500">
-                                Start:
-                                <span className="text-sm font-semibold text-gray-700">
-                                Mar 06
-                                </span>
-                            </span>
-                            <span className="text-sm font-medium text-gray-500">
-                                End:
-                                <span className="text-sm font-semibold text-gray-700">
-                                Dec 21
-                                </span>
-                            </span>
-                        </div>
-                        <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
-                            <div className="progress-bar" style={{width: '55%'}}></div>
-                        </div>
-                        <div className="flex -space-x-2">
-                            <div className="flex">
-                                <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                                    src="images/avatars/300-4.png"
-                                    alt="Images"
-                                />
-                            </div>
-                            <div className="flex">
-                                <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                                    src="images/avatars/300-2.png"
-                                    alt="Images"
-                                />
-                            </div>
-                            <div className="flex">
-                                <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
-                                S
-                                </span>
+                    {loading ? (
+                        <div className="flex items-center justify-center h-full">
+                            <div className="spinner-border text-primary-active" role="status">
+                                <span className="sr-only">Loading...</span>
                             </div>
                         </div>
-                    </div>
+                    ) : projects.length > 0  && projects.map((project) => (
+                        <ProjectCard 
+                            key={project.id}
+                            project={project}
+                            onAddMembers={(projectId, memberIds) => handleAddMembers(projectId, memberIds)}
+                            onRemoveMember={(memberId, projectId) => handleRemoveMember(projectId, memberId)}
+                        />
+                    ))}
+                </div>
 
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/telegram.svg"/>
-                </div>
-                <span className="badge badge-success badge-outline">
-                    Completed
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    Radiant Wave
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Short-term accommodation marketplace
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 09
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 23
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-success mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '100%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                        src="images/avatars/300-24.png"
-                    />
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                        src="images/avatars/300-7.png"
-                    />
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/kickstarter.svg"/>
-                </div>
-                <span className="badge badge-outline">
-                    Upcoming
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    Dreamweaver
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Social media photo sharing
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 05
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 12
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '100%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-21.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-1.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
-                </div>
-                <div className="flex">
-                    <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
-                    +10
-                    </span>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/quickbooks.svg"/>
-                </div>
-                <span className="badge badge-primary badge-outline">
-                    In Progress
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    Horizon Quest
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Team communication and collaboration
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 03
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 11
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
-                <div className="progress-bar" style={{ width : '19%' }}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-1.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
-                </div>
-                <div className="flex">
-                    <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-danger-inverse ring-danger-light bg-danger">
-                    M
-                    </span>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/google-analytics.svg"/>
-                </div>
-                <span className="badge badge-outline">
-                    Upcoming
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    Golden Gate Analytics
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Note-taking and organization app
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 22
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 14
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '100%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-5.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-17.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-16.png"/>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                    <div className="flex items-center justify-between mb-3 lg:mb-6">
-                        <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                            <img alt="" className="" src="images/brand-logos/google-webdev.svg"/>
+                <Loader isLoading={loading} />
+                {!loading && projects.length === 0 && (
+                    <div className="flex flex-col items-center gap-5 lg:gap-7.5 p-8 lg:p-12">
+                        <img src="/images/illustrations/11.svg"
+                            className="dark:hidden max-h-[170px] w-full" alt="" />
+                        {/* <img src="/metronic/tailwind/react/demo1/media/illustrations/11-dark.svg"
+                            className="light:hidden max-h-[170px] w-full" alt="" /> */}
+                        <div className="text-lg font-medium text-gray-900 text-center">
+                            No Projects Yet
                         </div>
-                        <span className="badge badge-success badge-outline">
-                            Completed
-                        </span>
-                    </div>
-                    <div className="flex flex-col mb-3 lg:mb-6">
-                        <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                            Celestial SaaS
-                        </a>
-                        <span className="text-sm font-medium text-gray-600">
-                            CRM App application to HR efficienty
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                        <span className="text-sm font-medium text-gray-500">
-                            Start:
-                            <span className="text-sm font-semibold text-gray-700">
-                            Mar 14
-                            </span>
-                        </span>
-                        <span className="text-sm font-medium text-gray-500">
-                            End:
-                            <span className="text-sm font-semibold text-gray-700">
-                            Dec 25
-                            </span>
-                        </span>
-                    </div>
-                    <div className="progress h-1.5 progress-success mb-4 lg:mb-8">
-                        <div className="progress-bar" style={{width: '100%'}}>
+                        <div className="text-sm text-gray-700 text-center gap-1">
+                            Begin your journey by creating or joining a project.&nbsp;
+                            <Link to="/projects" className="text-primary font-medium hover:text-primary-active">
+                                Get Started!
+                            </Link>
                         </div>
                     </div>
-                    <div className="flex -space-x-2">
-                        <div className="flex">
-                            <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-6.png"/>
-                        </div>
-                        <div className="flex">
-                            <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-23.png"/>
-                        </div>
-                        <div className="flex">
-                            <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-12.png"/>
-                        </div>
-                        <div className="flex">
-                            <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
-                            +10
-                            </span>
-                        </div>
+                )}
+
+                { hasMore && !loading && (
+                    <div className="flex grow justify-center pt-5 lg:pt-7.5">
+                        <button
+                            type="button"
+                            onClick={handleLoadMore}
+                            className="btn btn-link"
+                            disabled={loading}
+                        >
+                            'Show more projects'
+                        </button>
                     </div>
-                </div>
-                <div className="card p-7.5">
-                    <div className="flex items-center justify-between mb-3 lg:mb-6">
-                        <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                            <img alt="" className="" src="images/brand-logos/figma.svg"/>
-                        </div>
-                        <span className="badge badge-outline">
-                            Upcoming
-                        </span>
-                    </div>
-                    <div className="flex flex-col mb-3 lg:mb-6">
-                        <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                            Nexus Design System
-                        </a>
-                        <span className="text-sm font-medium text-gray-600">
-                            Online discussion and forum platform
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                        <span className="text-sm font-medium text-gray-500">
-                            Start:
-                            <span className="text-sm font-semibold text-gray-700">
-                            Mar 17
-                            </span>
-                        </span>
-                        <span className="text-sm font-medium text-gray-500">
-                            End:
-                            <span className="text-sm font-semibold text-gray-700">
-                            Dec 08
-                            </span>
-                        </span>
-                    </div>
-                    <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
-                        <div className="progress-bar" style={{width: '100%'}}></div>
-                    </div>
-                    <div className="flex -space-x-2">
-                        <div className="flex">
-                            <img 
-                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                                src="/images/avatars/300-14.png"
-                                alt=""
-                            />
-                        </div>
-                        <div className="flex">
-                            <img 
-                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                                src="/images/avatars/300-3.png"
-                                alt=""
-                            />
-                        </div>
-                        <div className="flex">
-                            <img 
-                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                                src="/images/avatars/300-19.png"
-                                alt=""
-                            />
-                        </div>
-                        <div className="flex">
-                            <img 
-                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]"
-                                src="/images/avatars/300-9.png"
-                                alt=""
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/btcchina.svg"/>
-                </div>
-                <span className="badge badge-primary badge-outline">
-                    In Progress
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    Neptune App
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Team messaging and collaboration
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 09
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 23
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '35%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-21.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-32.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
-                </div>
-                <div className="flex">
-                    <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
-                    +1
-                    </span>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/patientory.svg"/>
-                </div>
-                <span className="badge badge-outline">
-                    Upcoming
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    SparkleTech
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Meditation and relaxation app
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 14
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 21
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '100%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-4.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-2.png"/>
-                </div>
-                <div className="flex">
-                    <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
-                    K
-                    </span>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/jira.svg"/>
-                </div>
-                <span className="badge badge-success badge-outline">
-                    Completed
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    EmberX CRM
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Commission-free stock trading
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 01
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 13
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-success mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '100%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-12.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-20.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-3.png"/>
-                </div>
-                <div className="flex">
-                    <span className="relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-success-inverse ring-success-light bg-success">
-                    +5
-                    </span>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/plastic-scm.svg"/>
-                </div>
-                <span className="badge badge-outline">
-                    Upcoming
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    LunaLink
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Meditation and relaxation app
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 14
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 21
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-gray-300 mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '100%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-16.png"/>
-                </div>
-                </div>
-                </div>
-                <div className="card p-7.5">
-                <div className="flex items-center justify-between mb-3 lg:mb-6">
-                <div className="flex items-center justify-center size-[50px] rounded-lg bg-gray-100">
-                    <img alt="" className="" src="images/brand-logos/perrier.svg"/>
-                </div>
-                <span className="badge badge-primary badge-outline">
-                    In Progress
-                </span>
-                </div>
-                <div className="flex flex-col mb-3 lg:mb-6">
-                <a className="text-lg font-semibold text-gray-900 hover:text-primary-active mb-px" href="#">
-                    TerraCrest App
-                </a>
-                <span className="text-sm font-medium text-gray-600">
-                    Video conferencing software
-                </span>
-                </div>
-                <div className="flex items-center gap-5 mb-3.5 lg:mb-7">
-                <span className="text-sm font-medium text-gray-500">
-                    Start:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Mar 22
-                    </span>
-                </span>
-                <span className="text-sm font-medium text-gray-500">
-                    End:
-                    <span className="text-sm font-semibold text-gray-700">
-                    Dec 28
-                    </span>
-                </span>
-                </div>
-                <div className="progress h-1.5 progress-primary mb-4 lg:mb-8">
-                <div className="progress-bar" style={{width: '55%'}}>
-                </div>
-                </div>
-                <div className="flex -space-x-2">
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-4.png"/>
-                </div>
-                <div className="flex">
-                    <img className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" src="images/avatars/300-9.png"/>
-                </div>
-                <div className="flex">
-                    <span className="hover:z-5 relative inline-flex items-center justify-center shrink-0 rounded-full ring-1 font-semibold leading-none text-3xs size-[30px] text-primary-inverse ring-primary-light bg-primary">
-                    F
-                    </span>
-                </div>
-                </div>
-                </div>
-                </div>
-                <div className="flex grow justify-center pt-5 lg:pt-7.5">
-                    <a className="btn btn-link" href="#">
-                        Show more projects
-                    </a>
-                </div>
+                )}
             </div>
-                        {/* Pagination Controls */}
-                        {/* <div className="flex items-center justify-between mt-6">
-                            <button
-                                onClick={() => handlePageChange(currentPage - 1)}
-                                disabled={currentPage === 1}
-                                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                            >
-                                Previous
-                            </button>
-                            <span className="text-sm text-gray-600">
-                                Page {currentPage} of {totalPages}
-                            </span>
-                            <button
-                                onClick={() => handlePageChange(currentPage + 1)}
-                                disabled={currentPage === totalPages}
-                                className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
-                            >
-                                Next
-                            </button>
-                        </div> */}
-
-
-            {/* {!projects.length && (
-                <div className="container-fixed">
-                    <div className="card p-8 lg:p-12">
-                        <div className="card-body">
-                            <div className="grid justify-center py-5">
-                                <img src="/images/illustrations/11.svg"
-                                    className="max-h-[170px]" alt=""
-                                />
-                            </div>
-                            <div className="text-lg font-medium text-gray-900 text-center">
-                                Upload Item to Get Started
-                            </div>
-                            <div className="text-sm text-gray-700 text-center gap-1">
-                                Begin by crafting your inaugural list in minutes.&nbsp;
-                            <a className="text-sm font-medium link"
-                                href="/metronic/tailwind/react/demo1/account/billing/plans">
-                                    Get Started!
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )} */}
         </>
     );
 };

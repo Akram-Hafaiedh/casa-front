@@ -24,10 +24,9 @@ const DropZone: React.FC<DropZoneProps> = ({ label, onChange, accept }) => {
     };
 
     return (
-        <div className="file-upload min-h-32 flex flex-col">
-            <label className="block text-gray-700 text-sm font-bold mb-2">{label}</label>
+        <div className="file-upload min-h-20 flex flex-col w-full">
             <div
-                className="file-input flex-grow border rounded px-3 py-2 cursor-pointer text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-gray-100 hover:bg-gray-300 flex items-center justify-center"
+                className="file-input flex-grow border border-primary border-dashed rounded px-3 py-2 cursor-pointer text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-primary-light flex items-center justify-center"
                 onClick={() => document.getElementById(label)?.click()}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleFileDrop}

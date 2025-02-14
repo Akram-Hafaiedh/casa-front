@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { User } from "../../types/User";
 import useAxiosInstance from "../../utils/axiosInstance";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
-import Avatar from "react-avatar";
-import { FaLocationDot, FaMessage, FaUsers } from "react-icons/fa6";
-import { SiAbstract } from "react-icons/si";
+import {  Outlet, useNavigate, useParams } from "react-router-dom";
+import { FaLocationDot, FaMessage } from "react-icons/fa6";
 import { IoMail } from "react-icons/io5";
 import { FaEllipsisV } from "react-icons/fa";
+import Loader from "../../components/Loader";
+import MenuItem from "../../components/menu/MenuItem";
 
 const Layout: React.FC = () => {
     const axiosInstance = useAxiosInstance();
     const { userId } = useParams<{ userId: string }>();
     const navigate = useNavigate();
     const [overviewUser, setOverviewUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const fetchUser = useCallback(async () => {
+        setLoading(true);
         try {
             const response = await axiosInstance.get(`/users/${userId}`);
             if (response.data.status.code == 200) {
@@ -25,6 +27,8 @@ const Layout: React.FC = () => {
             }
         } catch (error: unknown) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     }, [axiosInstance, userId, navigate]);
 
@@ -32,8 +36,12 @@ const Layout: React.FC = () => {
         fetchUser();
     }, []);
 
-    if (!overviewUser) {
-        return <div>Loading...</div>;
+    const updateUser  = (updatedUser: User) => {
+        setOverviewUser(updatedUser);
+    };
+
+    if (!overviewUser || loading) {
+        return <Loader isLoading={loading} />
     }
     return (
         <>
@@ -41,9 +49,7 @@ const Layout: React.FC = () => {
                 <div className="container-fixed">
                     <div className="flex flex-col items-center gap-2 lg:gap-3.5 py-4 lg:pt-5 lg:pb-10">
                         <div className="flex items-center justify-center rounded-full border-2 border-success-clarity size-[100px] shrink-0 bg-light">
-                            {/* <img src="/metronic/tailwind/react/demo1/media/brand-logos/duolingo.svg" className="size-[50px]" alt="User Icon" /> */}
-                            <Avatar name={overviewUser.first_name + " " + overviewUser.last_name } size="100" round={true} />
-
+                            <img src={overviewUser.logo_url || "/images/avatars/blank.svg"} className="size-[50px]" alt="User Avatar" />
                         </div>
                         <div className="flex items-center gap-1.5">
                             <div className="text-lg leading-5 font-semibold text-gray-900">
@@ -55,12 +61,12 @@ const Layout: React.FC = () => {
                                 </path>
                             </svg>
                         </div>
-                        <div className="flex flex-wrap justify-center gap-1 lg:gap-4.5 text-sm">
-                            <div className="flex gap-1.25 items-center text-gray-600">
-                                <SiAbstract className="text-xl"/>
-                                {/* <i className="ki-filled ki-abstract-41 text-gray-500 text-sm"></i> */}
-                                <span className="font-medium">{overviewUser.role.name}</span>
+                        {overviewUser.roles.map(role => (
+                            <div key={role.id} className="badge badge-outline mr-1.5">
+                                {role.name}
                             </div>
+                        ))}
+                        <div className="flex flex-wrap justify-center gap-1 lg:gap-4.5 text-sm">
                             <div className="flex gap-1.25 items-center text-gray-600">
                                 <FaLocationDot className="text-xl" />
                                 <span className="font-medium">{overviewUser.city}</span>
@@ -84,55 +90,14 @@ const Layout: React.FC = () => {
                     <div className="grid">
                         <div className="overflow-x-auto">
                             <div className="menu gap-3">
-                                <div className={`menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary ${location.pathname.includes('/profile') ? 'active show here' : ''}`}>
-                                    <Link className="menu-link gap-1.5 pb-2 lg:pb-4 px-2" to={`/users/${overviewUser.id}/profile`}>
-                                        <div className="menu-title text-nowrap font-medium  text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                                            Profile
-                                        </div>
-                                    </Link>
-                                </div>
-                                <div className={`menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary ${location.pathname.includes('/projects') ? 'active show here' : ''}`}>
-                                    <Link className="menu-link gap-1.5 pb-2 lg:pb-4 px-2" to={`/users/${overviewUser.id}/projects`}>
-                                        <div className="menu-title text-nowrap  text-gray-700 menu-item-active:text-primary menu-item-active:font-medium menu-item-here:text-primary menu-item-here:font-medium menu-item-show:text-primary menu-link-hover:text-primary">
-                                            Projects
-                                        </div>
-                                    </Link>
-                                </div>
-                                <div className={`menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary ${location.pathname.includes('/contracts') ? 'active show here' : ''}`}>
-                                    <Link className="menu-link gap-1.5 pb-2 lg:pb-4 px-2" to={`/users/${overviewUser.id}/contracts`}>
-                                        <div className="menu-title text-nowrap font-medium  text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                                            Contracts
-                                        </div>
-                                    </Link>
-                                </div>
-                                <div className={`menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary ${location.pathname.includes('/documents') ? 'active show here' : ''}`}>
-                                    <Link className="menu-link gap-1.5 pb-2 lg:pb-4 px-2" to={`/users/${overviewUser.id}/documents`}>
-                                        <div className="menu-title text-nowrap font-medium  text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                                            Documents
-                                        </div>
-                                    </Link>
-                                </div>
-                                {/* <div className="menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary">
-                                    <Link className="menu-link gap-1.5 pb-2 lg:pb-4 px-2" to="/user/notifications">
-                                        <div className="menu-title text-nowrap font-medium  text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                                            Notifications
-                                        </div>
-                                    </Link>
-                                </div> */}
-                                <div className={`menu-item border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary ${location.pathname.includes('/activity') ? 'active show here' : ''}`}>
-                                    <Link className="menu-link gap-1.5 pb-2 lg:pb-4 px-2" to={`/users/${overviewUser.id}/activity`}>
-                                        <div className="menu-title text-nowrap font-medium  text-gray-700 menu-item-active:text-primary menu-item-active:font-semibold menu-item-here:text-primary menu-item-here:font-semibold menu-item-show:text-primary menu-link-hover:text-primary">
-                                            Activity
-                                        </div>
-                                    </Link>
-                                </div>
-                                {/* <div className="menu-item menu-item-dropdown border-b-2 border-b-transparent menu-item-active:border-b-primary menu-item-here:border-b-primary">
-                                    <div className="menu-link gap-1.5 pb-2 lg:pb-4 px-2">
-                                        <div className="menu-title text-nowrap text-sm text-gray-700 menu-item-active:text-primary menu-item-active:font-medium menu-item-here:text-primary menu-item-here:font-medium menu-item-show:text-primary menu-link-hover:text-primary">
-                                            More
-                                        </div>
-                                    </div>
-                                </div> */}
+
+                                <MenuItem path={`/users/${userId}/overview`} label="Overview" />
+                                <MenuItem path={`/users/${userId}/projects`} label="Projects" />
+                                {/* <MenuItem path={`/users/${userId}/contracts`} label="Contracts" /> */}
+                                <MenuItem path={`/users/${userId}/vacations`} label="Vacations" />
+                                <MenuItem path={`/users/${userId}/files`} label="Documents" />
+                                <MenuItem path={`/users/${userId}/activity`} label="Activity" />
+                                <MenuItem path={`/users/${userId}/settings`} label="Settings" />
                             </div>
                         </div>
                     </div>
@@ -161,7 +126,7 @@ const Layout: React.FC = () => {
                 </div>
             </div>
             <div className="container-fixed">
-                <Outlet context={overviewUser} />
+                <Outlet context={{ overviewUser, updateUser }} />
             </div>
         </>
     )

@@ -1,19 +1,17 @@
 import { toast } from "react-toastify";
 import useAxiosInstance from "../../utils/axiosInstance";
-import { useState } from "react";
-import HomeLayout from '../../layouts/PrivateLayout';
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { IoReturnDownBackOutline } from "react-icons/io5";
-import Sidebar from "../../components/Sidebar";
+import { IoClose, IoReturnDownBackOutline } from "react-icons/io5";
 import moment from "moment";
 import FileUpload from "../../components/FileUpload";
 import Modal from "react-modal";
 import InfoSection from "../../layouts/Info";
+import { HiCamera, HiOutlineXMark } from "react-icons/hi2";
 
 
 
 const UserCreate: React.FC = () => {
-    const [isPreviewVisible, setIsPreviewVisible] = useState(false);
     const navigate = useNavigate();
     const axiosInstance = useAxiosInstance();
     const [firstName, setFirstName] = useState('');
@@ -28,12 +26,15 @@ const UserCreate: React.FC = () => {
     const [copyIdDocuments, setCopyIdDocuments] = useState<File | null>(null);
     const [phone, setPhone] = useState('');
     const [role, setRole] = useState('Employee');
+
+    const [userLogo, setUserLogo] = useState<string | null>(null);
+    const [userLogoFile, setUserLogoFile] = useState<File | null>(null);
     
     // Contract fields
     const [isContractVisible, setIsContractVisible] = useState(false);
     const [contractType, setContractType] = useState('');
     const [startDate, setStartDate] = useState(moment().format('YYYY-MM-DD'));
-    const [endDate, setEndDate] = useState(moment().format('YYYY-MM-DD'));;
+    const [endDate, setEndDate] = useState(moment().add(1, 'year').format('YYYY-MM-DD'));
     const [contractStatus, setContractStatus] = useState('');
     const [contractDocuments, setContractDocuments] = useState<File | null>(null);
 
@@ -51,11 +52,26 @@ const UserCreate: React.FC = () => {
     const contractStatusOptions = [
         { value: 'active', label: 'Active' },
         { value: 'inactive', label: 'Inactive' },
+        { value: 'pending', label: 'Pending' },
         { value: 'terminated', label: 'Terminated' },
     ];
 
-    const togglePreview = () => {
-        setIsPreviewVisible(!isPreviewVisible);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    const handleRemoveUserLogo = () => {
+        setUserLogo(null);
+        setUserLogoFile(null);
+    };
+    const handleUserLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event?.target.files?.[0];
+        if(file){
+            setUserLogoFile(file);
+            const reader = new FileReader();
+            reader.onload = () => {
+                setUserLogo(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -64,6 +80,7 @@ const UserCreate: React.FC = () => {
             const userData  = {
                 first_name : firstName,
                 last_name : lastName,
+                logo : userLogoFile,
                 email,
                 role,
                 birthday,
@@ -129,253 +146,349 @@ const UserCreate: React.FC = () => {
 
 
     return (
+        <>
         <div className="container-fixed">
-        <div>
             <InfoSection
                 title="New employee"
                 description="Create a new employee on the platform"
-                linkText="Employees List"
-                icon={<IoReturnDownBackOutline />}
-                iconPosition="start"
-                linkTo="/users"
+                actions={[
+                    {
+                        type: 'link',
+                        text: 'Employees List',
+                        to: '/users',
+                        icon: <IoReturnDownBackOutline />,
+                        iconPosition: 'start'
+                    },
+                ]}
             />
-            <div className="p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-xl font-bold mb-4 text-center">Employee - Personnal Informations:</h2>
-                <form onSubmit={handleSubmit} className="gap-4 grid grid-cols-1 md:grid-cols-2">
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="first_name">First Name:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="first_name"
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="last_name">Last Name:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="last_name"
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="birthday">Birthday:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="birthday"
-                            type="date"
-                            value={birthday}
-                            onChange={(e) => setBirthday(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="id_passport">ID/Passport:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="id_passport"
-                            type="text"
-                            value={idPassport}
-                            onChange={(e) => setIdPassport(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">Address:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="address"
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="city">City:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="city"
-                            type="text"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="postal_code">Postal Code:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="postal_code"
-                            type="text"
-                            value={postalCode}
-                            onChange={(e) => setPostalCode(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="ahv_number">AHV Number:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="ahv_number"
-                            type="text"
-                            value={ahvNumber}
-                            onChange={(e) => setAhvNumber(e.target.value)}
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">Phone:</label>
-                        <input 
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            id="phone"
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                        />
-                    </div>
-                    <div className="col-span-1 md:col-span-2 h-full">
-                        <FileUpload 
-                            label="Copy of ID Document" 
-                            accept="image/*" 
-                            onChange={(file) => setCopyIdDocuments(file)} 
-                        />
-                         {/* Add Preview Button */}
-                        {copyIdDocuments && (
-                            <button
-                                type="button"
-                                onClick={togglePreview}
-                                className="mt-2 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-                            >
-                                Preview Document
-                            </button>
-                        )}
-                    </div>
-                    {/* Modal for Previewing Image */}
-                    {isPreviewVisible && copyIdDocuments && (
-                        <Modal
-                            isOpen={isPreviewVisible}
-                            onRequestClose={togglePreview}
-                            contentLabel="Image Preview"
-                        >
-                            <button
-                                type="button"
-                                onClick={togglePreview}
-                                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                            >
-                                Close
-                            </button>
-                            <div className="flex justify-center items-center h-full">
-                                <img 
-                                    src={URL.createObjectURL(copyIdDocuments)} 
-                                    alt="ID Document Preview" 
-                                    className="max-w-full max-h-full"
+        </div>
+
+        <form onSubmit={handleSubmit} className="container-fixed" >
+            <div className="grid gap-5 lg:gap-7.5 mx-auto">
+                {/* Create User Card */}
+                <div className="card pb-2.5">
+
+                    <div className="card-body grid gap-5">
+                    {/* Profile Photo */}
+                        <div className="flex items-center flex-wrap lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56">Photo</label>
+                            <div className="flex items-center justify-between flex-wrap grow gap-2.5">
+                                <span className="text-2sm font-medium text-gray-600">150x150px JPEG, PNG Image</span>
+                                <input 
+                                    title="Upload User Logo"
+                                    className="hidden"
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleUserLogoChange}
+                                />
+                                <div className="image-input size-16">
+                                {userLogo && (
+                                    <button 
+                                        title="remove"
+                                        onClick={handleRemoveUserLogo}
+                                        type="button" 
+                                        className="btn btn-icon btn-icon-xs btn-light shadow absolute z-1 !size-5 -top-0.5 -end-0.5 rounded-full"
+                                        >
+                                        <HiOutlineXMark className="size-6" />
+                                    </button>
+                                )}
+                                    <div
+                                        className={`image-input-placeholder rounded-full border-2 ${userLogo ? 'border-success': 'border-gray-300'}`}
+                                        style={{ backgroundImage: "url('/images/blank.png')" }}
+                                    >
+                                    {userLogo && <img src={userLogo} alt="logo" />}
+                                        <div 
+                                            className="flex items-center justify-center cursor-pointer h-5 left-0 right-0 bottom-0 bg-dark-clarity absolute"
+                                            onClick={() => fileInputRef.current?.click()}
+                                        >
+                                            <HiCamera className="fill-light opacity-80" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* User Info Fields */}
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="first_name">
+                                First Name
+                            </label>
+                            <input
+                                id="first_name"
+                                type="text" 
+                                className="input" 
+                                placeholder="Enter first name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="last_name">
+                                Last Name
+                            </label>
+                            <input
+                                id="last_name"
+                                type="text" 
+                                className="input" 
+                                placeholder="Enter last name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="phone">
+                                Phone Number
+                            </label>
+                            <input
+                                id="phone"
+                                type="text"
+                                className="input"
+                                placeholder="Enter phone number"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="email">
+                                Email
+                            </label>
+                            <input 
+                                type="email"
+                                className="input"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="birthday">
+                                Birthday
+                            </label>
+                            <input 
+                                id="birthday"
+                                type="date"
+                                className="input"
+                                placeholder="Enter email"
+                                value={birthday}
+                                onChange={(e) => setBirthday(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="address">
+                                Address
+                            </label>
+                            <input
+                                id="address"
+                                type="text"
+                                className="input"
+                                placeholder="Enter address"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)} 
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="postal_code">
+                                Postal Code
+                            </label>
+                            <input
+                                id="postal_code"
+                                type="text"
+                                className="input"
+                                placeholder="Enter postal code"
+                                value={postalCode}
+                                onChange={(e) => setPostalCode(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="city">
+                                City
+                            </label>
+                            <input 
+                                id="city"
+                                type="text"
+                                className="input"
+                                placeholder="Enter city"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                            <label className="form-label max-w-56" htmlFor="id_passport">
+                                ID / Passport
+                            </label>
+                            <input
+                                id="id_passport"
+                                type="text"
+                                className="input"
+                                placeholder="Enter ID / Passport"
+                                value={idPassport}
+                                onChange={(e) => setIdPassport(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5 mb-2.5">
+                            <label className="form-label max-w-56" htmlFor="ahv_number">
+                                AHV Number
+                            </label>
+                            <input
+                                id="ahv_number"
+                                type="text"
+                                className="input"
+                                placeholder="Enter AHV Number"
+                                value={ahvNumber}
+                                onChange={(e) => setAhvNumber(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5 mb-2.5">
+                            <label className="form-label max-w-56" htmlFor="role">
+                                Role
+                            </label>
+                            <div className="flex flex-col w-full gap-2">
+                                <label className="form-label flex items-center gap-2.5">
+                                    <input className="radio"
+                                        name="administrator"
+                                        title="administrator"
+                                        type="radio"
+                                        value="Administrator"
+                                        checked={role === 'Administrator'}
+                                        onChange={(e) => setRole(e.target.value)} 
+                                    />
+                                    Administrator
+                                </label>
+                                <label className="form-label flex items-center gap-2.5">
+                                    <input className="radio"
+                                        name="employee"
+                                        title="employee"
+                                        type="radio"
+                                        value="Employee"
+                                        checked={role === 'Employee'}
+                                        onChange={(e) => setRole(e.target.value)} 
+                                    />
+                                    Employee
+                                </label>
+                                <label className="form-label flex items-center gap-2.5">
+                                    <input className="radio"
+                                        name="manager"
+                                        title="manager"
+                                        type="radio"
+                                        value="Manager"
+                                        checked={role === 'Manager'}
+                                        onChange={(e) => setRole(e.target.value)} 
+                                    />
+                                    Manager
+                                </label>
+                            </div>
+                        </div>
+                        <div className="flex items-baseline lg:flex-nowrap gap-2.5 mb-2.5">
+                            <label className="form-label max-w-56" htmlFor="copy_id_document">
+                                Copy of ID Document
+                            </label>
+                            <div className="w-full">
+                                <FileUpload 
+                                    label="Copy of ID Document" 
+                                    accept="image/*" 
+                                    onChange={(file) => setCopyIdDocuments(file)} 
                                 />
                             </div>
-                        </Modal>
-                    )}
 
-                    
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">Role:</label>
-                        <div className="flex items-center mt-4">
-                            <input className="mr-2" id="admin" type="radio" value="Administrator" checked={role === 'Administrator'} onChange={(e) => setRole(e.target.value)} />
-                            <label className="text-gray-700 text-sm font-bold" htmlFor="admin">Admin</label>
-                            <input className="ml-4 mr-2" id="employee" type="radio" value="Employee" checked={role === 'Employee'} onChange={(e) => setRole(e.target.value)} />
-                            <label className="text-gray-700 text-sm font-bold" htmlFor="employee">Employee</label>
                         </div>
-                    </div>
-
-                    
-                    {isContractVisible &&(
-                    <>
-                        <h2 className="text-xl font-bold mb-4 mt-6 col-span-2 text-center">Contract Information:</h2>
-                        <div>
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contractType">Contract Type:</label>
-                            <select
-                                className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" 
-                                id="contractType" 
-                                value={contractType} 
-                                onChange={(e) => setContractType(e.target.value)} 
-                                required
-                            >
-                                <option value="">Select contract type</option>
-                                {contractTypeOptions.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="contractStatus">Status:</label>
-                            <select id="contractStatus"
-                                className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white" 
-                                value={contractStatus}
-                                onChange={(e) => setContractStatus(e.target.value)}>
-                                <option value="">Select status</option>
-                                {contractStatusOptions.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
+                        {/* User Contract Fields */}
+                        {isContractVisible &&(
+                            <>
+                            <div className="border-b border-gray-300"></div>
+                            
+                            <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                                <label className="form-label max-w-56" htmlFor="contract_type">
+                                    Contract Type
+                                </label>
+                                <select
+                                    id="contract_type"
+                                    className="select"
+                                    value={contractType}
+                                    onChange={(e) => setContractType(e.target.value)}>
+                                    {contractTypeOptions.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
                                 </select>
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="startDate">Start Date:</label>
-                            <input 
-                                type="date" 
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                value={startDate} 
-                                onChange={(e) => setStartDate(e.target.value)} 
-                                id="startDate" 
-                                required 
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="endDate">End Date:</label>
-                            <input 
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                type="date" 
-                                value={endDate} 
-                                onChange={(e) => setEndDate(e.target.value)} 
-                                id="endDate" 
-                            />
-                        </div>
-                        <div className="col-span-1 md:col-span-2 h-full">
-                            <FileUpload 
-                                label="Contract Document" 
-                                accept=".pdf,.doc,.docx" 
-                                onChange={(file) => setContractDocuments(file)} 
-                            />
-                        </div>
+                            </div>
 
-                    </>
-                    )}
-                    <div className="flex justify-between items-center space-x-2 col-span-2 ml-auto">
-                        <button type="submit" className="w-fit min-w-40 px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-                            Create Employee
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setIsContractVisible(!isContractVisible)}
-                            className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
-                        >
-                            {isContractVisible ? 'Hide Contract Information' : 'Show Contract Information'}
-                        </button>
+                            <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                                <label className="form-label max-w-56" htmlFor="start_date">
+                                    Contract Start Date
+                                </label>
+                                <input
+                                    id="start_date"
+                                    type="date"
+                                    className="input"
+                                    value={startDate}
+                                    onChange={(e) => setStartDate(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                                <label className="form-label max-w-56" htmlFor="end_date">
+                                    Contract End Date
+                                </label>
+                                <input
+                                    id="end_date"
+                                    type="date"
+                                    className="input"
+                                    value={endDate}
+                                    onChange={(e) => setEndDate(e.target.value)}
+                                />
+                            </div>
+                            <div className="flex items-baseline lg:flex-nowrap gap-2.5">
+                                <label className="form-label max-w-56" htmlFor="id_passport">
+                                    Contract Status
+                                </label>
+                                <select
+                                    id="id_passport"
+                                    className="select"
+                                    value={contractStatus}
+                                    onChange={(e) => setContractStatus(e.target.value)}>
+                                    {contractStatusOptions.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex items-baseline lg:flex-nowrap gap-2.5 mb-2.5">
+                                <label className="form-label max-w-56" htmlFor="contract_document">
+                                    Contract Document
+                                </label>
+                                <div className="w-full">
+                                    <FileUpload 
+                                        label="Contract Document" 
+                                        accept=".pdf,.doc,.docx" 
+                                        onChange={(file) => setContractDocuments(file)} 
+                                    />
+                                </div>
+
+                            </div>
+                            </>
+                        )}
+
+
+                        <div className="flex gap-2.5 justify-end">
+                            {/* Submit Button */}
+                            <div className="flex justify-end">
+                                <button type="submit" className="btn btn-primary">Create Employee</button>
+                            </div>
+                            <button
+                                    type="button"
+                                    onClick={() => setIsContractVisible(!isContractVisible)}
+                                    className="btn btn-primary"
+                                >
+                                    {isContractVisible ? 'Hide Contract' : 'Show Contract'}
+                            </button>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
-        </div>
+        </form>
+        </>
     )
 }
 

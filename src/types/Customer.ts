@@ -2,18 +2,24 @@ import { Tax } from './Tax';
 import { Insurance } from './Insurance';
 import { Accounting } from './Accounting';
 export interface Customer {
-    id?: string;
-    firstName: string;
-    lastName: string;
+    id?: number;
+    first_name: string;
+    last_name: string;
     companyName: string;
-    dateOfBirth: string;
-    phoneNumber: string;
+    full_name:string;
+    birthday: string;
+    gender: string;
+    phone: string;
     address: string;
-    postalCode: string;
+    postal_code: number;
     city: string;
     email: string;
-    idOrPassport: string;
-    accounting: Accounting;
+    id_passport: string;
+    accountings: Accounting[];
     insurances: Insurance[];
-    taxes: Tax;
+    taxes: Tax[];
+    created_at?: string;
+    updated_at?: string;
+    files? : string [];
 }
+

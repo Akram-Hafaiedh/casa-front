@@ -9,39 +9,121 @@ import moment from "moment";
 import DropZone from "../../components/DropZone";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import InfoSection from "../../layouts/Info";
+import { HiOutlinePlus, HiOutlineXMark } from "react-icons/hi2";
+import { Insurance } from "../../types/Insurance";
+import { Accounting } from "../../types/Accounting";
+import { Tax } from "../../types/Tax";
 const CustomerCreate: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  // const axiosInstance = useAxiosInstance();
+  const axiosInstance = useAxiosInstance();
   const [step, setStep] = useState<number>(0);
+
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [birthday, setBirthday] = useState('');
+  const [gender, setGender] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [postalCode, setPostalCode] = useState(0);
+  const [city, setCity] = useState('');
+  const [email, setEmail] = useState('');
+  const [idPassport, setIdPassport] = useState('');
+
+  const [insurances, setInsurances] = useState<Insurance[]>([
+    {
+      type: '',
+      agency: '',
+      policy_number: 0,
+      inception_date: new Date(),
+      expiration_date: new Date(),
+      status: '',
+      cancellation_period: 1,
+      payment_amount: 0,
+      payment_frequency: '',
+    }
+  ]);
+
+  const [accountings, setAccountings] = useState<Accounting[]>([
+    {    
+      start_date: new Date(),
+      tax_included: 0,
+      status: '',
+      documents: null as File[] | null
+    }
+  ])
+
   const statusOptions = [
-    "Active",
-    "Inactive",
-    "Pending",
-    "Cancelled",
-    "Expired",
-    "Suspended",
+    { value: 0, label: "Active" },
+    { value: 1, label: "Inactive" },
+    { value: 2, label: "Pending" },
+    { value: 3, label: "Cancelled" },
+    { value: 4, label: "Expired" },
+    { value: 5, label: "Suspended" },
   ];
+
+    const [taxes, setTaxes] = useState<Tax[]>([
+    {
+      name: '',
+      type: 'percentage',
+      value: 0,
+      documents: null as File[] | null
+    }
+  ]);
+  
 
   const steps = [
     {
         title: 'Client Info',
         description: 'Description for Step 1',
-        component: <ClientInfo />,
+        component: <ClientInfo 
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
+          birthday={birthday}
+          setBirthday={setBirthday}
+          gender={gender}
+          setGender={setGender}
+          phone={phone}
+          setPhone={setPhone}
+          address={address}
+          setAddress={setAddress}
+          postalCode={postalCode}
+          setPostalCode={setPostalCode}
+          city={city}
+          setCity={setCity}
+          email={email}
+          setEmail={setEmail}
+          idPassport={idPassport}
+          setIdPassport={setIdPassport}
+        />,
     },
     {
         title: 'Insurances',
         description: 'Description for Step 2',
-        component: <ClientInsurances statusOptions={statusOptions} />,
+        component: <ClientInsurances
+          insurances={insurances}
+          setInsurances={setInsurances} 
+          statusOptions={statusOptions} 
+        />,
     },
     {
         title: 'Accountings',
         description: 'Description for Step 3',
-        component: <ClientAccountings statusOptions={statusOptions} />,
+        component: <ClientAccountings
+          accountings={accountings}
+          setAccountings={setAccountings}
+          statusOptions={statusOptions}
+        />,
     },
     {
         title: 'Taxes',
         description: 'Description for Step 4',
-        component: <ClientTaxes />,
+        component: <ClientTaxes 
+          taxes={taxes}
+          setTaxes={setTaxes}
+        />,
     },
   ];
   
@@ -61,28 +143,48 @@ const CustomerCreate: React.FC = () => {
 
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(client);
-    // try {
-    //   const response = await axiosInstance.post('/customers', client,{
-    //     headers: {
-    //       'Content-Type': 'multipart/form-data',
-    //     },
-    //   });
-    //   if (response.data.status.code === 201) {
-    //     toast.success(response.data.status.message);
-    //     setClient();
-    //   }else {
-    //     toast.error(response.data.status.message);
-    //   }
-    // } catch (error) {
-    //   console.error('Error creating client:', error);
-    //   toast.error('An error occurred while creating the client');
-    // }
+    const data = {
+      firstName,
+      lastName,
+      email,
+      birthday,
+      gender,
+      phone,
+      address,
+      postalCode,
+      city,
+      idPassport,
+      insurances,
+      taxes,
+      accountings
+    }
+    console.log(data);
+    try {
+      const response = await axiosInstance.post('/customers/create', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (response.data.status.code === 201) {
+        toast.success(response.data.status.message);
+        // setClient();
+      }
+      if(response.data.status.code === 400 ){
+        Object.keys(response.data.errors).forEach((key) => {
+            response.data.errors[key].forEach((error: string) => {
+                toast.error(`${error}`);
+            });
+        });
+      }
+    } catch (error) {
+      console.error('Error creating client:', error);
+      toast.error('An error occurred while creating the client please contact support.');
+    }
   };
 
   return (
-    <div className="container-fixed">
-      <div>
+    <div>
+        <div className="container-fixed">
         {/* <div className="flex items-center justify-between">
             <h1 className="mb-4 text-2xl font-bold">Create Customer</h1>
             <Link to="/customers" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 flex items-center space-x-4">
@@ -92,65 +194,71 @@ const CustomerCreate: React.FC = () => {
         <InfoSection
           title="Create Customer"
           description="Fill out the form below to create a new customer."
-          icon={<IoReturnDownBackOutline />}
-          iconPosition="start"
-          linkTo="/customers"
-          linkText="Customers List"
+          actions={[
+            {
+                type: 'link',
+                text: 'Customers List',
+                to: '/customers',
+                icon: <IoReturnDownBackOutline />,
+                iconPosition: 'start'
+            },
+        ]}
         />
+      </div>
+      
 
-        <div className="container-fixed">
-          <form className="w-full" onSubmit={handleCreate}>
-            <div data-stepper="true">
-              <div className="card">
-                <div className="card-header flex justify-between items-center gap-4 py-8">
-                  {steps.map((step,index)=> (
-                    <div 
-                        key={index}
-                        className={`flex gap-2.5 items-center ${index + 1 === currentStep ? 'active' : ''} ${index + 1 < currentStep ? 'completed' : ''}`} data-stepper-item="#stepper_1">
-                        <div className={`rounded-full size-10 flex items-center justify-center text-md font-semibold bg-primary-light text-primary stepper-item-active:bg-primary stepper-item-active:text-primary-inverse stepper-item-completed:bg-success stepper-item-completed:text-success-inverse`}>
-                            <span className="stepper-item-completed:hidden" data-stepper-number="true">
-                                {index + 1}
-                            </span>
-                            <FaCheck className="text-xl hidden stepper-item-completed:inline" />
-                        </div>
-                        <div className="flex flex-col gap-0.5">
-                            <h4 className="text-sm font-medium text-gray-900 stepper-item-completed:text-gray-600">
-                                {step.title}
-                            </h4>
-                            <span className="text-2sm text-gray-700 stepper-item-completed:text-gray-400">
-                                {step.description}
-                            </span>
-                        </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="card-body !py-16">
-                  {steps.map((step, index) => (
-                    <div key={index} className={`flex items-center justify-center font-semibold text-gray-900 ${index + 1 === currentStep ? '' : 'hidden'}`} id={`step-${index + 1}`}>
-                        {step.component}
-                    </div>   
-                  ))}
-                </div>
-                <div className="card-footer py-8 flex justify-between">
-                  <div>
-                    <button type="button" className={`btn btn-light ${currentStep === 1 ? '!hidden' : ''}`} onClick={handlePreviousStep}>
-                        Back
-                    </button>
+      <div className="container-fixed">
+        <form className="w-full" onSubmit={handleCreate}>
+          <div data-stepper="true">
+            <div className="card">
+              <div className="card-header flex justify-between items-center gap-4 py-8">
+                {steps.map((step,index)=> (
+                  <div 
+                      key={index}
+                      className={`flex gap-2.5 items-center ${index + 1 === currentStep ? 'active' : ''} ${index + 1 < currentStep ? 'completed' : ''}`} data-stepper-item="#stepper_1">
+                      <div className={`rounded-full size-10 flex items-center justify-center text-md font-semibold bg-primary-light text-primary stepper-item-active:bg-primary stepper-item-active:text-primary-inverse stepper-item-completed:bg-success stepper-item-completed:text-success-inverse`}>
+                          <span className="stepper-item-completed:hidden" data-stepper-number="true">
+                              {index + 1}
+                          </span>
+                          <FaCheck className="text-xl hidden stepper-item-completed:inline" />
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                          <h4 className="text-sm font-medium text-gray-900 stepper-item-completed:text-gray-600">
+                              {step.title}
+                          </h4>
+                          <span className="text-2sm text-gray-700 stepper-item-completed:text-gray-400">
+                              {step.description}
+                          </span>
+                      </div>
                   </div>
-                  <div>
-                    <button type="button" className={`btn btn-light ${currentStep === steps.length ? '!hidden' : ''}`} onClick={handleNextStep}>
-                        Next
-                    </button>
-                    
-                    <button type="submit" className={`btn btn-primary ${currentStep === steps.length ? '' : '!hidden'}`}>
-                        Submit
-                    </button>
-                  </div>
+                ))}
+              </div>
+              <div className="card-body !py-16">
+                {steps.map((step, index) => (
+                  <div key={index} className={`flex items-center justify-center font-semibold text-gray-900 ${index + 1 === currentStep ? '' : 'hidden'}`} id={`step-${index + 1}`}>
+                      {step.component}
+                  </div>   
+                ))}
+              </div>
+              <div className="card-footer py-8 flex justify-between">
+                <div>
+                  <button type="button" className={`btn btn-light ${currentStep === 1 ? '!hidden' : ''}`} onClick={handlePreviousStep}>
+                      Back
+                  </button>
+                </div>
+                <div>
+                  <button type="button" className={`btn btn-light ${currentStep === steps.length ? '!hidden' : ''}`} onClick={handleNextStep}>
+                      Next
+                  </button>
+                  
+                  <button type="submit" className={`btn btn-primary ${currentStep === steps.length ? '' : '!hidden'}`}>
+                      Submit
+                  </button>
                 </div>
               </div>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   )
@@ -160,17 +268,51 @@ const CustomerCreate: React.FC = () => {
 export default CustomerCreate
 
 
-const ClientInfo: React.FC = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [gender, setGender] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [city, setCity] = useState('');
-  const [email, setEmail] = useState('');
-  const [idPassport, setIdPassport] = useState('');
+interface ClientInfoProps {
+  firstName: string;
+  setFirstName: React.Dispatch<React.SetStateAction<string>>;
+  lastName: string;
+  setLastName: React.Dispatch<React.SetStateAction<string>>;
+  birthday: string;
+  setBirthday: React.Dispatch<React.SetStateAction<string>>;
+  gender: string;
+  setGender: React.Dispatch<React.SetStateAction<string>>;
+  phone: string;
+  setPhone: React.Dispatch<React.SetStateAction<string>>;
+  address: string;
+  setAddress: React.Dispatch<React.SetStateAction<string>>;
+  postalCode: number;
+  setPostalCode: React.Dispatch<React.SetStateAction<number>>;
+  city: string;
+  setCity: React.Dispatch<React.SetStateAction<string>>;
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  idPassport: string;
+  setIdPassport: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ClientInfo: React.FC<ClientInfoProps> = ({
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  birthday,
+  setBirthday,
+  gender,
+  setGender,
+  phone,
+  setPhone,
+  address,
+  setAddress,
+  postalCode,
+  setPostalCode,
+  city,
+  setCity,
+  email,
+  setEmail,
+  idPassport,
+  setIdPassport,
+}) => {
   return (
     <div className="grid gap-5 w-full">
 
@@ -265,12 +407,12 @@ const ClientInfo: React.FC = () => {
       <div className="flex items-baseline gap-2.5">
         <label htmlFor="postal-code" className="form-label max-w-56">Postal Code</label>
         <input
-          type="text"
+          type="number"
           name="postal-code"
           id="postal-code"
           value={postalCode}
           placeholder="5405"
-          onChange={(e)=>setPostalCode(e.target.value)}
+          onChange={(e)=>setPostalCode(Number(e.target.value))}
           className="input"
         />
       </div>
@@ -303,14 +445,18 @@ const ClientInfo: React.FC = () => {
 }
 
 interface ClientInsurancesProps {
-  statusOptions: string[]
-}
-interface ClientAccountingsProps {
-  statusOptions: string[]
+  insurances: Insurance[];
+  setInsurances: React.Dispatch<React.SetStateAction<Insurance[]>>;
+  statusOptions: {value: number, label: string}[]
 }
 
 
-const ClientInsurances: React.FC<ClientInsurancesProps> = ({statusOptions}) => {
+
+const ClientInsurances: React.FC<ClientInsurancesProps> = ({
+  insurances,
+  setInsurances,
+  statusOptions
+}) => {
 
   const insuranceTypes = [
     "Assurance Vie",
@@ -339,19 +485,19 @@ const ClientInsurances: React.FC<ClientInsurancesProps> = ({statusOptions}) => {
     "Annuel",
   ];
 
-  const [insurances, setInsurances] = useState([
-    {
-      type: '',
-      agency: '',
-      policy_number: '',
-      inception_date: new Date(),
-      expiration_date: new Date(),
-      status: '',
-      cancellation_period: 1,
-      payment_amount: 0,
-      payment_frequency: '',
-    }
-  ])
+  // const [insurances, setInsurances] = useState<Insurance[]>([
+  //   {
+  //     type: '',
+  //     agency: '',
+  //     policy_number: '',
+  //     inception_date: new Date(),
+  //     expiration_date: new Date(),
+  //     status: '',
+  //     cancellation_period: 1,
+  //     payment_amount: 0,
+  //     payment_frequency: '',
+  //   }
+  // ])
 
   const addInsurance = () => {
     setInsurances([...insurances, {
@@ -385,188 +531,167 @@ const ClientInsurances: React.FC<ClientInsurancesProps> = ({statusOptions}) => {
   };
   
   return (
-    <div>
+    <div className="grid gap-5 lg:gap-7.5 w-full mx-auto">
       {insurances.map((insurance, index) => (
-        <div key={index} className="mb-4 border border-dashed border-gray-400 p-4 rounded-md grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50">
-          <div className="col-span-3 flex justify-between items-center">
-            <h3 className="text-lg font-bold">Accounting #{index + 1}</h3>
-            <button
-              type="button"
-              title="Remove Insurance"
-              onClick={() => removeInsurance(index)}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 w-fit text-red-500"
-            >
-              <FaXmark />
-            </button>
-          </div>
-          <div>
-            <label htmlFor="type" className="font-semibold block mb-1">Insurance Type</label>
-            <select
-              id="type"
-              name="type"
-              value={insurance.type}
-              title="Insurance Type"
-              onChange={(e) => handleInsuranceChange(e, index)} // Adjust the target as needed
-              className="w-full p-2 border rounded mb-2 bg-white"
-            >
-              <option value="">Select Insurance Type</option>
-              {insuranceTypes.map((insuranceType, index) => (
-                <option key={index} value={insuranceType}>
-                  {insuranceType}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="agency" className="font-semibold block mb-1">Insurance Agency</label>
-            <select
-              name="agency"
-              id="agency"
-              title="Insurance Agency"
-              value={insurance.agency}
-              onChange={(e) => handleInsuranceChange(e, index)}
-              className="w-full p-2 border rounded mb-2 bg-white"
-            >
-              <option value="">Select Agency</option>
-              {agencyOptions.map((agency, index) => (
-                <option key={index} value={agency}>
-                  {agency}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="policy_number" className="font-semibold block mb-1">Insurance Number</label>
-            <input
-              placeholder="6546465"
-              type="text"
-              title="Insurance Number"
-              name="policy_number"
-              value={insurance.policy_number}
-              onChange={(e) => handleInsuranceChange(e, index)}
-              className="w-full p-2 border rounded mb-2"
-            />
-          </div>
-          <div>
-            <label htmlFor="start" className="font-semibold block mb-1">Inception Date</label>
-            <input 
-              type="date"
-              name="flex-1"
-              value={moment(insurance.inception_date).format('YYYY-MM-DD')}
-              title="Inception Date"
-              onChange={(e) => handleInsuranceChange(e, index)}
-              className="w-full p-2 border rounded mb-2"
-              />
-          </div>
-          <div>
-            <label htmlFor="expiration_date" className="font-semibold block mb-1">End Date</label>
-            <input 
-              type="date"
-              name="expiration_date"
-              value={moment(insurance.expiration_date).format('YYYY-MM-DD')}
-              title="End Date"
-              placeholder="End Date"
-              onChange={(e) => handleInsuranceChange(e, index)}
-              className="w-full p-2 border rounded mb-2"
-            />
-          </div>
-          <div>
-            <label htmlFor="status" className="font-semibold block mb-1">Status</label>
-            <select
-              name="status"
-              id="status"
-              value={insurance.status}
-              title="Status"
-              onChange={(e) => handleInsuranceChange(e, index)}
-              className="w-full p-2 border rounded mb-2 bg-white"
-            >
-              <option value="">Select Status</option>
-              {statusOptions.map((status, index) => (
-                <option key={index} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="font-semibold block mb-1">Cancellation Period</label>
-            <div className="flex items-center space-x-2 mb-2">
-              <label htmlFor="cancellation_period" className="font-tight block mb-1">
-                Cancellation Before
-              </label>
-              <input
-                type="number"
-                value={insurance.cancellation_period}
-                id="cancellation_period"
-                name="cancellation_period"
-                placeholder="1-12"
-                min="1"
-                max="12"
-                onChange={(e) => handleInsuranceChange(e, index)}
-                className="flex-1 p-2 border rounded"
-              />
-              <span className="font-tight">months</span>
+        <div key={index} className="card pb-2.5">
+          <div className="card-header">
+            <h3 className="card-title">Insurance #{index + 1}</h3>
+            <div className="card-toolbar">
+              <button
+                type="button"
+                title="Remove Insurance"
+                onClick={() => removeInsurance(index)}
+              >
+                <HiOutlineXMark className="size-4" />
+              </button>
             </div>
           </div>
-          <div>
-            <label className="font-semibold block mb-1">Payment Amount</label>
-            <div className="flex items-center space-x-2 mb-2">
-              <label htmlFor="payment_amount">
-                Amount
-              </label>
-              <input
-                value={insurance.payment_amount}
-                type="number"
-                id="payment_amount"
-                name="payment_amount"
-                placeholder="2000"
+          <div className="card-body grid gap-5 grid-cols-1 xl:grid-cols-3">
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="type">Insurance Type</label>
+              <select
+                id="type"
+                name="type"
+                value={insurance.type}
                 onChange={(e) => handleInsuranceChange(e, index)}
-                className="flex-1 p-2 border rounded"
-              />
-              <span>CHF</span>
+                className="select"
+              >
+                {insuranceTypes.map((type, idx) => (
+                  <option key={idx} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
             </div>
-          </div>
 
-          <div className="mb-2">
-            <label htmlFor="payment_frequency" className="font-semibold block mb-1">
-              Payment Frequency
-            </label>
-            <select
-              id="payment_frequency"
-              title="Payment Frequency"
-              value={insurance.payment_frequency}
-              name="payment_frequency"
-              onChange={(e) => handleInsuranceChange(e, index)}
-              className="w-full p-2 border rounded bg-white"
-            >
-              <option value="">Select Payment Frequency</option>
-              {paymentFrequencyOptions.map((paymentFrequency, index) => (
-                <option key={index} value={paymentFrequency}>
-                  {paymentFrequency}
-              </option>
-              ))}
-            </select>
-          </div>
-          
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="agency">Agency</label>
+              <select
+                id="agency"
+                name="agency"
+                value={insurance.agency}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="select"
+              >
+                {agencyOptions.map((agency, idx) => (
+                  <option key={idx} value={agency}>
+                    {agency}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="policy_number">Policy Number</label>
+              <input
+                type="text"
+                name="policy_number"
+                value={insurance.policy_number}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="input"
+                placeholder="Enter policy number"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="inception_date">Inception Date</label>
+              <input
+                type="date"
+                id="inception_date"
+                name="inception_date"
+                value={moment(insurance.inception_date).format("YYYY-MM-DD")}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="input"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="payment_amount">Payment Amount</label>
+              <input
+                type="number"
+                placeholder="1000"
+                title="Payment Amount"
+                name="payment_amount"
+                value={insurance.payment_amount}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="input"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="payment_frequency">Payment Frequency</label>
+              <select
+                id="payment_frequency"
+                name="payment_frequency"
+                value={insurance.payment_frequency}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="select"
+              >
+                {paymentFrequencyOptions.map((frequency, idx) => (
+                  <option key={idx} value={frequency}>
+                    {frequency}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Cancellation Period */}
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="cancellation_period">Cancellation Period (Months)</label>
+              <input
+                id="cancellation_period"
+                type="number"
+                name="cancellation_period"
+                value={insurance.cancellation_period}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="input"
+                min={1}
+                max={12}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="status">Status</label>
+              <select
+                id="status"
+                name="status"
+                value={insurance.status}
+                onChange={(e) => handleInsuranceChange(e, index)}
+                className="select"
+              >
+                {statusOptions.map((status, idx) => (
+                  <option key={idx} value={status.value}>
+                    {status.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+          </div>          
         </div>
       ))}
-        <div className="col-span-3">
-        <button type="button" onClick={addInsurance} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-fit flex items-center space-x-4">
-          <FaPlus/> <span>Add Accounting</span>
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={addInsurance}
+        className="btn btn-primary flex items-center gap-2 w-fit"
+      >
+        <HiOutlinePlus /> Add Insurance
+      </button>
     </div>
   )
 }
-const ClientAccountings: React.FC<ClientAccountingsProps> = ({statusOptions}) => {
-  const [accountings, setAccountings] = useState([
-    {    
-      start_date: new Date(),
-      tax_included: 0,
-      status: '',
-      documents: null as File[] | null
-    }
-  ])
+
+interface ClientAccountingsProps {
+  accountings: Accounting[]
+  setAccountings: React.Dispatch<React.SetStateAction<Accounting[]>>
+  statusOptions: {value: number, label: string}[]
+}
+
+const ClientAccountings: React.FC<ClientAccountingsProps> = ({
+  accountings,
+  setAccountings,
+  statusOptions
+}) => {
 
   const addAccounting = () => {
     setAccountings([...accountings, {
@@ -578,13 +703,17 @@ const ClientAccountings: React.FC<ClientAccountingsProps> = ({statusOptions}) =>
   }
 
   const removeAccounting = (index: number) => {
+    if (accountings.length === 1) {
+      toast.error("You cannot remove the last accounting.");
+      return;
+    }
     const updatedAccountings = [...accountings];
     updatedAccountings.splice(index, 1);
     setAccountings(updatedAccountings);
   };
 
   const handleAccountingChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement >, index: number) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target as HTMLInputElement;
     const updatedAccountings = [...accountings];
     updatedAccountings[index] = {
       ...updatedAccountings[index],
@@ -613,107 +742,112 @@ const ClientAccountings: React.FC<ClientAccountingsProps> = ({statusOptions}) =>
   
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4 text-center">Portfolio - Accountings</h2>
-        {accountings.map((accounting, index) => (
-          <div key={index} className="mb-4 border bg-gray-50 border-gray-400 border-dashed p-4 rounded-md shadow grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Contract Start Date */}
-          <h3 className="text-lg font-bold mb-2">Accounting #{index + 1}</h3>
-          <span></span>
-          <button
-            type="button"
-            onClick={() => removeAccounting(index)}
-            className="ml-auto px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-fit"
-          >
-            Remove Accounting
-          </button>
-          <div>
-            <label htmlFor="start_date" className="block mb-1">Start Date</label>
-
-            <input
-              title="Start Date"
-              type="date"
-              name="start_date"
-              value={moment(accounting.start_date).format('YYYY-MM-DD')} 
-              onChange={(e) => handleAccountingChange(e, index)}
-              className="w-full p-2 border rounded mb-2"
-            />
+    <div className="grid gap-5 w-full">
+      {accountings.map((accounting, index) => (
+        <div key={index} className="card">
+          <div className="card-header">
+            <h2 className="card-title">Accounting #{index + 1}</h2>
+            <div className="card-tooltip">
+              <button
+                title="remove insurance"
+                type="button"
+                onClick={() => removeAccounting(index)}
+              >
+                <HiOutlineXMark className="size-4" />
+              </button>
+            </div>
           </div>
-          <div>
+          <div className="card-body grid gap-5 grid-cols-1 xl:grid-cols-3">
 
-          
-            <label htmlFor="status" className="font-semibold block mb-1">
-              Status
-            </label>
-            <select
-              title="Status"
-              id="status"
-              name="status"
-              value={accounting.status}
-              onChange={(e) => handleAccountingChange(e, index)}
-              className="w-full p-2 border rounded bg-white"
-            >
-              <option value="">Select The Contract Status</option>
-              {statusOptions.map((status, index) => (
-                <option key={index} value={status}>
-                  {status}
-              </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex items-center justify-end mt-6">
-            <Switch
-              isChecked={accounting.tax_included === 1}
-              onChange={() => handleSwitchChange(index)}
-              label="TVA"
-            />
-          </div>
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="start_date">Start Date</label>
 
+              <input
+                  title="Start Date"
+                  type="date"
+                  name="start_date"
+                  value={moment(accounting.start_date).format('YYYY-MM-DD')} 
+                  onChange={(e) => handleAccountingChange(e, index)}
+                  className="input"
+                />
+            </div>
+            
+            <div className="flex flex-col gap-1">
+              <label className="form-label" htmlFor="status">
+                Status
+              </label>
+              <select
+                title="Status"
+                id="status"
+                name="status"
+                value={accounting.status}
+                onChange={(e) => handleAccountingChange(e, index)}
+                className="select"
+              >
+                {statusOptions.map((status, index) => (
+                  <option key={index} value={status.value}>
+                    {status.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label htmlFor="tva_included" className="form-label">
+                TVA Included
+              </label>
+              <div className="switch switch-sm h-full">
+                <input 
+                  className="order-2"
+                  name="tva_included"
+                  id="tva_included"
+                  type="checkbox"
+                  onChange={() => handleSwitchChange(index)}
+                  value={accounting.tax_included}
+                  checked={accounting.tax_included === 1} 
+                />
+              </div>
+            </div>
 
-          {/* File input for documents */}
-          <div className="block mb-2 cursor-pointer col-span-3">
-            {/* <input
-              type="file"
-              name="documents"
-              onChange={(e) => handleAccountingChange(e, index)} // Adjust handling as needed
-              className="hidden" // Hide the default file input
-            /> */}
-            <DropZone 
-              label={`Upload Documents ${index + 1}`}
-              onChange={(files) => handleAccountingFileChange(files, index)}
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            />
+            <div className="flex flex-col gap-1 col-span-3">
+              <label htmlFor="documents" className="form-label">
+                Accounting Documents
+              </label>
+              <DropZone 
+                label={`Upload Documents ${index + 1}`}
+                onChange={(files) => handleAccountingFileChange(files, index)}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              />
+            </div>
           </div>
-        </div>
+      </div>
       ))}
       
       <button
         type="button"
         onClick={addAccounting}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="btn btn-primary w-fit flex items-center gap-2.5"
       >
-        Add Another Accounting
+        <HiOutlinePlus /> Add Another Accounting
       </button>
     </div>
   )
 }
 
+interface ClientTaxesProps {
+  taxes: Tax[];
+  setTaxes: React.Dispatch<React.SetStateAction<Tax[]>>
+}
 
-const ClientTaxes: React.FC = () => {
-  const [taxes, setTaxes] = useState([
-    {
-      name: '',
-      percentage: 0,
-      type: '',
-      documents: null as File[] | null
-    }
-  ]);
-  const taxTypeOptions = [
-    "Percentage",
-    "Fixed Amount",
-  ];
+const ClientTaxes: React.FC<ClientTaxesProps> = ({
+  taxes,
+  setTaxes
+}) => {
 
   const removeTax = (index: number) => {
+    if (taxes.length === 1) {
+      toast.error("You cannot remove the last tax.");
+      return;
+    }
     const updatedTaxes = [...taxes];
     updatedTaxes.splice(index, 1);
     setTaxes(updatedTaxes);
@@ -721,8 +855,9 @@ const ClientTaxes: React.FC = () => {
   const addTax = () => {
     setTaxes([...taxes, {
       name: '',
-      percentage: 0,
-      type: ''
+      type: 'percentage',
+      value: 0,
+      documents: null as File[] | null
     }]);
   }
 
@@ -736,6 +871,13 @@ const ClientTaxes: React.FC = () => {
     setTaxes(updatedTaxes);
   };
 
+  const handleChangeTaxType = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const taxtype = e.target.value;
+    const updatedTaxes = [...taxes];
+    updatedTaxes[index] = {...updatedTaxes[index], type: taxtype };
+    setTaxes(updatedTaxes);
+  }
+
   const handleTaxFileChange = (files: File[], index: number) => {
     setTaxes(prevTaxes => {
       const updatedTaxes = [...prevTaxes];
@@ -744,76 +886,90 @@ const ClientTaxes: React.FC = () => {
     })
   }
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4 text-center">Portfolio - Taxes</h2>
+    <div className="grid gap-5 w-full">
       {taxes.map((tax, index) => (
-        <div key={index} className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4 border p-4 bg-gray-50 border-gray-400 border-dashed rounded-md shadow">
-            <h3 className="text-lg font-bold mb-2 col-span-2">Tax #{index + 1}</h3>
-
-            <button
-              type="button"
-              onClick={() => removeTax(index)}
-              className=" px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-fit ml-auto"
-            >
-              Remove Tax
-            </button>
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="name">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={tax.name}
-              placeholder="Tax Name"
-              onChange={(e) => handleTaxChange(e, index)}
-              className="w-full p-2 border rounded mb-2"
-            />
+        <div key={index} className="card">
+          <div className="card-header">
+            <div className="card-title">
+              <h3>Tax #{index + 1}</h3>
+            </div>
+            <div className="card-tooltip">
+              <button
+                title="remove tax"
+                type="button"
+                onClick={() => removeTax(index)}
+              >
+                <HiOutlineXMark className="size-4" />
+              </button>
+            </div>
           </div>
-          <div>
-            {/* TODO: This needs to be changed to value */}
-            <label className="block text-sm font-bold mb-2" htmlFor="percentage">Percentage</label>
-            <input
-              type="number"
-              name="percentage"
-              value={tax.percentage}
-              placeholder="Tax Percentage"
-              onChange={(e) => handleTaxChange(e, index)}
-              className="w-full p-2 border rounded mb-2"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold mb-2" htmlFor="type">Type</label>
-            <select 
-              title="Type"
-              id="type"
-              name="type"
-              value={tax.type}
-              onChange={(e) => handleTaxChange(e, index)}
-              className="w-full p-3 border rounded mb-2 bg-white"  
-            >
-              <option value="">Select The Tax Type</option>
-              {taxTypeOptions.map((type, index) => (
-                <option key={index} value={type}>
-                  {type}
-              </option>
-              ))}
-            </select>
-          </div>
-          {/* Tailwind Styled File Input */}
-          <div className="block mb-2 cursor-pointer col-span-3">
-            <DropZone 
-              label={`Upload Documents ${index + 1}`}
-              onChange={(files) => handleTaxFileChange(files, index)}
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-            />
+          <div className="card-body grid gap-5">
+            <div className="flex items-center gap-2.5">
+              <label className="form-label max-w-56" htmlFor="name">Name</label>
+              <input
+                type="text"
+                name="name"
+                value={tax.name}
+                placeholder="Tax Name"
+                onChange={(e) => handleTaxChange(e, index)}
+                className="input"
+              />
+            </div>
+            <div className="flex items-center gap-2.5">
+              <label className="form-label max-w-56" htmlFor="value">Value</label>
+              <input
+                type="number"
+                name="value"
+                value={tax.value}
+                placeholder="0"
+                onChange={(e) => handleTaxChange(e, index)}
+                className="input"
+              />
+            </div>
+            <div className="flex items-center gap-2.5">
+              <label className="form-label max-w-56" htmlFor={`type-${index}`}>Type</label>
+              <div className="flex items-center gap-2">
+                  <label key="percentage" className="radio-label flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name={`type-${index}`} 
+                      value="percentage"
+                      checked={tax.type === "percentage"}
+                      onChange={(e) => handleChangeTaxType(e, index)}
+                      className="radio"
+                    />
+                    <span>Percentage</span>
+                  </label>
+                  <label key="fixed" className="radio-label flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name={`type-${index}`}
+                      value="fixed"
+                      checked={tax.type === "fixed"}
+                      onChange={(e) => handleChangeTaxType(e, index)}
+                      className="radio"
+                    />
+                    <span>Fixed Amount</span>
+                  </label>
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <label className="form-label max-w-56" htmlFor="value">Value</label>
+              <DropZone 
+                label={`Upload Documents ${index + 1}`}
+                onChange={(files) => handleTaxFileChange(files, index)}
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              />
+            </div>
           </div>
         </div>
       ))}
       <button
         type="button"
         onClick={addTax}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="btn btn-primary w-fit"
       >
-        Add Another Tax
+        <HiOutlinePlus /> Add Another Tax
       </button>
     </div>
   )

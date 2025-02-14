@@ -1,12 +1,13 @@
 import { User } from "./User";
 
 export interface Vacation {
-    id: string;
+    id: number;
     description?: string;
     title: string;
     start: string;
     end: string;
-    userId?: string;
-    status?: string;
+    user_id: string;
+    status?: number;
     user?:User;
+    created_at?: string;
 }

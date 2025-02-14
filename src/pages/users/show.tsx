@@ -16,10 +16,11 @@ import FileUpload from "../../components/FileUpload";
 import Swal from "sweetalert2";
 import { UserDocument } from "../../types/UserDocument";
 import { toast } from "react-toastify";
-import { SiAbstract } from "react-icons/si";
+
 const UserDetails = () => {
+
     const navigate = useNavigate();
-    const storageUrl = import.meta.env.VITE_REACT_APP_STORAGE_URL;
+    // const storageUrl = import.meta.env.VITE_REACT_APP_STORAGE_URL;
     const { userId } = useParams<{ userId: string }>();
     const axiosInstance = useAxiosInstance();
     const [loading, setLoading] = useState(true);

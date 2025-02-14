@@ -1,6 +1,10 @@
 export interface Tax {
+    id?: number;
     name: string;
-    percentage: number;
+    value: number;
     type: string;
     documents: object | null;
+    updated_at?: Date;
+    created_at?: Date;
 }
+
