@@ -188,7 +188,7 @@ const UserCreate: React.FC = () => {
                                         title="remove"
                                         onClick={handleRemoveUserLogo}
                                         type="button" 
-                                        className="btn btn-icon btn-icon-xs btn-light shadow absolute z-1 !size-5 -top-0.5 -end-0.5 rounded-full"
+                                        className="btn btn-icon btn-icon-xs btn-light shadow-sm absolute z-1 size-5! -top-0.5 -end-0.5 rounded-full"
                                         >
                                         <HiOutlineXMark className="size-6" />
                                     </button>

@@ -95,7 +95,7 @@ const MessagesMenu: React.FC<MessagesMenuProps> = ({onClose}) => {
                         </div>
                         <div className="flex items-end justify-end gap-3.5 px-5">
                             <div className="flex flex-col gap-1.5">
-                                <div className="card shadow-none flex !bg-primary text-primary-inverse text-2sm font-medium flex-col gap-2.5 p-3 rounded-be-none">
+                                <div className="card shadow-none flex bg-primary! text-primary-inverse text-2sm font-medium flex-col gap-2.5 p-3 rounded-be-none">
                                     This is excellent news!
                                 </div>
                                 <div className="flex items-center justify-end relative">
@@ -141,7 +141,7 @@ const MessagesMenu: React.FC<MessagesMenuProps> = ({onClose}) => {
                         </div>
                         <div className="flex items-end justify-end gap-3.5 px-5">
                             <div className="flex flex-col gap-1.5">
-                                <div className="card shadow-none flex !bg-primary text-primary-inverse text-2sm font-medium flex-col gap-2.5 p-3 rounded-be-none">
+                                <div className="card shadow-none flex bg-primary! text-primary-inverse text-2sm font-medium flex-col gap-2.5 p-3 rounded-be-none">
                                     Haven't seen the build yet, I'll look now.
                                 </div>
                                 <div className="flex items-center justify-end relative">
@@ -161,7 +161,7 @@ const MessagesMenu: React.FC<MessagesMenuProps> = ({onClose}) => {
                         </div>
                         <div className="flex items-end justify-end gap-3.5 px-5">
                             <div className="flex flex-col gap-1.5">
-                                <div className="card shadow-none flex !bg-primary text-primary-inverse text-2sm font-medium flex-col gap-2.5 p-3 rounded-be-none">
+                                <div className="card shadow-none flex bg-primary! text-primary-inverse text-2sm font-medium flex-col gap-2.5 p-3 rounded-be-none">
                                     Checking the build now
                                 </div>
                                 <div className="flex items-center justify-end relative">
@@ -236,7 +236,7 @@ const MessagesMenu: React.FC<MessagesMenuProps> = ({onClose}) => {
                         <img src="/images/avatars/300-2.png"
                             className="rounded-full size-[30px] absolute start-0 top-2/4 -translate-y-2/4 ms-2.5" alt="" 
                         />
-                        <input type="text" className="input h-auto py-4 !ps-12 bg-transparent"
+                        <input type="text" className="input h-auto py-4 ps-12! bg-transparent"
                             placeholder="Write a message..."
                             value=""
                         />

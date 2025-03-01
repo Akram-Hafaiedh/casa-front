@@ -227,7 +227,7 @@ const Logs = () => {
                                 <input
                                     type="text"
                                     name="search"
-                                    className="input input-sm !ps-8"
+                                    className="input input-sm ps-8!"
                                     placeholder="Search logs..."
                                     onChange={handleFilterChange}
                                     value={filters.search}
@@ -240,7 +240,7 @@ const Logs = () => {
                                 <select
                                     title="filter-by-action-type"
                                     name="action_type"
-                                    className="select select-sm me-3 !min-w-36"
+                                    className="select select-sm me-3 min-w-36!"
                                     onChange={handleFilterChange}
                                     value={filters.action_type}
                                 >
@@ -327,7 +327,7 @@ const Logs = () => {
                                 <select
                                     title="filter-by-per-page"
                                     name="per_page"
-                                    className="select select-sm !w-16"
+                                    className="select select-sm w-16!"
                                     onChange={handleFilterChange}
                                     value={filters.per_page}
                                 >

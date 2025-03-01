@@ -75,7 +75,7 @@ const CommentCard: React.FC <CommentCardProps>= ({
                             title="Edit content"
                             value={editedContent}
                             onChange={(e) => onContentChange(e.target.value)}
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2 border rounded-sm"
                             rows={3}
                             autoFocus
                         />

@@ -92,7 +92,7 @@ const AccountRoles = () => {
                     ))}
 
                     {/* Add Role Card */}
-                    <button className="card !border-2 border-dashed !border-brand-clarity bg-center bg-[length:600px] bg-no-repeat min-h-[198px]"
+                    <button className="card border-2! border-dashed border-brand-clarity! bg-center bg-[length:600px] bg-no-repeat min-h-[198px]"
                         style={{ backgroundImage: "url(/images/2600x1200/bg-4.png)" }}
                         onClick={() => toast.warning('Feature coming soon')}>
                         <div className="card-body grid items-center">

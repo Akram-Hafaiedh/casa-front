@@ -157,7 +157,7 @@ const ProjectListing: React.FC = () => {
                 <div>
                     {/* <div className="flex items-center justify-between">
                         <h1 className="mb-4 text-2xl font-bold">Projects</h1>
-                        <Link to="/projects/create" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700">Create New Project</Link>
+                        <Link to="/projects/create" className="px-4 py-2 text-white bg-blue-500 rounded-sm hover:bg-blue-700">Create New Project</Link>
                     </div> */}
 
                     <InfoSection

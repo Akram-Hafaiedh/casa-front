@@ -113,7 +113,7 @@ const UserVacations: React.FC = () => {
                             <input 
                                 onChange={handleSearchChange}
                                 value={searchQuery}
-                                className="input input-sm !ps-8"
+                                className="input input-sm ps-8!"
                                 placeholder="Search Vacations..."
                                 type="text" 
                             />
@@ -159,7 +159,7 @@ const UserVacations: React.FC = () => {
                                                         type="button"
                                                         onClick={()=>openEditModal(vacation)}
                                                         title="Edit vacation"
-                                                        className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                        className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                                     >
                                                         <HiOutlineEye className="size-4 " />
                                                     </button>
@@ -170,7 +170,7 @@ const UserVacations: React.FC = () => {
                                                 <button 
                                                     title="Delete vacation"
                                                     type="button" 
-                                                    className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                    className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                                     onClick={()=> openDeleteModal(vacation)}
                                                 >
                                                     <HiOutlineTrash className="size-4 " />
@@ -191,7 +191,7 @@ const UserVacations: React.FC = () => {
                             <div className="flex items-center gap-2 order-2 md:order-1">
                                 Show
                                 <select 
-                                    className="select select-sm !w-16"
+                                    className="select select-sm w-16!"
                                     data-datatable-size="true"
                                     title="perpage"
                                     name="perpage"

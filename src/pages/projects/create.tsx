@@ -237,7 +237,7 @@ const ProjectCreate: React.FC = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="card-body !py-16">
+                            <div className="card-body py-16!">
                                 {steps.map((step, index) => (
                                     <div key={index} className={`flex items-center justify-center font-semibold text-gray-900 ${index + 1 === currentStep ? '' : 'hidden'}`} id={`step-${index + 1}`}>
                                         {step.component}
@@ -246,16 +246,16 @@ const ProjectCreate: React.FC = () => {
                             </div>
                             <div className="card-footer py-8 flex justify-between">
                                 <div>
-                                    <button type="button" className={`btn btn-light ${currentStep === 1 ? '!hidden' : ''}`} onClick={handlePreviousStep}>
+                                    <button type="button" className={`btn btn-light ${currentStep === 1 ? 'hidden!' : ''}`} onClick={handlePreviousStep}>
                                         Back
                                     </button>
                                 </div>
                                 <div>
-                                    <button type="button" className={`btn btn-light ${currentStep === steps.length ? '!hidden' : ''}`} onClick={handleNextStep}>
+                                    <button type="button" className={`btn btn-light ${currentStep === steps.length ? 'hidden!' : ''}`} onClick={handleNextStep}>
                                         Next
                                     </button>
                                     
-                                    <button type="submit" className={`btn btn-primary ${currentStep === steps.length ? '' : '!hidden'}`}>
+                                    <button type="submit" className={`btn btn-primary ${currentStep === steps.length ? '' : 'hidden!'}`}>
                                         Submit
                                     </button>
                                 </div>
@@ -333,7 +333,7 @@ const ProjectSettings: React.FC<ProjectSettingsProps> = ({
                             <button 
                                 title="remove"
                                 type="button"
-                                className="btn btn-icon btn-icon-xs btn-light shadow absolute z-1 !size-5 -top-0.5 -end-0.5 rounded-full"
+                                className="btn btn-icon btn-icon-xs btn-light shadow-sm absolute z-1 size-5! -top-0.5 -end-0.5 rounded-full"
                                 onClick={handleRemoveProjectImage}
                             >
                                 <HiOutlineXMark className="size-6" />
@@ -459,9 +459,9 @@ const ProjectBudget: React.FC <ProjectBudgetProps> = ({
                         <label 
                             key={option.value}
                             htmlFor={`budget-usage-${option.value}`} 
-                            className={`min-h-[125px] cursor-pointer text-slate-700 border border-dashed has-[:checked]:border-indigo-500 has-[:checked]:text-indigo-800 has-[:checked]:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 border-gray-200 hover:bg-slate-100`}>
+                            className={`min-h-[125px] cursor-pointer text-slate-700 border border-dashed has-checked:border-indigo-500 has-checked:text-indigo-800 has-checked:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 border-gray-200 hover:bg-slate-100`}>
                             <input
-                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-none ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
+                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-hidden ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
                                 name="budget_usage"
                                 id={`budget-usage-${option.value}`}
                                 type="radio"
@@ -476,10 +476,10 @@ const ProjectBudget: React.FC <ProjectBudgetProps> = ({
                         </label>
                     ))}
                     {/* <label htmlFor="normal"
-                        className="cursor-pointer text-slate-700 border border-dashed has-[:checked]:border-indigo-500 has-[:checked]:text-indigo-800 has-[:checked]:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 border-gray-200 hover:bg-slate-100"
+                        className="cursor-pointer text-slate-700 border border-dashed has-checked:border-indigo-500 has-checked:text-indigo-800 has-checked:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 border-gray-200 hover:bg-slate-100"
                     >
                         <input 
-                            className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-none ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
+                            className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-hidden ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
                             name="budget_usage"
                             id="normal"
                             type="radio"
@@ -495,10 +495,10 @@ const ProjectBudget: React.FC <ProjectBudgetProps> = ({
                         </div>
                     </label>
                     <label htmlFor="extreme"
-                        className="cursor-pointer text-slate-700 border border-dashed has-[:checked]:border-indigo-500 has-[:checked]:text-indigo-800 has-[:checked]:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 border-gray-200 hover:bg-slate-100"
+                        className="cursor-pointer text-slate-700 border border-dashed has-checked:border-indigo-500 has-checked:text-indigo-800 has-checked:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 border-gray-200 hover:bg-slate-100"
                     >
                         <input 
-                            className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-none ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
+                            className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-hidden ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
                             name="budget_usage"
                             id="extreme"
                             value="extreme"
@@ -771,7 +771,7 @@ const ProjectTeam: React.FC<ProjectTeamProps> = ({
 //             <h2 className="text-xl font-bold mb-4 text-center">Project First Task</h2>
 //             {/* Task form */}
 //             <div className="flex items-baseline lg:flex-nowrap gap-2.5">
-//                 <label className="form-label max-w-56 !font-semibold" htmlFor='project-name'>Title</label>
+//                 <label className="form-label max-w-56 font-semibold!" htmlFor='project-name'>Title</label>
 //                 <input
 //                     name="task-title"
 //                     id='task-title'
@@ -783,7 +783,7 @@ const ProjectTeam: React.FC<ProjectTeamProps> = ({
 //                 />
 //             </div>
 //             <div className="flex items-baseline lg:flex-nowrap gap-2.5">
-//                 <label className="form-label max-w-56 !font-semibold" htmlFor='task-description'>Description</label>
+//                 <label className="form-label max-w-56 font-semibold!" htmlFor='task-description'>Description</label>
 //                 <textarea 
 //                     name="task-description"
 //                     rows={4}
@@ -796,7 +796,7 @@ const ProjectTeam: React.FC<ProjectTeamProps> = ({
 //             </div>
 
 //             <div className="flex items-baseline lg:flex-nowrap gap-2.5">
-//                 <label className="form-label max-w-56 !font-semibold" htmlFor='task-due-date'>Due Date</label>
+//                 <label className="form-label max-w-56 font-semibold!" htmlFor='task-due-date'>Due Date</label>
 //                 <input
 //                     id="task-due-date"
 //                     name="task-due-date"
@@ -808,7 +808,7 @@ const ProjectTeam: React.FC<ProjectTeamProps> = ({
 //             </div>
             
 //             <div className="flex items-baseline lg:flex-nowrap gap-2.5">
-//                 <label htmlFor="asignedTo" className="form-label max-w-56 !font-semibold">Assignee</label>
+//                 <label htmlFor="asignedTo" className="form-label max-w-56 font-semibold!">Assignee</label>
 //                 <select
 //                     id="asignedTo"
 //                     name="asignedTo"
@@ -826,7 +826,7 @@ const ProjectTeam: React.FC<ProjectTeamProps> = ({
 //             </div>
 
 //             <div className="flex items-baseline lg:flex-nowrap gap-2.5">
-//                 <label htmlFor="asigned-member" className="form-label max-w-56 !font-semibold">Skills</label>
+//                 <label htmlFor="asigned-member" className="form-label max-w-56 font-semibold!">Skills</label>
 //                 <div className="flex flex-wrap items-center gap-2 input w-full">
 //                     {firstTaskTags.map((tag: string,index: number) =>(
 //                         <div 
@@ -849,7 +849,7 @@ const ProjectTeam: React.FC<ProjectTeamProps> = ({
 //                         onChange={(e) => setTagInput(e.target.value)}
 //                         onKeyDown={handleKeyDown}
 //                         placeholder="Add a tag"
-//                         className="flex-grow px-2 py-1 text-sm border-none focus:ring-0 focus:outline-none bg-transparent"
+//                         className="grow px-2 py-1 text-sm border-none focus:ring-0 focus:outline-hidden bg-transparent"
 //                     />
 //                 </div>
 //             </div>

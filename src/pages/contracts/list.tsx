@@ -124,7 +124,7 @@ const Contracts: React.FC = () => {
                                     placeholder="Search contracts..."
                                     value={searchQuery}
                                     onChange={handleSearchChange}
-                                    className="input input-sm !ps-8"
+                                    className="input input-sm ps-8!"
                                 />
                             </div>
                             <label className="switch switch-sm">
@@ -188,7 +188,7 @@ const Contracts: React.FC = () => {
                                                         <Link to={`/contracts/${contract.id}/edit`}
                                                             title="Show User"
                                                             type="button" 
-                                                            className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                            className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                                         >
                                                             <HiOutlinePencilSquare className="size-4 " />
                                                         </Link>
@@ -199,7 +199,7 @@ const Contracts: React.FC = () => {
                                                     <button 
                                                         title="Delete User"
                                                         type="button" 
-                                                        className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                        className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                                         onClick={() => contract.id && handleDeleteContract(contract.id)}
                                                     >
                                                         <HiOutlineTrash className="size-4 " />
@@ -233,7 +233,7 @@ const Contracts: React.FC = () => {
                                 <div className="flex items-center gap-2 order-2 md:order-1">
                                     Show
                                     <select 
-                                        className="select select-sm !w-16"
+                                        className="select select-sm w-16!"
                                         data-datatable-size="true"
                                         title="perpage"
                                         name="perpage"

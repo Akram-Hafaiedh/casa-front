@@ -57,7 +57,7 @@ const Login: React.FC = () => {
                             <input
                                 type="email"
                                 placeholder="Username or e-mail"
-                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
                             <input
                                 type="password"
                                 placeholder="Password"
-                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />

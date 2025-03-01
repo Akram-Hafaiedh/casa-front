@@ -139,7 +139,7 @@ const List = () => {
                             </div>
 
                             <div className="d-flex flex-column">
-                                <h2 className="text-2.5xl mb-1">File Manager</h2>
+                                <h2 className="text-2-5xl mb-1">File Manager</h2>
                                 <div className="text-muted fw-bold">
                                     <a href="#">Home</a>
                                     <span className="mx-3">|</span>
@@ -161,7 +161,7 @@ const List = () => {
                                 <input 
                                     onChange={handleSearchChange}
                                     value={searchQuery}
-                                    className="input input-sm !ps-8"
+                                    className="input input-sm ps-8!"
                                     placeholder="Search Files &amp; Folders"
                                     type="text" 
                                 />

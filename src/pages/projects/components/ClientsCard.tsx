@@ -17,10 +17,10 @@ const ClientsCard: React.FC<ClientsCardProps> = ({ customers = [] }) => (
       {customers.length > 0 && (
           <thead>
               <tr>
-                  <th className="text-start min-w-[150px] !text-gray-700">Full Name</th>
-                  <th className="min-w-[100px] !text-gray-700">Phone</th>
-                  <th className="text-start min-w-52 !text-gray-700">Address</th>
-                  <th className="min-w-[110px] !text-gray-700">Created At</th>
+                  <th className="text-start min-w-[150px] text-gray-700!">Full Name</th>
+                  <th className="min-w-[100px] text-gray-700!">Phone</th>
+                  <th className="text-start min-w-52 text-gray-700!">Address</th>
+                  <th className="min-w-[110px] text-gray-700!">Created At</th>
                   <th className="w-[30px]"></th>
               </tr>
           </thead>
@@ -40,7 +40,7 @@ const ClientsCard: React.FC<ClientsCardProps> = ({ customers = [] }) => (
               />
             ))
           ) : (
-            <tr className="flex-grow">
+            <tr className="grow">
               <td colSpan={5} className="text-center pt-15 pb-15">
                 <div className="flex flex-col items-center justify-center h-full">
                   <div className="max-w-md">

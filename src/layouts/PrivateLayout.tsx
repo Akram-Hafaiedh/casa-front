@@ -7,7 +7,7 @@ const PrivateLayout: React.FC = () => {
     return (
         <div className="flex h-full">
             <Sidebar />
-            <div className="wrapper flex flex-grow p-6 flex-col">
+            <div className="wrapper flex grow p-6 flex-col">
                 <Header />
                 <main className="relative">
                     <Outlet />

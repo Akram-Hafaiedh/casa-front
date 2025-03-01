@@ -187,7 +187,7 @@ const CustomerCreate: React.FC = () => {
         <div className="container-fixed">
         {/* <div className="flex items-center justify-between">
             <h1 className="mb-4 text-2xl font-bold">Create Customer</h1>
-            <Link to="/customers" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 flex items-center space-x-4">
+            <Link to="/customers" className="px-4 py-2 text-white bg-blue-500 rounded-sm hover:bg-blue-700 flex items-center space-x-4">
               <IoReturnDownBackOutline /> <span>Customers List</span>
             </Link>
         </div> */}
@@ -233,7 +233,7 @@ const CustomerCreate: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <div className="card-body !py-16">
+              <div className="card-body py-16!">
                 {steps.map((step, index) => (
                   <div key={index} className={`flex items-center justify-center font-semibold text-gray-900 ${index + 1 === currentStep ? '' : 'hidden'}`} id={`step-${index + 1}`}>
                       {step.component}
@@ -242,16 +242,16 @@ const CustomerCreate: React.FC = () => {
               </div>
               <div className="card-footer py-8 flex justify-between">
                 <div>
-                  <button type="button" className={`btn btn-light ${currentStep === 1 ? '!hidden' : ''}`} onClick={handlePreviousStep}>
+                  <button type="button" className={`btn btn-light ${currentStep === 1 ? 'hidden!' : ''}`} onClick={handlePreviousStep}>
                       Back
                   </button>
                 </div>
                 <div>
-                  <button type="button" className={`btn btn-light ${currentStep === steps.length ? '!hidden' : ''}`} onClick={handleNextStep}>
+                  <button type="button" className={`btn btn-light ${currentStep === steps.length ? 'hidden!' : ''}`} onClick={handleNextStep}>
                       Next
                   </button>
                   
-                  <button type="submit" className={`btn btn-primary ${currentStep === steps.length ? '' : '!hidden'}`}>
+                  <button type="submit" className={`btn btn-primary ${currentStep === steps.length ? '' : 'hidden!'}`}>
                       Submit
                   </button>
                 </div>

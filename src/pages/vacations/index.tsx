@@ -122,10 +122,10 @@ const Vacations: React.FC = () => {
             {/* <div className="flex justify-between items-center">
                 <h1 className="mb-4 text-3xl font-bold">Vacations</h1>
                 <div className="flex space-x-2">
-                    <button type='button' onClick={toggleModal} className="px-4 py-2 text-white bg-green-500 rounded">
+                    <button type='button' onClick={toggleModal} className="px-4 py-2 text-white bg-green-500 rounded-sm">
                         Create New Vacation
                     </button>
-                    <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded">{user?.role === 'Administrator' ? 'Process Vacations' : 'My Vacations'}
+                    <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded-sm">{user?.role === 'Administrator' ? 'Process Vacations' : 'My Vacations'}
                     </Link>
                 </div>
             </div> */}

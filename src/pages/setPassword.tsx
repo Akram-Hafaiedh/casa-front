@@ -56,7 +56,7 @@ const SetPassword: React.FC = () => {
                             <input
                                 type="password"
                                 placeholder="Password"
-                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
@@ -68,7 +68,7 @@ const SetPassword: React.FC = () => {
                             <input
                                 type="password"
                                 placeholder="Confirm Password"
-                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full py-3 pl-10 pr-4 border rounded-full focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                                 value={passwordConfirmation}
                                 onChange={(e) => setPasswordConfirmation(e.target.value)}
                             />

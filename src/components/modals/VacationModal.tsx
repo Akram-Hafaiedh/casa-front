@@ -110,7 +110,7 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
                                 id="comment"
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
-                                className="w-full px-3 py-2 border rounded"
+                                className="w-full px-3 py-2 border rounded-sm"
                                 placeholder="Vacation Comment"
                                 required
                             />
@@ -122,7 +122,7 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
                                 type="date"
                                 value={startDate || ''}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full px-3 py-2 border rounded"
+                                className="w-full px-3 py-2 border rounded-sm"
                                 required
                             />
                         </div>
@@ -133,7 +133,7 @@ const VacationModal : React.FC<VacationModalProps> = ({ isOpen, onClose, selecte
                                 type="date"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
-                                className="w-full px-3 py-2 border rounded"
+                                className="w-full px-3 py-2 border rounded-sm"
                                 required
                             />
                             </div>

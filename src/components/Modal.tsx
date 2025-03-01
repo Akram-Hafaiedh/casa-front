@@ -28,7 +28,7 @@ const GlobalModal: React.FC = () => {
 
         {/* Modal */}
         <div
-            className={`z-[90] fixed inset-0 flex items-center justify-center p-4 ${isModalOpen ? 'block' : 'hidden' }`}
+            className={`z-90 fixed inset-0 flex items-center justify-center p-4 ${isModalOpen ? 'block' : 'hidden' }`}
             role="dialog"
             aria-modal="true"
         >

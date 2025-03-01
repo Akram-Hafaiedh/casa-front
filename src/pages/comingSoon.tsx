@@ -53,7 +53,7 @@ const ComingSoon = () => {
     }
 
     return (
-        <div className="flex-grow h-screen w-full">
+        <div className="grow h-screen w-full">
             <div className="flex flex-col items-center justify-center grow h-[95%]">
                 <div className="mb-10">
                     <img src="images/illustrations/22.svg"
@@ -64,7 +64,7 @@ const ComingSoon = () => {
                         alt="image"
                     /> */}
                 </div>
-                <h3 className="text-2.5xl font-semibold text-gray-900 text-center mb-2">
+                <h3 className="text-2-5xl font-semibold text-gray-900 text-center mb-2">
                     We're Launching Soon 
                 </h3>
                 <div className="text-md text-center text-gray-700 mb-10">

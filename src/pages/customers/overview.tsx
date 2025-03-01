@@ -33,7 +33,7 @@ const Overview = () => {
                     key={index}
                     className="flex-1 flex flex-col gap-1 text-center"
                   >
-                    <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+                    <span className="text-gray-900 text-2xl lg:text-2-5xl leading-none font-semibold">
                       {stat.value}
                     </span>
                     <span className="text-gray-700 text-sm">
@@ -41,7 +41,7 @@ const Overview = () => {
                     </span>
                   </div>
                   {index !== stats.length - 1 && (
-                    <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                    <span className="not-last:border-e border-e-gray-300 my-1"></span>
                   )}
                 </>
               ))}
@@ -71,7 +71,7 @@ const Overview = () => {
             ))}
           </div>
           </div>
-          <div className="card-footer !justify-center">
+          <div className="card-footer justify-center!">
             <Link to={`/customers/${customerId}/taxes`}  className="btn btn-link">
               View all Taxes
             </Link>
@@ -137,7 +137,7 @@ const Overview = () => {
               ))}
             </div>
           </div>
-          <div className="card-footer !justify-center">
+          <div className="card-footer justify-center!">
             <Link to={`/customers/${customerId}/taxes`}  className="btn btn-link">
               View all Insurances
             </Link>

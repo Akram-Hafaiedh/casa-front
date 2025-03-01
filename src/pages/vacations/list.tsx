@@ -103,12 +103,12 @@ const VacationListing = () => {
                 <h1 className="mb-4 text-3xl font-bold">Vacations</h1>
                 <div className="flex space-x-2">
                     {user?.role !== 'admin' && (
-                        <button type='button' onClick={toggleModal} className="px-4 py-2 text-white bg-green-500 rounded">
+                        <button type='button' onClick={toggleModal} className="px-4 py-2 text-white bg-green-500 rounded-sm">
                             Create New Vacation
                         </button>
                     )}
 
-                    <Link to="/vacations" className="px-4 py-2 text-white bg-blue-500 rounded">Back to calendar</Link>
+                    <Link to="/vacations" className="px-4 py-2 text-white bg-blue-500 rounded-sm">Back to calendar</Link>
                 </div>
             </div> */}
 
@@ -151,7 +151,7 @@ const VacationListing = () => {
                                             title="edit vacation"
                                             type="button"
                                             onClick={() => openEditModal(vacation)}
-                                            className="px-4 py-2 text-white bg-blue-500 rounded"
+                                            className="px-4 py-2 text-white bg-blue-500 rounded-sm"
                                         >
                                             <HiOutlinePencilSquare className="w-5 h-5" />
                                         </button>
@@ -159,7 +159,7 @@ const VacationListing = () => {
                                             title="delete vacation"
                                             type="button"
                                             onClick={() => openDeleteModal(vacation)}
-                                            className="px-4 py-2 text-white bg-red-500 rounded"
+                                            className="px-4 py-2 text-white bg-red-500 rounded-sm"
                                         >
                                             <HiOutlineTrash className="w-5 h-5" />
                                         </button>

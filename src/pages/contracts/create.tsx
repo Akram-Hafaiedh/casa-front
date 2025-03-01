@@ -80,7 +80,7 @@ const ContractCreate: React.FC = () => {
             <div>
                 {/* <div className="flex items-center justify-between">
                     <h1 className="mb-4 text-2xl font-bold">Create Contract</h1>
-                    <Link to="/contracts" className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 flex items-center space-x-4">
+                    <Link to="/contracts" className="px-4 py-2 text-white bg-blue-500 rounded-sm hover:bg-blue-600 flex items-center space-x-4">
                         <IoReturnDownBackOutline /> <span>Contracts List</span>
                     </Link>
                 </div> */}
@@ -177,7 +177,7 @@ const ContractCreate: React.FC = () => {
                         />
                     </div>
                     <div className="flex items-center justify-end">
-                        <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded">Create Contract</button>
+                        <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded-sm">Create Contract</button>
                     </div>
                 </form>
             </div>

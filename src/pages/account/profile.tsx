@@ -36,7 +36,7 @@ const AccountProfile = () => {
                                                     <div className="flex justify-center items-center">
                                                         <input className="hidden" type="file" accept="image/*" />
                                                         <div className="image-input size-16">
-                                                            <div className="btn btn-icon btn-icon-xs btn-light shadow-default absolute z-1 !size-5 -top-0.5 -end-0.5 !rounded-full">
+                                                            <div className="btn btn-icon btn-icon-xs btn-light shadow-default absolute z-1 size-5! -top-0.5 -end-0.5 rounded-full!">
                                                                 {/* <i className="ki-filled ki-cross"></i> */}
                                                                 <HiOutlineXMark className="size-6" />
                                                             </div>
@@ -235,7 +235,7 @@ const AccountProfile = () => {
                                                     <td className="min-w-32 text-gray-700 font-normal">
                                                         MacOS 12.19.6<br />Active: Today at 9:03 AM
                                                     </td>
-                                                    <td className="!pr-7.5 min-w-16 text-end">
+                                                    <td className="pr-7.5! min-w-16 text-end">
                                                         <a href="#" className="btn btn-sm btn-icon btn-light btn-clear">
                                                             <HiArrowRightStartOnRectangle />
                                                             {/* <i className="ki-filled ki-exit-right"></i> */}
@@ -263,7 +263,7 @@ const AccountProfile = () => {
                                                     <td className="min-w-32 text-gray-700 font-normal">
                                                         Android 14.35<br />Active: Mar 18 at 9:03 AM
                                                     </td>
-                                                    <td className="!pr-7.5 min-w-16 text-end">
+                                                    <td className="pr-7.5! min-w-16 text-end">
                                                         <a href="#" className="btn btn-sm btn-icon btn-light btn-clear">
                                                             {/* <i className="ki-filled ki-exit-right"></i> */}
                                                             <HiArrowRightStartOnRectangle />
@@ -288,7 +288,7 @@ const AccountProfile = () => {
                                 <div className="card-body">
                                     <div className="flex flex-wrap justify-center gap-2 py-1">
                                         <div className="flex flex-col items-center gap-1.5">
-                                            <span className="text-gray-900 text-2xl lg:text-2.5xl font-semibold">
+                                            <span className="text-gray-900 text-2xl lg:text-2-5xl font-semibold">
                                                 397
                                             </span>
                                             <span className="text-gray-700 text-sm font-normal">
@@ -297,7 +297,7 @@ const AccountProfile = () => {
                                         </div>
                                         <span className="sm:ms-8 sm:ps-8 border-s border-s-gray-200"></span>
                                         <div className="flex flex-col items-center gap-1.5">
-                                            <span className="text-gray-900 text-2xl lg:text-2.5xl font-semibold">
+                                            <span className="text-gray-900 text-2xl lg:text-2-5xl font-semibold">
                                                 89k
                                             </span>
                                             <span className="text-gray-700 text-sm font-normal">

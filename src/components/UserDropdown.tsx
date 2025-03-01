@@ -113,7 +113,7 @@ const UserDropdown = () => {
                             />
                         </div>
                     </div>
-                    <div className="menu-item !px-4 !py-1.5">
+                    <div className="menu-item px-4! py-1.5!">
                         <button type="button" onClick={handleLogout} className="btn btn-sm btn-light justify-center">
                             Logout
                         </button>

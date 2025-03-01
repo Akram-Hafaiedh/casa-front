@@ -45,7 +45,7 @@ const Register: React.FC = () => {
                     <input
                         id="email"
                         type="email"
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none ${email === '' ? 'border-red-500' : 'focus:ring-2 border-gray-300 focus:ring-indigo-400'}`}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-hidden ${email === '' ? 'border-red-500' : 'focus:ring-2 border-gray-300 focus:ring-indigo-400'}`}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
@@ -59,7 +59,7 @@ const Register: React.FC = () => {
                     <input
                         id="password"
                         type="password"
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none ${password === '' ? 'border-red-500' : 'focus:ring-2 border-gray-300 focus:ring-indigo-400'}`}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-hidden ${password === '' ? 'border-red-500' : 'focus:ring-2 border-gray-300 focus:ring-indigo-400'}`}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Enter your password"
@@ -73,7 +73,7 @@ const Register: React.FC = () => {
                     <input
                         id="confirmPassword"
                         type="password"
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none ${confirmPassword === '' || password !== confirmPassword ? 'border-red-500' : 'focus:ring-2 border-gray-300 focus:ring-indigo-400'}`}
+                        className={`w-full px-3 py-2 border rounded-lg focus:outline-hidden ${confirmPassword === '' || password !== confirmPassword ? 'border-red-500' : 'focus:ring-2 border-gray-300 focus:ring-indigo-400'}`}
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="Confirm your password"
@@ -82,7 +82,7 @@ const Register: React.FC = () => {
 
                 <button
                     type="submit"
-                    className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                    className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-400">
                     Register
                 </button>
             </form>

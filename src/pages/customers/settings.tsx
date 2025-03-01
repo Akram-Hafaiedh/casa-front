@@ -235,7 +235,7 @@ const Settings: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
-                <div className="card-footer !justify-end">
+                <div className="card-footer justify-end!">
                     <button type="submit" className="btn btn-primary">
                         Save Changes
                     </button>

@@ -23,7 +23,7 @@ const Vacations: React.FC = () => {
     useEffect(() => {
         const buttons = document.querySelectorAll('.fc-button');
         buttons.forEach(button => {
-            button.classList.add('bg-blue-500', 'text-white', 'px-4', 'py-2', 'rounded');
+            button.classList.add('bg-blue-500', 'text-white', 'px-4', 'py-2', 'rounded-sm');
         });
     }, []);
     const handleEventClick = (arg: EventClickArg) => {
@@ -38,7 +38,7 @@ const Vacations: React.FC = () => {
         <>
             <div className="flex justify-between items-center">
                 <h1 className="mb-4 text-3xl font-bold">Vacations</h1>
-                <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded">My Vacations</Link>
+                <Link to="/vacations/list" className="px-4 py-2 text-white bg-blue-500 rounded-sm">My Vacations</Link>
             </div>
 
             {/* Add more content or components here */}

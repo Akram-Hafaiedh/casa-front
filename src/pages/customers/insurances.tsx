@@ -113,7 +113,7 @@ const Insurances = () => {
                   onClick={()=>openEditModal(null)}
                   className="btn btn-primary btn-sm"
               >
-                  <HiOutlinePlusCircle className="!size-5 mr-2" /> Add Insurance
+                  <HiOutlinePlusCircle className="size-5! mr-2" /> Add Insurance
               </button>
           </div>
           <div className="card-body">
@@ -161,7 +161,7 @@ const Insurances = () => {
                                                   onClick={()=>openEditModal(insurance)}
                                                   title="Edit Tax"
                                                   type="button" 
-                                                  className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                  className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                               >
                                                   <HiOutlinePencilSquare className="size-4 " />
                                               </button>
@@ -172,7 +172,7 @@ const Insurances = () => {
                                           <button 
                                               title="Delete User"
                                               type="button" 
-                                              className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                              className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                               onClick={() => openDeleteModal(insurance)}
                                           >
                                               <HiOutlineTrash className="size-4 " />
@@ -187,7 +187,7 @@ const Insurances = () => {
                       <div className="flex items-center gap-2 order-2 md:order-1">
                           Show
                           <select 
-                              className="select select-sm !w-16"
+                              className="select select-sm w-16!"
                               data-datatable-size="true"
                               title="perpage"
                               name="perpage"

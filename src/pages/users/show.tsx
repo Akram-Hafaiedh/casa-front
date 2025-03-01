@@ -151,8 +151,8 @@ const UserDetails = () => {
         <div>
             <div className="flex items-center justify-between">
                 <h1 className="mb-4 text-2xl font-bold">Employee Details</h1>
-                {/* <button type="button" onClick={() => setIsModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded">Add User</button> */}
-                <Link to="/users/create" className="px-4 py-2 text-white bg-blue-500 rounded">Add Employee</Link>
+                {/* <button type="button" onClick={() => setIsModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded-sm">Add User</button> */}
+                <Link to="/users/create" className="px-4 py-2 text-white bg-blue-500 rounded-sm">Add Employee</Link>
             </div>
             {/* Overview with Tabs */}
             <div className="bg-white relative">
@@ -196,7 +196,7 @@ const UserDetails = () => {
                         Actions <FaCaretDown />
                     </button>
                     {dropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-sm shadow-lg">
                             <button
                                 type="button"
                                 className={`block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left ${contract?.user_id ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -425,14 +425,14 @@ const UserDetails = () => {
                         <div className="flex justify-end gap-4">
                             <button
                                 type="button"
-                                className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-sm"
                                 onClick={handleCancelContractClick}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
-                                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-sm"
                                 onClick={handleSubmitContract}
                             >
                                 Save

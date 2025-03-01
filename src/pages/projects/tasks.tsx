@@ -144,7 +144,7 @@ const ProjectTasks: React.FC = () => {
                     <div className="modal-body my-5">
                         <p className="text-gray-700">Are you sure you want to delete this task?</p>
                     </div>
-                    <div className="modal-footer !justify-end gap-2">
+                    <div className="modal-footer justify-end! gap-2">
                         <button
                             type="button"
                             title="cancel-delete"
@@ -346,7 +346,7 @@ const ProjectTasks: React.FC = () => {
             {taskStatuses.map((status) => {
                 const filteredTasks = filterTasksByStatus(status.name);
                 return (
-                <div key={status.id} className="card grow min-w-[400px] flex-shrink-0">
+                <div key={status.id} className="card grow min-w-[400px] shrink-0">
                     <div className="card-header">
                         <h3 className="card-title">
                             {status.name}

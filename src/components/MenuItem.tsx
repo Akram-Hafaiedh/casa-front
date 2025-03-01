@@ -15,11 +15,11 @@ const MenuItem : React.FC<MenuItemProps>= ({to, icon: Icon, title, isPrefixMatch
         <div className={`menu-item` + (isActive ? ' active' : '')}>
             <Link  
                 to={to}
-                className="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] !ps-[10px] !pe-[10px] !py-[6px]">
+                className="menu-link flex items-center grow cursor-pointer border border-transparent gap-[10px] ps-[10px]! pe-[10px]! py-[6px]!">
                 <div className="menu-icon items-start text-gray-500 dark:text-gray-400 w-[20px] h-[28px]">
                     <Icon className="text-xl" />
                 </div>
-                <div className="menu-title !text-md font-semibold text-gray-800 menu-item-active:text-primary menu-link-hover:!text-primary">
+                <div className="menu-title text-md! font-semibold text-gray-800 menu-item-active:text-primary menu-link-hover:!text-primary">
                     {title}
                 </div>
             </Link>

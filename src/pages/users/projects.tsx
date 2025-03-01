@@ -6,7 +6,7 @@ import { Project } from "../../types/Project";
 const UserProjects: React.FC = () => {
     const user = useOutletContext<User>()
     if ( !user.projects || user.projects.length === 0) return (
-        <div className="card p-8 lg:p-12 border-none !shadow-none">
+        <div className="card p-8 lg:p-12 border-none shadow-none!">
             <div className="card-body">
                 <div className="grid justify-center py-5">
                     <img src="/images/illustrations/11.svg"
@@ -78,7 +78,7 @@ const UserProjects: React.FC = () => {
                                                 </span>
                                             )}
                                             
-                                            <div className="progress h-1.5 !w-36 progress-primary">
+                                            <div className="progress h-1.5 w-36! progress-primary">
                                                 <div className="progress-bar" style={{width: "50%"}}></div>
                                             </div>
                                         </div>

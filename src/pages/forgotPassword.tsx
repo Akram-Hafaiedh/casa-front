@@ -34,7 +34,7 @@ const ForgotPassword: React.FC = () => {
                         <input
                             id="email"
                             type="email"
-                            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${email === '' ? 'border-red-500' : 'border-gray-300'} focus:ring-indigo-400`}
+                            className={`w-full px-3 py-2 border rounded-lg focus:outline-hidden focus:ring-2 ${email === '' ? 'border-red-500' : 'border-gray-300'} focus:ring-indigo-400`}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
@@ -43,7 +43,7 @@ const ForgotPassword: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        className="w-full px-4 py-2 text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-hidden focus:ring-2 focus:ring-indigo-400">
                         Send Reset Instructions
                     </button>
                 </form>

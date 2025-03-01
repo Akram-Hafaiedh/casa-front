@@ -17,10 +17,10 @@ const ProjectsCard: React.FC<ProjectsCardProps> = ({ projects = [] }) => (
         {projects.length > 0 && (
           <thead>
             <tr>
-              <th className="text-start min-w-52 !font-normal !text-gray-700">Project Name</th>
-              <th className="min-w-40 !font-normal !text-gray-700">Progress</th>
-              <th className="min-w-32 !font-normal !text-gray-700">People</th>
-              <th className="min-w-32 !font-normal !text-gray-700">Due Date</th>
+              <th className="text-start min-w-52 font-normal! text-gray-700!">Project Name</th>
+              <th className="min-w-40 font-normal! text-gray-700!">Progress</th>
+              <th className="min-w-32 font-normal! text-gray-700!">People</th>
+              <th className="min-w-32 font-normal! text-gray-700!">Due Date</th>
               <th className="w-[30px]"></th>
             </tr>
           </thead>
@@ -38,7 +38,7 @@ const ProjectsCard: React.FC<ProjectsCardProps> = ({ projects = [] }) => (
               />
             ))
           ) : (
-            <tr className="flex-grow">
+            <tr className="grow">
               <td colSpan={5} className="text-center pt-15 pb-15">
                 <div className="flex flex-col items-center justify-center h-full">
                   <div className="max-w-md">

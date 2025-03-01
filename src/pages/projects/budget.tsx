@@ -16,7 +16,7 @@ const ProjectBudget : React.FC = () => {
             <div className="col-span-2 grid grid-cols-1 gap-5 lg:gap-7.5">
                 <div className="flex flex-col gap-5 lg:gap-7.5">
                     <div className="card">
-                        <div className="card-body !px-10 !py-7.5">
+                        <div className="card-body px-10! py-7.5!">
                             <div className="grid grid-col gap-4">
                                 <div className="flex flex-col gap-4">
                                     <label className="form-label" htmlFor='project-name'>Current Status</label>
@@ -48,9 +48,9 @@ const ProjectBudget : React.FC = () => {
                                 <div className="flex flex-col gap-4">
                                     <label className="form-label" htmlFor='project-usage'>Budget Usage</label>
                                     <div className="flex flex-row items-center space-x-2">
-                                        <label htmlFor="precise" className="has-[:checked]:ring-indigo-200 has-[:checked]:text-indigo-900 has-[:checked]:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 ring-1 ring-transparent hover:bg-slate-100">
+                                        <label htmlFor="precise" className="has-checked:ring-indigo-200 has-checked:text-indigo-900 has-checked:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 ring-1 ring-transparent hover:bg-slate-100">
                                             <input
-                                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-none ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
+                                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-hidden ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
                                                 name="budget_usage"
                                                 id="precise"
                                                 type="radio"
@@ -65,9 +65,9 @@ const ProjectBudget : React.FC = () => {
                                                 </span>
                                             </div>
                                         </label>
-                                        <label htmlFor="normal" className="text-slate-700 has-[:checked]:ring-indigo-200 has-[:checked]:text-indigo-800 has-[:checked]:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 ring-1 ring-transparent hover:bg-slate-100">
+                                        <label htmlFor="normal" className="text-slate-700 has-checked:ring-indigo-200 has-checked:text-indigo-800 has-checked:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 ring-1 ring-transparent hover:bg-slate-100">
                                             <input 
-                                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-none ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
+                                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-hidden ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
                                                 name="budget_usage"
                                                 id="normal"
                                                 type="radio"
@@ -82,9 +82,9 @@ const ProjectBudget : React.FC = () => {
                                                 </span>
                                             </div>
                                         </label>
-                                        <label htmlFor="extreme" className="text-slate-700 has-[:checked]:ring-indigo-200 has-[:checked]:text-indigo-800 has-[:checked]:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 ring-1 ring-transparent hover:bg-slate-100">
+                                        <label htmlFor="extreme" className="text-slate-700 has-checked:ring-indigo-200 has-checked:text-indigo-800 has-checked:bg-indigo-50 grid grid-cols-[24px_1fr_auto] items-start gap-6 rounded-lg p-4 ring-1 ring-transparent hover:bg-slate-100">
                                             <input 
-                                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-none ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
+                                                className="box-content h-1.5 w-1.5 appearance-none rounded-full border-[5px] border-white bg-white bg-clip-padding outline-hidden ring-1 ring-gray-950/10 checked:border-indigo-500 checked:ring-indigo-500 mt-2"
                                                 name="budget_usage"
                                                 id="extreme"
                                                 value="extreme"
@@ -174,7 +174,7 @@ const ProjectBudget : React.FC = () => {
                                     Learn more
                                 </a>
                             </div>
-                            <span className="hidden [&:not(:last-child)]:block [&:not(:last-child)]:border-b border-b-gray-200"></span>
+                            <span className="hidden not-last:block not-last:border-b border-b-gray-200"></span>
                             <div className="flex flex-col items-start gap-2.5">
                                 <div className="mb-2.5">
                                     <Hexagon
@@ -197,7 +197,7 @@ const ProjectBudget : React.FC = () => {
                                     Learn more
                                 </a>
                             </div>
-                            <span className="hidden [&:not(:last-child)]:block [&:not(:last-child)]:border-b border-b-gray-200"></span>
+                            <span className="hidden not-last:block not-last:border-b border-b-gray-200"></span>
                             <div className="flex flex-col items-start gap-2.5">
                                 <div className="mb-2.5">
                                     <Hexagon
@@ -221,7 +221,7 @@ const ProjectBudget : React.FC = () => {
                                     Learn more
                                 </a>
                             </div>
-                            <span className="hidden [&:not(:last-child)]:block [&:not(:last-child)]:border-b border-b-gray-200"></span>
+                            <span className="hidden not-last:block not-last:border-b border-b-gray-200"></span>
                         </div>
                     </div>
                 </div>

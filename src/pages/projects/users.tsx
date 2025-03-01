@@ -182,7 +182,7 @@ const ProjectUsers: React.FC = () => {
                         </div>
                         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
                     </div>
-                    <div className="modal-footer !justify-end">
+                    <div className="modal-footer justify-end!">
                         <div className="flex gap-4">
                             <button 
                                 type="button"
@@ -261,7 +261,7 @@ const ProjectUsers: React.FC = () => {
                                         <div className="flex size-2.5 bg-success rounded-full absolute bottom-0.5 start-16 transform -translate-y-1/2"></div>
                                     </div>
                                 ): (
-                                    <div className="flex items-center justify-center relative text-2.5xl text-primary size-20 ring-1 ring-primary-clarity bg-primary-light rounded-full">
+                                    <div className="flex items-center justify-center relative text-2-5xl text-primary size-20 ring-1 ring-primary-clarity bg-primary-light rounded-full">
                                         {user.first_name.charAt(0).toUpperCase() + user.last_name.charAt(0).toUpperCase()}
                                         <div className="flex size-2.5 bg-success rounded-full absolute bottom-0.5 start-16 transform -translate-y-1/2"></div>
                                     </div>

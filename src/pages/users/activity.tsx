@@ -230,7 +230,7 @@ const UserActivity: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="card-footer !justify-center">
+            <div className="card-footer justify-center!">
               <a href="#" className="btn btn-link">All-time Activity</a>
             </div>
           </div>

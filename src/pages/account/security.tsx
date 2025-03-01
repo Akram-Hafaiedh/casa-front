@@ -62,7 +62,7 @@ const AccountSecurity: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="card-footer !justify-center">
+                                <div className="card-footer justify-center!">
                                     <a className="btn btn-link" href="/metronic/tailwind/react/demo1/account/security/overview">
                                         Review Security Tips
                                     </a>

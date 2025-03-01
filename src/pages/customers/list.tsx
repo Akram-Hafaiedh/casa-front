@@ -116,7 +116,7 @@ const CustomerListing: React.FC = () => {
                                 <input 
                                     onChange={handleSearchChange}
                                     value={searchQuery}
-                                    className="input input-sm !ps-8"
+                                    className="input input-sm ps-8!"
                                     placeholder="Search Members"
                                     type="text" 
                                 />
@@ -173,7 +173,7 @@ const CustomerListing: React.FC = () => {
                                                         <Link to={`/customers/${customer.id}/settings`}
                                                             title="Show Customer"
                                                             type="button" 
-                                                            className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                            className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                                         >
                                                             <HiOutlinePencilSquare className="size-4 " />
                                                         </Link>
@@ -184,7 +184,7 @@ const CustomerListing: React.FC = () => {
                                                     <button 
                                                         title="Delete User"
                                                         type="button" 
-                                                        className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded"
+                                                        className="px-2 py-1 hover:text-dark hover:bg-gray-200 rounded-sm"
                                                         onClick={() => openModal(customer.id)}
                                                     >
                                                         <HiOutlineTrash className="size-4 " />
@@ -217,7 +217,7 @@ const CustomerListing: React.FC = () => {
                                 <div className="flex items-center gap-2 order-2 md:order-1">
                                     Show
                                     <select 
-                                        className="select select-sm !w-16"
+                                        className="select select-sm w-16!"
                                         data-datatable-size="true"
                                         title="perpage"
                                         name="perpage"

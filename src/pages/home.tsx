@@ -114,16 +114,16 @@ const HomePage: React.FC = () => {
                                 <table className="table text-end">
                                     <thead>
                                         <tr>
-                                            <th className="text-start min-w-52 !font-normal !text-gray-700">
+                                            <th className="text-start min-w-52 font-normal! text-gray-700!">
                                                 Project Name
                                             </th>
-                                            <th className="min-w-40 !font-normal !text-gray-700">
+                                            <th className="min-w-40 font-normal! text-gray-700!">
                                                 Progress
                                             </th>
-                                            <th className="min-w-32 !font-normal !text-gray-700">
+                                            <th className="min-w-32 font-normal! text-gray-700!">
                                                 People
                                             </th>
-                                            <th className="min-w-32 !font-normal !text-gray-700">
+                                            <th className="min-w-32 font-normal! text-gray-700!">
                                                 Due Date
                                             </th>
                                             <th className="w-[30px]"></th>

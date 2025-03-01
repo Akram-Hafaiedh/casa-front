@@ -231,65 +231,66 @@ const SearchMenu: React.FC<SearchMenuProps> = ({onClose}) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="menu-item"><div className="menu-link flex items-center justify-between gap-2">
-                                    <div className="flex items-center grow gap-2">
-                                        <div className="flex items-center justify-center size-10 shrink-0 rounded-full border border-gray-200 bg-gray-100">
-                                            <img src="/images/brand-logos/google-webdev.svg"
-                                                className="size-6 shrink-0" alt="Google Webdev"
-                                            />
+                                <div className="menu-item">
+                                    <div className="menu-link flex items-center justify-between gap-2">
+                                        <div className="flex items-center grow gap-2">
+                                            <div className="flex items-center justify-center size-10 shrink-0 rounded-full border border-gray-200 bg-gray-100">
+                                                <img src="/images/brand-logos/google-webdev.svg"
+                                                    className="size-6 shrink-0" alt="Google Webdev"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-0.5">
+                                                <a href="#" className="text-2sm font-semibold text-gray-900 hover:text-primary-active">
+                                                    Google Webdev
+                                                </a>
+                                                <span className="text-2xs font-medium text-gray-600">
+                                                    Building web experiences
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col gap-0.5">
-                                            <a href="#" className="text-2sm font-semibold text-gray-900 hover:text-primary-active">
-                                                Google Webdev
-                                            </a>
-                                            <span className="text-2xs font-medium text-gray-600">
-                                                Building web experiences
-                                            </span>
-                                        </div>
-                                    </div>
-                                <div className="flex justify-end shrink-0">
-                                    <div className="flex -space-x-2">
-                                        <div className="flex">
-                                            <img src="/images/avatars/300-14.png"
-                                                className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" alt=""
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                        <img src="/images/avatars/300-20.png"
-                                            className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" alt=""
-                                        />
-                                    </div>
-                                    <div className="flex">
-                                        <img src="/images/avatars/300-21.png"
-                                            className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" alt=""
-                                        />
-                                    </div>
+                                        <div className="flex justify-end shrink-0">
+                                            <div className="flex -space-x-2">
+                                                <div className="flex">
+                                                    <img src="/images/avatars/300-14.png"
+                                                        className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" alt=""
+                                                />
+                                            </div>
+                                            <div className="flex">
+                                                <img src="/images/avatars/300-20.png"
+                                                    className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" alt=""
+                                                />
+                                            </div>
+                                            <div className="flex">
+                                                <img src="/images/avatars/300-21.png"
+                                                    className="hover:z-5 relative shrink-0 rounded-full ring-1 ring-light-light size-[30px]" alt=""
+                                                />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id=":r2k:" role="tabpanel"
-                            className="base-TabPanel-root base-TabPanel-hidden"
-                            aria-labelledby=":r2d:"
-                            hidden=""
-                        ></div>
-                        <div id=":r2l:" role="tabpanel"
-                            className="base-TabPanel-root base-TabPanel-hidden"
-                            aria-labelledby=":r2e:"
-                            hidden=""
-                        ></div>
-                        <div id=":r2m:" role="tabpanel"
-                            className="base-TabPanel-root base-TabPanel-hidden"
-                            aria-labelledby=":r2f:"
-                            hidden=""
-                        ></div>
-                        <div id=":r2n:" role="tabpanel"
-                            className="base-TabPanel-root base-TabPanel-hidden"
-                            aria-labelledby=":r2g:"
-                            hidden=""
-                        ></div>
+                    </div>
+                    <div id=":r2k:" role="tabpanel"
+                        className="base-TabPanel-root base-TabPanel-hidden"
+                        aria-labelledby=":r2d:"
+                        hidden=""
+                    ></div>
+                    <div id=":r2l:" role="tabpanel"
+                        className="base-TabPanel-root base-TabPanel-hidden"
+                        aria-labelledby=":r2e:"
+                        hidden=""
+                    ></div>
+                    <div id=":r2m:" role="tabpanel"
+                        className="base-TabPanel-root base-TabPanel-hidden"
+                        aria-labelledby=":r2f:"
+                        hidden=""
+                    ></div>
+                    <div id=":r2n:" role="tabpanel"
+                        className="base-TabPanel-root base-TabPanel-hidden"
+                        aria-labelledby=":r2g:"
+                        hidden=""
+                    ></div>
                     </div>
                 </div>
             </div>

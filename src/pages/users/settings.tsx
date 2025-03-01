@@ -125,7 +125,7 @@ const UserSettings : React.FC = () => {
 
                   <button
                     type="button" 
-                    className="btn btn-icon btn-icon-xs btn-light shadow absolute z-1 !size-5 -top-0.5 -end-0.5 rounded-full"
+                    className="btn btn-icon btn-icon-xs btn-light shadow-sm absolute z-1 size-5! -top-0.5 -end-0.5 rounded-full"
                     onClick={handleRemoveUserLogo}
                     >
                     {/* <i className="ki-filled ki-cross"></i> */}

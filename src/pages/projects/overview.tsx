@@ -30,23 +30,23 @@ const ProjectOverview = () => {
                         <div className="card-body">
                             <div className="flex lg:px-10 py-1.5 gap-2">
                                 <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-                                    <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+                                    <span className="text-gray-900 text-2xl lg:text-2-5xl leading-none font-semibold">
                                         {project.tasks?.length || 0}
                                     </span>
                                     <span className="text-gray-700 text-sm">
                                         Open Tasks
                                     </span>
                                 </div>
-                                <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                                <span className="not-last:border-e border-e-gray-300 my-1"></span>
                                 <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
-                                    <span className="text-gray-900 text-2xl lg:text-2.5xl leading-none font-semibold">
+                                    <span className="text-gray-900 text-2xl lg:text-2-5xl leading-none font-semibold">
                                         {moment(project.due_date).format('DD MMM YYYY').toLowerCase()}
                                     </span>
                                     <span className="text-gray-700 text-sm">
                                         Due Date
                                     </span>
                                 </div>
-                                <span className="[&:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                                <span className="not-last:border-e border-e-gray-300 my-1"></span>
                             </div>
                         </div>
                     </div>

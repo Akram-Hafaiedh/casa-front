@@ -177,7 +177,7 @@ const AddTaskForm = ({
                     </div>
                 </div>
             </div>
-            <div className="modal-footer !justify-end">
+            <div className="modal-footer justify-end!">
                 <div className="flex gap-4">
                     <button 
                         type="button"
